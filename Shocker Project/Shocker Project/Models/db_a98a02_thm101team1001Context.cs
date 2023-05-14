@@ -34,8 +34,7 @@ namespace Shocker_Project.Models
         {
             modelBuilder.Entity<Addresses>(entity =>
             {
-                entity.HasKey(e => new { e.Address, e.UserAccount })
-                    .HasName("PK_收件地址");
+                entity.HasKey(e => new { e.Address, e.UserAccount });
 
                 entity.Property(e => e.Address).HasMaxLength(50);
 
@@ -50,8 +49,7 @@ namespace Shocker_Project.Models
 
             modelBuilder.Entity<ClientCases>(entity =>
             {
-                entity.HasKey(e => e.CaseId)
-                    .HasName("PK_客服案件");
+                entity.HasKey(e => e.CaseId);
 
                 entity.Property(e => e.CaseId).HasColumnName("CaseID");
 
@@ -87,8 +85,7 @@ namespace Shocker_Project.Models
 
             modelBuilder.Entity<Coupons>(entity =>
             {
-                entity.HasKey(e => e.CouponId)
-                    .HasName("PK_優惠碼");
+                entity.HasKey(e => e.CouponId);
 
                 entity.Property(e => e.CouponId)
                     .HasMaxLength(10)
@@ -134,8 +131,7 @@ namespace Shocker_Project.Models
 
             modelBuilder.Entity<OrderDetails>(entity =>
             {
-                entity.HasKey(e => new { e.OrderId, e.ProductId })
-                    .HasName("PK_訂單明細");
+                entity.HasKey(e => new { e.OrderId, e.ProductId });
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
@@ -174,8 +170,7 @@ namespace Shocker_Project.Models
 
             modelBuilder.Entity<Orders>(entity =>
             {
-                entity.HasKey(e => e.OrderId)
-                    .HasName("PK_訂單");
+                entity.HasKey(e => e.OrderId);
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
@@ -221,7 +216,7 @@ namespace Shocker_Project.Models
             modelBuilder.Entity<Pictures>(entity =>
             {
                 entity.HasKey(e => e.PictureId)
-                    .HasName("PK_商品圖片");
+                    .HasName("PK_Pictures_1");
 
                 entity.Property(e => e.PictureId)
                     .HasMaxLength(50)
@@ -253,8 +248,7 @@ namespace Shocker_Project.Models
 
             modelBuilder.Entity<Products>(entity =>
             {
-                entity.HasKey(e => e.ProductId)
-                    .HasName("PK_商品");
+                entity.HasKey(e => e.ProductId);
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
@@ -303,8 +297,7 @@ namespace Shocker_Project.Models
 
             modelBuilder.Entity<QuestionCategories>(entity =>
             {
-                entity.HasKey(e => e.CategoryId)
-                    .HasName("PK_問題類型");
+                entity.HasKey(e => e.CategoryId);
 
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
@@ -340,8 +333,7 @@ namespace Shocker_Project.Models
 
             modelBuilder.Entity<Users>(entity =>
             {
-                entity.HasKey(e => e.Account)
-                    .HasName("PK_用戶");
+                entity.HasKey(e => e.Account);
 
                 entity.Property(e => e.Account).HasMaxLength(50);
 
@@ -364,6 +356,8 @@ namespace Shocker_Project.Models
                 entity.Property(e => e.Phone)
                     .IsRequired()
                     .HasMaxLength(30);
+
+                entity.Property(e => e.PicturePath).HasMaxLength(50);
 
                 entity.Property(e => e.Role)
                     .IsRequired()
