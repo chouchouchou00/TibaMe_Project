@@ -34,10 +34,8 @@
     <Folder Include="Areas\Seller\Data\" />
     <Folder Include="Areas\Seller\Models\" />
     <Folder Include="Areas\Seller\Views\" />
-    <Folder Include="Areas\Shoppingcart\Controllers\" />
     <Folder Include="Areas\Shoppingcart\Data\" />
     <Folder Include="Areas\Shoppingcart\Models\" />
-    <Folder Include="Areas\Shoppingcart\Views\" />
     <Folder Include="Areas\User\Controllers\" />
     <Folder Include="Areas\User\Data\" />
     <Folder Include="Areas\User\Models\" />
