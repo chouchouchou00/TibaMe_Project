@@ -9,6 +9,7 @@ using Shocker_Project.Models;
 
 namespace Shocker_Project.Areas.Shoppingcart.Controllers
 {
+    //    [Authorize]
     [Area("Shoppingcart")]
     public class ShoppingCartProductsController : Controller
     {
@@ -169,6 +170,38 @@ namespace Shocker_Project.Areas.Shoppingcart.Controllers
         private bool ProductsExists(int id)
         {
           return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();
+        }
+        public IActionResult Product()
+        {
+            return View();
+        }
+        public IActionResult ShoppingCart()
+        {
+            //取得登入帳號並指定給fUserId
+            //string fUserId = User.Identity.Name;
+            //不確定是否為area的Identity 要自寫?
+            //找出未成為訂單明細的資料，及購物車內容
+            //var orderDetails = db_a98a02_thm101team1001Context.tOrderDetail.Where
+            //    (m => m.fUserId == fUserId == fUserId && m.fIsApproved == "否").ToList();
+            //view使用orderdetail model
+            return View();
+        }
+        public IActionResult AddCar()
+        {
+            ////取得會員帳號並指定給'
+            //string fUserId = User.Identity.Name;
+            ////找出會員放入訂單明細的產品 該產品的fIsApproved =="否"
+            //表示該產品是購物車狀態
+            //var currentCar = db_a98a02_thm101team1001Context.tOrderDetail.Where
+
+            //    (m => m.fPId == fPId == fPId && m.fIsApproved == "否" )
+
+            return View();
+        }
+        public IActionResult Shop()
+        {
+
+            return View();
         }
     }
 }
