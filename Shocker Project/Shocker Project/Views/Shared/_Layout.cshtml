@@ -64,12 +64,13 @@
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
-                <li class="active"><a href="./index.html">首頁</a></li>
+                @*href="./index.html"*@
+                <li class="active"><a  asp-controller="Home" asp-action="index">首頁</a></li>
                 <li><a asp-area="Shoppingcart" asp-controller="ShoppingCartProducts" asp-action="Product">開始購物sideBar</a></li>
                 <li>
                     <a href="#">客服中心</a>
                     <ul class="header__menu__dropdown">
-                        <li><a href="#">常見Q&A</a></li>
+                        <li><a asp-controller="CommonProblem" asp-action="Index">常見Q&A</a></li>
                         <li><a href="#">聯絡客服</a></li>
                     </ul>
                 </li>
@@ -149,12 +150,12 @@
                 <div class="col-lg-6">
                     <nav class="header__menu">
                         <ul>
-                            <li class="active"><a href="./index.html">首頁</a></li>
+                            <li class="active"><a asp-controller="Home" asp-action="index">首頁</a></li>
                             <li><a asp-area="Shoppingcart" asp-controller="ShoppingCartProducts" asp-action="Product">開始購物navBar</a></li>
                             <li>
                                 <a href="#">客服中心</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="#">常見Q&A</a></li>
+                                    <li><a asp-controller="CommonProblem" asp-action="index">常見Q&A</a></li>
                                     <li><a href="#">聯絡客服</a></li>
                                     @* <li><a href="./shop-details.html">Shop Details</a></li>
                                     <li><a href="./shoping-cart.html">Shoping Cart</a></li>
