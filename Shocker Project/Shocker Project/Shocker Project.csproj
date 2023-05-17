@@ -30,10 +30,9 @@
     <Folder Include="Areas\Login\Data\" />
     <Folder Include="Areas\Login\Models\" />
     <Folder Include="Areas\Login\Views\" />
-    <Folder Include="Areas\Seller\Controllers\" />
     <Folder Include="Areas\Seller\Data\" />
     <Folder Include="Areas\Seller\Models\" />
-    <Folder Include="Areas\Seller\Views\" />
+    <Folder Include="Areas\Seller\Pictures\" />
     <Folder Include="Areas\Shoppingcart\Controllers\" />
     <Folder Include="Areas\Shoppingcart\Data\" />
     <Folder Include="Areas\Shoppingcart\Models\" />
