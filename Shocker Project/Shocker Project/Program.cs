@@ -22,7 +22,8 @@ namespace Shocker_Project
 
 			builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 				.AddEntityFrameworkStores<ApplicationDbContext>();
-			builder.Services.AddControllersWithViews();
+			builder.Services.AddControllersWithViews().AddJsonOptions(options => 
+				options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
 			var app = builder.Build();
 
@@ -48,12 +49,12 @@ namespace Shocker_Project
 			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>
-						{
-							endpoints.MapControllerRoute(
-							  name: "areas",
-							  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-							);
-						});
+			{
+				endpoints.MapControllerRoute(
+					name: "areas",
+					pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+				);
+			});
 
 			app.MapControllerRoute(
 				name: "default",
