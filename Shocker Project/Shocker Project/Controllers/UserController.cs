@@ -13,6 +13,7 @@ namespace Shocker_Project.Controllers
             _context = context;
         }
         [HttpGet]
+        
         public IActionResult MyAccount()
         {
             //var Myaccountinformation = from i in _context.Users

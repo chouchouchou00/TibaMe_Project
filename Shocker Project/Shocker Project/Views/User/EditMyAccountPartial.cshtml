@@ -53,8 +53,10 @@
 					<td>帳號名</td>
 					<td>密碼</td>
 					<td>姓名</td>
-					<td>LastName</td>
-					<td>Title</td>
+					<td>性別</td>
+					<td>生日</td>
+					<td>Email</td>
+					<td>手機</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -64,9 +66,13 @@
 							<button class="btn btn-success" @@click="update(item)">修改</button>
 							<button class="btn btn-warning" @@click="cancel">取消</button>
 						<td>{{item.employeeId}}</td>
-						<td><input v-model="item.firstName" /></td>
-						<td><input v-model="item.lastName" /></td>
-						<td><input v-model="item.title" /></td>
+						<td><input v-model="Users.Account" /></td>
+						<td><input v-model="Users.Password" /></td>
+						<td><input v-model="Users.Name" /></td>
+						<td><input v-model="Users.Gender" /></td>
+						<td><input v-model="Users.BirthDate" /></td>
+						<td><input v-model="Users.Email" /></td>
+						<td><input v-model="Users.Phone" /></td>
 						</td>
 					</template>
 					<template v-else>
