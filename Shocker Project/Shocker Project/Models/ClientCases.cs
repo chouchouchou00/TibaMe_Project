@@ -8,16 +8,16 @@ namespace Shocker_Project.Models
     public partial class ClientCases
     {
         public int CaseId { get; set; }
-        public int QuestionCategory { get; set; }
+        public int QuestionCategoryId { get; set; }
         public string UserAccount { get; set; }
         public string AdminAccount { get; set; }
         public string Description { get; set; }
         public string Status { get; set; }
-        public DateTimeOffset CloseDate { get; set; }
+        public DateTimeOffset? CloseDate { get; set; }
         public string Reply { get; set; }
 
         public virtual Users AdminAccountNavigation { get; set; }
-        public virtual QuestionCategories QuestionCategoryNavigation { get; set; }
+        public virtual QuestionCategories QuestionCategory { get; set; }
         public virtual Users UserAccountNavigation { get; set; }
     }
 }

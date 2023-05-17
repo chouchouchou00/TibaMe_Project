@@ -30,6 +30,7 @@ namespace Shocker_Project.Models
         public string Role { get; set; }
         public DateTimeOffset RegisterDate { get; set; }
         public string PicturePath { get; set; }
+        public string AboutSeller { get; set; }
 
         public virtual ICollection<Addresses> Addresses { get; set; }
         public virtual ICollection<ClientCases> ClientCasesAdminAccountNavigation { get; set; }
