@@ -100,7 +100,8 @@
 		var baseAddress = "https://localhost:7031/";
 		var vueApp = {
 			data() {
-				return {				
+				return {
+					Users:[],
 					account:"",
 					password: "",
 					name: "",
@@ -112,18 +113,18 @@
 			},//就像MVC的Models，可用key:value的寫法
 			mounted: function () {
 				let _this = this;//this指的是Vue物件
-				_this.getusers();
+				_this.getusers();//一開始就執行getusers()拿user資料顯示在畫面上
 			},//mounted為初始化時即執行，呼叫methods的filterEmployeeDTOes()
 			methods: {
 				getusers:function(item){
 					let _this = this;
 					var request={
-						Account:item.account
-						Password:item.password
-						Name:item.name
-						Gender:item.gender
-						BirthDate:item.birthDate
-						Email:item.email
+						Account:item.account,
+						Password:item.password,
+						Name:item.name,
+						Gender:item.gender,
+						BirthDate:item.birthDate,
+						Email:item.email,
 						Phone:item.phone
 					};
 					axios.get(``)
