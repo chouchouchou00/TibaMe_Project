@@ -9,25 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Areas\Customerservice\**" />
-    <Compile Remove="Areas\Login\**" />
-    <Compile Remove="Areas\Seller\**" />
-    <Compile Remove="Areas\User\**" />
-    <Content Remove="Areas\Customerservice\**" />
-    <Content Remove="Areas\Login\**" />
-    <Content Remove="Areas\Seller\**" />
-    <Content Remove="Areas\User\**" />
-    <EmbeddedResource Remove="Areas\Customerservice\**" />
-    <EmbeddedResource Remove="Areas\Login\**" />
-    <EmbeddedResource Remove="Areas\Seller\**" />
-    <EmbeddedResource Remove="Areas\User\**" />
-    <None Remove="Areas\Customerservice\**" />
-    <None Remove="Areas\Login\**" />
-    <None Remove="Areas\Seller\**" />
-    <None Remove="Areas\User\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.15" />
@@ -41,6 +22,26 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\" />
+    <Folder Include="Areas\Customerservice\Controllers\" />
+    <Folder Include="Areas\Customerservice\Data\" />
+    <Folder Include="Areas\Customerservice\Models\" />
+    <Folder Include="Areas\Customerservice\Views\" />
+    <Folder Include="Areas\Login\Controllers\" />
+    <Folder Include="Areas\Login\Data\" />
+    <Folder Include="Areas\Login\Models\" />
+    <Folder Include="Areas\Login\Views\" />
+    <Folder Include="Areas\Seller\Controllers\" />
+    <Folder Include="Areas\Seller\Data\" />
+    <Folder Include="Areas\Seller\Models\" />
+    <Folder Include="Areas\Seller\Views\" />
+    <Folder Include="Areas\Shoppingcart\Controllers\" />
+    <Folder Include="Areas\Shoppingcart\Data\" />
+    <Folder Include="Areas\Shoppingcart\Models\" />
+    <Folder Include="Areas\Shoppingcart\Views\" />
+    <Folder Include="Areas\User\Controllers\" />
+    <Folder Include="Areas\User\Data\" />
+    <Folder Include="Areas\User\Models\" />
+    <Folder Include="Areas\User\Views\" />
     <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
