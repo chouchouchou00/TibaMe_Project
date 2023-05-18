@@ -49,32 +49,40 @@
             <div class="col-lg-4 col-md-5">
                 <div class="blog__sidebar">                 
                     <div class="blog__sidebar__item">
-                        <h4>我的帳號</h4>
-                            @*<ul class="nav flex-column">
-                                <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" asp-area="" asp-controller="User" asp-action="EditMyAccountPartial">Active</a>
-                                </li>
-                                <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="User" asp-action="MyPaymentPartial">Link</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Link</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                                </li>
-                            </ul>   *@                  
-                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="EditMyAccountPartial">個人檔案</a>
-                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="MyPaymentPartial">購買清單</a>
-                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="OrderlistsPartial">我的付款方式</a>
-                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="MyPromocodePartial">我的優惠碼</a>
-                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="QuestionRecordPartial">客服發問紀錄</a>                  
+                        <h4>我的帳號</h4>                        
+                        <a class="nav-link text-dark" asp-controller="User" asp-route-tab="a">個人檔案</a>
+                        <a class="nav-link text-dark" asp-controller="User" asp-route-tab="b">購買清單</a>
+                        <a class="nav-link text-dark" asp-controller="User" asp-route-tab="c">我的付款方式</a>
+                        <a class="nav-link text-dark" asp-controller="User" asp-route-tab="d">我的優惠碼</a>
+                        <a class="nav-link text-dark" asp-controller="User" asp-route-tab="e">客服發問紀錄</a>
                     </div>                 
                 </div>
             </div>
             <div class="col-lg-8 col-md-7">
                 <div class="row">
-                    <partial name="EditMyAccountPartial"/>                
+                    @{
+                        if (ViewBag.Tab == "a")
+                        {
+                            <partial name="EditMyAccountPartial"/>
+                        }
+                        if (ViewBag.Tab == "b")
+                        {
+                            <partial name="OrderlistsPartial" />
+                        }
+                        if (ViewBag.Tab == "c")
+                        {
+                            <partial name="MyPaymentPartial" />
+                        }
+                        if (ViewBag.Tab == "d")
+                        {
+                            <partial name="MyPromocodePartial" />
+                        }
+                        if (ViewBag.Tab == "e")
+                        {
+                            <partial name="QuestionRecordPartial" />
+                        }
+                    }
+                                
                 </div>
             </div>
         </div>

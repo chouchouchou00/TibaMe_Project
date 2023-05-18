@@ -14,49 +14,32 @@ namespace Shocker_Project.Controllers
         }
         [HttpGet]
         
-        public IActionResult MyAccount()
+        public IActionResult MyAccount(string tab)
         {
-            //var Myaccountinformation = from i in _context.Users
-            //						   where i.Account == Account
-            //						   select new
-            //						   {
-            //							   Account=i.Account, //Readonly
-            //							   Password=i.Password,
-            //							   Name=i.Name,
-            //							   Gender=i.Gender,
-            //							   BirthdDate=i.BirthDate,
-            //							   Email=i.Email,
-            //							   Phone=i.Phone,
-            //							   Role=i.Role, //Readonly
-            //							   RegisterDate=i.RegisterDate//Readonly
-            //						   };
-            //return Json(new { Result = "OK", Records = "Users" });
+            ViewBag.Tab = tab;
             return View();
-        }
-        public IActionResult EditMyAccounPartial()
-        {
-            return PartialView("EditMyAccounPartial");
-        }
-        public IActionResult MyPaymentPartial()
-        {
-            return PartialView();
-        }
-        public IActionResult OrderlistsPartial()
-        {
-            return PartialView();
-        }
-        public IActionResult MyPromocodePartial()
-        {
-            return PartialView();
-        }
-        public IActionResult QuestionRecordPartial()
-        {
-            return PartialView();
+
         }
 
-        //public IActionResult Index()
-        //{
-        //	return View();
-        //}
-    }
+
+		//var Myaccountinformation = from i in _context.Users
+		//						   where i.Account == Account
+		//						   select new
+		//						   {
+		//							   Account=i.Account, //Readonly
+		//							   Password=i.Password,
+		//							   Name=i.Name,
+		//							   Gender=i.Gender,
+		//							   BirthdDate=i.BirthDate,
+		//							   Email=i.Email,
+		//							   Phone=i.Phone,
+		//							   Role=i.Role, //Readonly
+		//							   RegisterDate=i.RegisterDate//Readonly
+		//						   };
+		//return Json(new { Result = "OK", Records = "Users" });
+		//public IActionResult Index()
+		//{
+		//	return View();
+		//}
+	}
 }
