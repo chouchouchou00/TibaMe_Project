@@ -175,6 +175,10 @@ namespace Shocker_Project.Areas.Shoppingcart.Controllers
         {
             return View();
         }
+        public IActionResult Products()
+        {
+            return View();
+        }
         public IActionResult ShoppingCart()
         {
 
