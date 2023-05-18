@@ -2,9 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Shocker_Project.Models;
 
-namespace Shocker_Project.Areas.Seller.Controllers
+namespace Shocker_Project.Controllers
 {
-    [Area("seller")]
     public class ProductsController : Controller
     {
         private readonly db_a98a02_thm101team1001Context _context;
@@ -22,7 +21,7 @@ namespace Shocker_Project.Areas.Seller.Controllers
         public JsonResult getProducts()
         {
             var product = from p in _context.Products
-                          //where p.SellerAccount == User.Identity.Name
+                              //where p.SellerAccount == User.Identity.Name
                           select new
                           {
                               ProductId = p.ProductId,
@@ -44,7 +43,7 @@ namespace Shocker_Project.Areas.Seller.Controllers
         {
             var query = _context.Products.Where(
                 p => /*p.SellerAccount == User.Identity.Name ||*/
-                     p.ProductName.Contains(product.ProductName) ||                     
+                     p.ProductName.Contains(product.ProductName) ||
                      p.Description.Contains(product.Description) ||
                      p.UnitsInStock.Contains(product.UnitsInStock) ||
                      p.UnitPrice.Contains(product.UnitPrice) ||
