@@ -181,14 +181,36 @@ namespace Shocker_Project.Areas.Shoppingcart.Controllers
         }
         public IActionResult ShoppingCart()
         {
-
-            return View();
+            string UserId = User.Identity.Name;
+            var orderDetails = _context.OrderDetails.Where(m => m.Order.BuyerAccount == UserId && m.Status == "購物車").ToList();
+            return View(orderDetails);
         }
-        public IActionResult AddCar()
+        public IActionResult AddCar(int ProductId)
         {
-
-            return View();
+            string UserId = User.Identity.Name;
+            var currentcar = _context.OrderDetails.Where(m => m.ProductId == ProductId && m.Status =="購物車" && m.Order.BuyerAccount ==UserId).FirstOrDefault();
+            if (currentcar != null)
+            {
+                var product = _context.Products.Where(m => m.ProductId == ProductId).FirstOrDefault();
+                OrderDetails orderDetails = new OrderDetails();
+                orderDetails.ProductId = ProductId;
+                orderDetails.Quantity = "1";
+                orderDetails.Status = "購物車";
+                _context.OrderDetails.Add(orderDetails);
+            }
+            else
+            {
+                currentcar.Quantity = "2";
+            }
+            _context.SaveChanges();
+            return RedirectToAction("ShoppingCart");
         }
-
+        public IActionResult Delete(int OrderId)
+        {
+            var orderDetail = _context.OrderDetails.Where(m => m.OrderId == OrderId).FirstOrDefault();
+            _context.OrderDetails.Remove(orderDetail);
+            _context.SaveChanges();
+            return RedirectToAction("ShoppingCart");
+        }
     }
 }
