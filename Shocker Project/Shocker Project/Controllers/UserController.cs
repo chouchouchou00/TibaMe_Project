@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shocker_Project.Models;
+using Shocker_Project.ViewModels;
+using System.Security.Principal;
 
 namespace Shocker_Project.Controllers
 {
@@ -13,33 +15,33 @@ namespace Shocker_Project.Controllers
             _context = context;
         }
         [HttpGet]
-        
-        public IActionResult MyAccount(string tab)
+        public async Task<IActionResult> MyAccount(string tab)
         {
+
             ViewBag.Tab = tab;
+
             return View();
 
         }
-
-
-		//var Myaccountinformation = from i in _context.Users
-		//						   where i.Account == Account
-		//						   select new
-		//						   {
-		//							   Account=i.Account, //Readonly
-		//							   Password=i.Password,
-		//							   Name=i.Name,
-		//							   Gender=i.Gender,
-		//							   BirthdDate=i.BirthDate,
-		//							   Email=i.Email,
-		//							   Phone=i.Phone,
-		//							   Role=i.Role, //Readonly
-		//							   RegisterDate=i.RegisterDate//Readonly
-		//						   };
-		//return Json(new { Result = "OK", Records = "Users" });
-		//public IActionResult Index()
-		//{
-		//	return View();
-		//}
+		///User/MyAccountInformation
+		[HttpGet]
+        public JsonResult MyAccountInformation()
+        {
+            var Myaccountinformation = from i in _context.Users
+                                           //.Where(users => users.Account == userviewmodel.Account)
+                                       select new
+                                       {
+                                           Account = i.Account,
+                                           Password = i.Password,
+                                           Name = i.Name,
+                                           Gender = i.Gender,
+                                           BirthDate = i.BirthDate,//Readonly
+                                           Email = i.Email,
+                                           Phone = i.Phone,
+                                           Role = i.Role, //Readonly
+                                           RegisterDate = i.RegisterDate//Readonly
+                                       };
+            return Json(Myaccountinformation);
+        }    
 	}
 }

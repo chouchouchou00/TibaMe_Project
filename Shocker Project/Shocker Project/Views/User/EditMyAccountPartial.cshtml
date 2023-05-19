@@ -1,4 +1,5 @@
-﻿@model Users
+﻿@*@model Shocker_Project.ViewModels.UserViewModel*@
+@model Shocker_Project.Models.Users
 @section Styles
 	{
 	<style>
@@ -10,44 +11,11 @@
 }
 
 <div id="app" class="container">
-
-	@*<div class="form-group">
-		<button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId" @@click="showInsertPage">
-			新增員工紀錄
-		</button>
-	</div>
-
-	<div class="form-group">
-		<div class="modal fade" id="insertPage" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="modalTitleId">Modal title</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<div class="form-group">
-							<label class="form-label">FirstName:</label>
-							<input class="form-control" v-model="firstName" />
-							<label class="form-label">LastName:</label>
-							<input class="form-control" v-model="lastName" />
-							<label class="form-label">Title:</label>
-							<input class="form-control" v-model="title" />
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-						<button type="button" class="btn btn-primary" @@click="insert">新增</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>*@
-
 	<div class="form-group">
 		<table class="table table-striped table table-hover">
 			<thead>
 				<tr>
+					<td>空白</td>
 					<td>帳號名</td>
 					<td>密碼</td>
 					<td>姓名</td>
@@ -55,34 +23,39 @@
 					<td>生日</td>
 					<td>Email</td>
 					<td>手機</td>
+					<td>身分</td>
+					<td>註冊日期</td>
 				</tr>
 			</thead>
 			<tbody>
 				<tr v-for="item in Users">
 					<template v-if="item.Edit==true">
 						<td>
-							<button class="btn btn-success" @@click="update(item)">修改</button>
+							<button class="btn btn-success" @@click="update">修改</button>
 							<button class="btn btn-warning" @@click="cancel">取消</button>
-						<td><input v-model="Users.Account" /></td>
-						<td><input v-model="Users.Password" /></td>
-						<td><input v-model="Users.Name" /></td>
-						<td><input v-model="Users.Gender" /></td>
-						<td><input v-model="Users.BirthDate" /></td>
-						<td><input v-model="Users.Email" /></td>
-						<td><input v-model="Users.Phone" /></td>
 						</td>
+						<td><input v-model="item.account" /></td>
+						<td><input v-model="item.password" /></td>
+						<td><input v-model="item.name" /></td>
+						<td><input v-model="item.gender" /></td>
+						<td><input v-model="item.birthDate" /></td>
+						<td><input v-model="item.email" /></td>
+						<td><input v-model="item.phone" /></td>
+						<td><input v-model="item.role" /></td>
+						<td><input v-model="item.registerDate" /></td>
 					</template>
 					<template v-else>
+						<td><button class="btn btn-primary" @@click="edit(item.employeeId)">編輯</button></td>
+						<td>{{item.account}}</td>
+						<td>{{item.password}}</td>
 						<td>
-							<button class="btn btn-primary" @@click="edit(item.employeeId)">編輯</button>
-						</td>
-						<td><input v-model="Users.Account" /></td>
-						<td><input v-model="Users.Password" /></td>
-						<td><input v-model="Users.Name" /></td>
-						<td><input v-model="Users.Gender" /></td>
-						<td><input v-model="Users.BirthDate" /></td>
-						<td><input v-model="Users.Email" /></td>
-						<td><input v-model="Users.Phone" /></td>
+							{{item.name}}<tdi>
+								<td>{{item.gender}}</td>
+								<td>{{item.birthDate}}</td>
+								<td>{{item.email}}</td>
+								<td>{{item.phone}}</td>
+								<td>{{item.role}}</td>
+								<td>{{item.registerDate}}</td>
 					</template>
 				</tr>
 			</tbody>
@@ -92,134 +65,137 @@
 	</div>
 </div>
 
-@section Scripts
-	{
-	<script src="~/js/vue.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-	<script>
-		var vueApp = {
-			data() {
-				return {
-					account: "",
-					password: "",
-					name: "",
-					gender: "",
-					birthDate: "",
-					email: "",
-					phone: ""
-				};
-			},//就像MVC的Models，可用key:value的寫法
-			mounted: function () {
-				let _this = this;//this指的是Vue物件
-				_this.getusers();
-			},//mounted為初始化時即執行，呼叫methods的filterEmployeeDTOes()
-			methods: {
-				getusers: function (item) {
-					let _this = this;
-					var request = {
-						Account: item.account
-						Password: item.password
-						Name: item.name
-						Gender: item.gender
-						BirthDate: item.birthDate
-						Email: item.email
-						Phone: item.phone
-					};
-					axios.get(``)
-				}
+@*<b-container fluid>
+						<b-row class="my-1">
+						<b-col sm="3">
+						<label for="input-none">No State:</label>
+						</b-col>
+						<b-col sm="9">
+						<b-form-input id="input-none" :state="null" placeholder="No validation"></b-form-input>
+						</b-col>
+						</b-row>*@
 
-
-								update: function (item) {
-					let _this = this;
-					var request = {
-						EmployeeId: item.employeeId,//因為要跟後端溝通，所以要寫EmployeeId這種頭大寫的DTO格式
-						FirstName: item.firstName,
-						LastName: item.lastName,
-						Title: item.title
-					};//item.employeeId,item.firstName...可用key:value的寫法
-					axios.put(`${baseAddress}api/Employees/${item.employeeId}`, request).then(response => {
-
-						_this.cancel();//呼叫樓下的cancel函式
-						_this.filterEmployeeDTOes();//呼叫filterEmployeeDTOes函式
-					});
-				},
-				cancel: function () {
-					let _this = this;
-					var employeeList = [];
-					for (var i = 0; i < _this.EmployeeDTOes.length; i++) {
-						var item = _this.EmployeeDTOes[i];
-						if (item.Edit == true) {
-							item.Edit = false;
-							item.firstName = _this.originFirstName;
-							item.lastName = _this.originLastName;
-							item.title = _this.originTitle;
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
+<script src="~/axios/axios.min.js"></script>
+<script>
+	var baseAddress = "https://localhost:7033/User";
+	var vueApp = new Vue({
+		el: '#app',
+		data() {
+			return {
+				Users: [],
+				account: "",
+				password: "",
+				name: "",
+				gender: "",
+				birthDate: "",
+				email: "",
+				phone: "",
+				role: "",
+				registerDate: "",
+				Edit: false
+			};
+		},
+		mounted: function () {
+			let _this = this;
+			_this.getUsers("Admin1");
+		},
+		methods: {
+			getUsers: function (account) {
+				//alert("getUsers")
+				let _this = this;
+				//request.Account = isEmpty(login.userAccount) ? -1 : login.userAccount;
+				axios.get(`${baseAddress}/MyAccountInformation`).then(response => {
+					//alert(response.data);
+					var item = _this.Users = response.data;
+					for (var i = 0; i < _this.Users.length; i++) {
+						if (item.account == account) {
+							_this.account = item.account;
+							_this.password = item.password;
+							_this.name = item.name;
+							_this.gender = item.gender;
+							_this.birthDate = item.birthDate;
+							_this.email = item.email;
+							_this.phone = item.phone;
+							_this.role = item.role;
+							_this.registerDate = item.registerDate;
 						}
-						employeeList.push(item);
 					}
-					_this.EmployeeDTOes = employeeList
-				},
-				edit: function (employeeId) {
-					let _this = this;
-					var employeeList = [];
-					for (var i = 0; i < _this.EmployeeDTOes.length; i++) {
-						var item = _this.EmployeeDTOes[i];
-						if (employeeId == item.employeeId) {
-							item.Edit = true;
-							_this.originFirstName = item.firstName;
-							_this.originLastName = item.lastName;
-							_this.originTitle = item.title;
-						};
-						employeeList.push(item);
-					};
-					_this.EmployeeDTOes = employeeList;
-				},
-				deleteEmp: function (employeeId) {
-					let _this = this;//this指的是Vue物件
-					var ret = confirm("刪除要確捏?");
-					if (ret == true) {
-						axios.delete(`${baseAddress}api/Employees/${employeeId}`).then(response => {
-							alert(response.data);
-							_this.filterEmployeeDTOes();
-						});
-					}
-				},
-				filterEmployeeDTOes: function () {
-					let _this = this;//this指的是Vue物件
-					var request = {};
-					request.EmployeeId = isNaN(parseInt(_this.filter)) ? -1 : parseInt(_this.filter);
-					request.FirstName = request.LastName = request.Title = _this.filter;
-					axios.post(`${baseAddress}api/Employees/Filter`, request).then(response => {
+				});
+			},
+			//update: function (item) {
+			//	let _this = this;
+			//	var request = {
+			//		EmployeeId: item.employeeId,//因為要跟後端溝通，所以要寫EmployeeId這種頭大寫的DTO格式
+			//		FirstName: item.firstName,
+			//		LastName: item.lastName,
+			//		Title: item.title
+			//	};//item.employeeId,item.firstName...可用key:value的寫法
+			//	axios.put(`${baseAddress}api/Employees/${item.employeeId}`, request).then(response => {
 
-						_this.EmployeeDTOes = response.data;
-						var employeeList = [];
-						for (var i = 0; i < _this.EmployeeDTOes.length; i++) {
-							var item = _this.EmployeeDTOes[i];
-							item.Edit = false;
-							employeeList.push(item);
-						}
-						_this.EmployeeDTOes = employeeList
-					});
-				},
-				showInsertPage: function () {
-					$("#insertPage").modal('show');
-				},
-				insert: function () {
-					let _this = this;
-					var empDTO = {
-						EmployeeId: 0,//因為要跟後端溝通，所以要寫EmployeeId這種頭大寫的DTO格式
-						FirstName: _this.firstName,
-						LastName: _this.lastName,
-						Title: _this.title
-					};
-					axios.post(`${baseAddress}api/Employees`, empDTO).then(response => {
-						alert(response.data);
-						$("#insertPage").modal('hide');
-						_this.filterEmployeeDTOes();
-					});
-				}
-			}//就像MVC的Controller
-		};
-		var app = Vue.createApp(vueApp).mount("#app");
-	</script>
-}
+			//		_this.cancel();//呼叫樓下的cancel函式
+			//		_this.filterEmployeeDTOes();//呼叫filterEmployeeDTOes函式
+			//	});
+			//},
+			//cancel: function () {
+			//	let _this = this;
+			//	var employeeList = [];
+			//	for (var i = 0; i < _this.EmployeeDTOes.length; i++) {
+			//		var item = _this.EmployeeDTOes[i];
+			//		if (item.Edit == true) {
+			//			item.Edit = false;
+			//			item.firstName = _this.originFirstName;
+			//			item.lastName = _this.originLastName;
+			//			item.title = _this.originTitle;
+			//		}
+			//		employeeList.push(item);
+			//	}
+			//	_this.EmployeeDTOes = employeeList
+			//},
+			//edit: function (employeeId) {
+			//	let _this = this;
+			//	var employeeList = [];
+			//	for (var i = 0; i < _this.EmployeeDTOes.length; i++) {
+			//		var item = _this.EmployeeDTOes[i];
+			//		if (employeeId == item.employeeId) {
+			//			item.Edit = true;
+			//			_this.originFirstName = item.firstName;
+			//			_this.originLastName = item.lastName;
+			//			_this.originTitle = item.title;
+			//		};
+			//		employeeList.push(item);
+			//	};
+			//	_this.EmployeeDTOes = employeeList;
+			//},
+			//deleteEmp: function (employeeId) {
+			//	let _this = this;//this指的是Vue物件
+			//	var ret = confirm("刪除要確捏?");
+			//	if (ret == true) {
+			//		axios.delete(`${baseAddress}api/Employees/${employeeId}`).then(response => {
+			//			alert(response.data);
+			//			_this.filterEmployeeDTOes();
+			//		});
+			//	}
+			//},
+			//showInsertPage: function () {
+			//	$("#insertPage").modal('show');
+			//},
+			//insert: function () {
+			//	let _this = this;
+			//	var empDTO = {
+			//		EmployeeId: 0,//因為要跟後端溝通，所以要寫EmployeeId這種頭大寫的DTO格式
+			//		FirstName: _this.firstName,
+			//		LastName: _this.lastName,
+			//		Title: _this.title
+			//	};
+			//	axios.post(`${baseAddress}api/Employees`, empDTO).then(response => {
+			//		alert(response.data);
+			//		$("#insertPage").modal('hide');
+			//		_this.filterEmployeeDTOes();
+			//	});
+			//}
+		}//就像MVC的Controller
+	});
+</script>
+
 
