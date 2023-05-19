@@ -12,6 +12,9 @@
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 -->
+@{
+	Layout = null;
+}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,14 +38,14 @@
 	<link id="pagestyle" href="~/assets/css/argon-dashboard.min.css?v=2.0.4" rel="stylesheet" />
 </head>
 
-<body class="g-sidenav-show   bg-gray-100">
+<body class="g-sidenav-show bg-gray-100">
 	<div class="min-height-300 bg-primary position-absolute w-100"></div>
 	<aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
 		<div class="sidenav-header">
 			<i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-			<a class="navbar-brand m-0" href="#" target="_blank">
+			<a asp-controller="Home" asp-action="Index" class="navbar-brand m-0">
 				<img src="~/assets/img/logo-ct-dark.png" class="navbar-brand-img h-100" alt="main_logo">
-				<span class="ms-1 font-weight-bold">賣家中心</span>
+				<span class="ms-1 font-weight-bold">蝦殼 Shocker</span>
 			</a>
 		</div>
 		<hr class="horizontal dark mt-0">
@@ -81,7 +84,7 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link " href="~/pages/sign-up.html">
+					<a class="nav-link " href="#">
 						<div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
 							<i class="ni ni-collection text-info text-sm opacity-10"></i>
 						</div>
@@ -151,7 +154,7 @@
 			</div>
 		</nav>
 		<!-- End Navbar -->
-		<div class="container-fluid py-4">
+		<div id="app" class="container-fluid py-4">
 			<div class="row">
 				<div class="col-12">
 					<div class="card mb-4">
@@ -160,7 +163,7 @@
 						</div>
 						<div class="card-body px-0 pt-0 pb-2">
 							<div class="table-responsive p-0">
-								<table id="app" class="table align-items-center mb-0">
+								<table class="table align-items-center mb-0">
 									<thead>
 										<tr>
 											<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">編號</th>
@@ -197,7 +200,7 @@
 													<span class="text-secondary text-xs font-weight-bold">{{item.LaunchDate}}</span>
 												</td>
 												<td class="align-middle">
-													<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" @@click="edit">
+													<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" @@click="edit(item.ProductId)" @@click="details">
 														編輯
 													</a>
 												</td>
@@ -226,7 +229,7 @@
 													<span class="text-secondary text-xs font-weight-bold">{{item.LaunchDate}}</span>
 												</td>
 												<td class="align-middle">
-													<span class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" @@click="cancel">
+													<span class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" @@click="cancel" @@click="!details">
 														取消
 													</span>
 												</td>
@@ -239,8 +242,8 @@
 					</div>
 				</div>
 			</div>
-			@*<template v-else>*@
-			<div id="insertPage" class="row">
+
+			<div v-if="details" class="row">
 				<div class="col-md-12">
 					<div class="card">
 						<div class="card-header pb-0">
@@ -257,7 +260,7 @@
 									<button class="btn btn-primary btn-sm ms-auto" @@click="update(item)">儲存</button>
 									<button class="btn btn-danger btn-sm ms-auto" @@click="delete(item)">刪除</button>
 								</div>
-							</div>							
+							</div>
 						</div>
 						<div class="card-body">
 							<p class="text-uppercase text-sm">商品編號 {{item.productId}}</p>
@@ -376,7 +379,7 @@
 					</div>
 				</div>
 			</div>
-			@*</template>*@
+
 			@*Footer*@
 			<footer class="footer pt-3">
 				<div class="container-fluid py-12">
@@ -506,6 +509,7 @@
 			data() {
 				return {
 					filter: '',
+					details: '',
 					Products: [],
 					ProductId: '',
 					SellerAccount: '',
@@ -534,18 +538,11 @@
 			},
 			methods: {
 				getProducts: function () {
-					alert('getProducts');
+					//alert('getProducts');
 					let _this = this;
-					axios.post(`${baseAddress}/Seller/Products/getProducts`).then(
+					axios.post(`${baseAddress}/Products/getProducts`).then(
 						response => {
-							_this.Products = response.data;
-							var ProductList = [];
-							for (var i = 0; i < _this.Products.length; i++) {
-								var item = _this.Products[i];
-								item.Edit = false;
-								ProductList.push(item);
-							}
-							_this.Products = ProductList;
+							_this.Products = response.data.map(x => ({ ...x, Edit: false }));
 						}
 					);
 				},
@@ -555,7 +552,7 @@
 					var request = {};
 					request.ProductId = isNaN(parseInt(_this.filter)) ? -1 : parseInt(_this.filter);
 					request.ProductName = request.ProductCategoryId = request.Description = request.UnitsInStock = request.Sales = request.UnitPrices = request.Status = request.Currency;
-					axios.get(`${baseAddress}/Seller/Products/Filter`, request).then(response => {
+					axios.get(`${baseAddress}/Products/Filter`, request).then(response => {
 						_this.Products = response.data;
 						var ProductList = [];
 						for (var i = 0; i < _this.Products.length; i++) {
@@ -567,12 +564,10 @@
 					});
 				},
 				edit: function (productId) {
-					alert('edit');
+					//alert('edit');
 					let _this = this;
-					var ProductList = [];
-					for (var i = 0; i < _this.Products.length; i++) {
-						var item = _this.Products[i];
-						if (productId == item.ProductId) {
+					_this.Products.forEach(item => {
+						if (item.ProductId == productId) {
 							item.Edit = true;
 							_this.productNameOld = item.ProductName;
 							_this.productCategoryIdOld = item.ProductCategoryId;
@@ -582,9 +577,7 @@
 							_this.statusOld = item.Status;
 							_this.currencyOld = item.Currency;
 						}
-						ProductList.push(item);
-					}
-					_this.Products = ProductList
+					});
 				},
 				update: function (item) {
 					alert('update');
@@ -597,7 +590,7 @@
 					request.Sales = item.Sales;
 					request.Status = item.Status;
 					request.Currency = item.Currency;
-					axios.get(`${baseAddress}/seller/Products/${item.ProductId}`, request).then(response => {
+					axios.get(`${baseAddress}/Products/${item.ProductId}`, request).then(response => {
 						alert(response.data);
 						_this.cancel();
 						_this.filterProducts();
@@ -627,7 +620,7 @@
 					let _this = this;
 					var ret = confirm('確定要刪除嗎？');
 					if (ret == true) {
-						axios.get(`${baseAddress}/Seller/Products/Delete/${item.ProductId}`).then(response => {
+						axios.get(`${baseAddress}/Products/Delete/${item.ProductId}`).then(response => {
 							alert(response.data);
 							_this.filterProducts();
 						});
@@ -649,7 +642,7 @@
 					request.Sales = _this.Sales;
 					request.Ptatus = _this.Status;
 					request.Purrency = _this.Currency;
-					axios.get(`${baseAddress}/Seller/Products/Create`, request).then(
+					axios.get(`${baseAddress}/Products/Create`, request).then(
 						response => {
 							alert(response.data);
 							$('#insertModal').modal('hide');

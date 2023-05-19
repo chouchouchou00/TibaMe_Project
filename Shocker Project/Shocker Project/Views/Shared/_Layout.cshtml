@@ -65,7 +65,7 @@
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
                 @*href="./index.html"*@
-                <li class="active"><a  asp-controller="Home" asp-action="index">首頁</a></li>
+                <li class="active"><a asp-controller="Home" asp-action="index">首頁</a></li>
                 <li><a asp-area="Shoppingcart" asp-controller="ShoppingCartProducts" asp-action="Product">開始購物sideBar</a></li>
                 <li>
                     <a href="#">客服中心</a>
@@ -94,7 +94,7 @@
         </div>
         <div class="humberger__menu__contact">
             <ul>
-                <li><i class="fa fa-envelope"></i>賣場中心</li>
+                <li><a asp-controller="Products" asp-action="Index"><i class="fa fa-envelope"></i> 賣場中心</a></li>
                 <li>登入滿十天，消費即滿百送千</li>
             </ul>
         </div>
@@ -108,7 +108,7 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="header__top__left">
                             <ul>
-                                <li><i class="fa fa-envelope"></i> 賣場中心</li>
+                                <li><a asp-controller="Products" asp-action="Index"><i class="fa fa-envelope"></i> 賣場中心</a></li>
                                 <li>登入滿十天，消費即滿百送千</li>
                             </ul>
                         </div>
