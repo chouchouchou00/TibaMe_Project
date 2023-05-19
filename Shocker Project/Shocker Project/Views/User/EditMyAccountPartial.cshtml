@@ -1,5 +1,4 @@
 ﻿@model Shocker_Project.ViewModels.UserViewModel
-@*@model Shocker_Project.Models.Users*@
 @section Styles
 	{
 	<style>
@@ -9,59 +8,6 @@
 		}
 	</style>
 }
-@*<div id="app" class="container">
-	<div class="form-group">
-		<table class="table table-striped table table-hover">
-			<thead>
-				<tr>
-					<td>帳號名</td>
-					<td>密碼</td>
-					<td>姓名</td>
-					<td>性別</td>
-					<td>生日</td>
-					<td>email</td>
-					<td>手機</td>
-					<td>身分</td>
-					<td>註冊日期</td>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-				<tr v-for="item in Users">
-					<template v-if="item.Edit==true">
-						<td>
-							<button class="btn btn-success" @@click="update">修改</button>
-							<button class="btn btn-warning" @@click="cancel">取消</button>
-						<td>{{item.account}}/></td>
-						<td><input v-model="item.password" /></td>
-						<td><input v-model="item.name" /></td>
-						<td><input v-model="item.gender" /></td>
-						<td><input v-model="item.birthDate" /></td>
-						<td><input v-model="item.email" /></td>
-						<td><input v-model="item.phone" /></td>
-						<td><input v-model="item.role" /></td>
-						<td><input v-model="item.registerDate" /></td>
-					</template>
-					<template v-else>
-						<td><button class="btn btn-primary" @@click="edit(item.employeeid)">編輯</button>
-						{{item.account}}</td>
-						<td>{{item.password}}</td>
-						<td>{{item.name}}<td>
-						<td>{{item.gender}}</td>
-						<td>{{item.birthDate}}</td>
-						<td>{{item.email}}</td>
-						<td>{{item.phone}}</td>
-						<td>{{item.role}}</td>
-						<td>{{item.registerDate}}</td>
-					</template>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-	<div class="form-group">
-	</div>
-</div>*@
-
 
 <div id="app" class="container">
 	<template v-if="Edit==true">
@@ -134,7 +80,7 @@
 
 		<div class="row">
 			<div class="col-sm-3">
-				<button type="button" class="btn btn-outline-success" @@click="update">完成</button>
+				<button type="button" class="btn btn-outline-success" @@click="update">完成</button>@*用modal來做效果"確認完成以上變更?*@
 			</div>
 			<div class="col-sm-3">
 				<button type="button" class="btn btn-outline-danger">取消</button>
@@ -167,28 +113,36 @@
 		},
 		mounted: function () {
 			let _this = this;
-			_this.getUsers("Admin1"); @*要跟登入驗證那裡做連結*@
+			_this.getUsers(); 
 			},
 		methods: {
 			getUsers: function (account) {
 				alert("getUsers")
-				//request.Account = isEmpty(login.userAccount) ? -1 : login.userAccount;
 				axios.get(`${baseAddress}/GetAccount`).then(response => {
 					alert(response.data);
 					this.Users = response.data;
-					for (var i = 0; i < this.Users.length; i++) {
-						if (this.Users[i].account == account) {
-							this.account = this.Users[i].account;
-							this.password = this.Users[i].password;
-							this.name = this.Users[i].name;
-							this.gender = this.Users[i].gender;
-							this.birthDate = this.Users[i].birthDate;
-							this.email = this.Users[i].email;
-							this.phone = this.Users[i].phone;
-							this.role = this.Users[i].role;
-							this.registerDate = this.Users[i].registerDate;
-						}
-					}
+					this.account = this.Users.account;
+					this.password = this.Users.password;
+					this.name = this.Users.name;
+					this.gender = this.Users.gender;
+					this.birthDate = this.Users.birthDate;
+					this.email = this.Users.email;
+					this.phone = this.Users.phone;
+					this.role = this.Users.role;
+					this.registerDate = this.Users.registerDate;
+					//for (var i = 0; i < this.Users.length; i++) {
+					//	if (this.Users[i].account == account) {
+					//		this.account = this.Users[i].account;
+					//		this.password = this.Users[i].password;
+					//		this.name = this.Users[i].name;
+					//		this.gender = this.Users[i].gender;
+					//		this.birthDate = this.Users[i].birthDate;
+					//		this.email = this.Users[i].email;
+					//		this.phone = this.Users[i].phone;
+					//		this.role = this.Users[i].role;
+					//		this.registerDate = this.Users[i].registerDate;
+					//	}
+					//}
 				});
 			},
 			update: function () {
@@ -261,7 +215,7 @@
 			//		_this.filterEmployeeDTOes();
 			//	});
 			//}
-		}//就像MVC的Controller
+		}
 	});
 </script>
 

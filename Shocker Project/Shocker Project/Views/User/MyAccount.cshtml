@@ -1,5 +1,4 @@
-﻿@*@model ShockerProject.Models.Users
-*@
+﻿@model Shocker_Project.ViewModels.UserViewModel
 
 <!-- Hero Section Begin -->
 <section class="hero hero-normal">
@@ -39,7 +38,6 @@
 <!-- Hero Section End -->
 <!-- Breadcrumb Section Begin -->
 <img src="~/img/breadcrumb.jpg" />
-<h3>我的帳號</h3>
 <!-- Breadcrumb Section End -->
 <!-- Blog Section Begin -->
 <section class="blog spad">
@@ -48,40 +46,49 @@
             <div class="col-lg-4 col-md-5">
                 <div class="blog__sidebar">                 
                     <div class="blog__sidebar__item">
-                        <h4>我的帳號</h4>                        
-                        <a class="nav-link text-dark" asp-controller="User" asp-route-tab="a">個人檔案</a>
-                        <a class="nav-link text-dark" asp-controller="User" asp-route-tab="b">購買清單</a>
-                        <a class="nav-link text-dark" asp-controller="User" asp-route-tab="c">我的付款方式</a>
-                        <a class="nav-link text-dark" asp-controller="User" asp-route-tab="d">我的優惠碼</a>
-                        <a class="nav-link text-dark" asp-controller="User" asp-route-tab="e">客服發問紀錄</a>
+                        <ul class="nav flex-column">
+							<h3>我的帳號</h3>
+							<li class="nav-item">
+                                <a class="nav-link active" asp-controller="User" asp-route-tab="a" aria-current="page">個人檔案</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="User" asp-route-tab="b">我的付款方式</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="User" asp-route-tab="c">購買清單</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="User" asp-route-tab="d">我的優惠碼</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="User" asp-route-tab="e">客服發問紀錄</a>
+                            </li>
+                        </ul>                                                                   
                     </div>                 
                 </div>
             </div>
             <div class="col-lg-8 col-md-7">
                 <div class="row">
                     @{
-                        if (ViewBag.Tab == "a")
+                        switch (ViewBag.Tab)
                         {
-                            <partial name="EditMyAccountPartial"/>
+                            case "a":
+                                <partial name="EditMyAccountPartial" />
+                                break;
+                            case "b":
+                                <partial name="MyPaymentPartial" />
+                                break;
+                            case "c":
+                                <partial name="OrderlistsPartial" />
+                                break;
+                            case "d":
+                                <partial name="MyPromocodePartial" />
+                                break;
+                            case "e":
+                                <partial name="QuestionRecordPartial" />
+                                break;
                         }
-                        if (ViewBag.Tab == "b")
-                        {
-                            <partial name="OrderlistsPartial" />
-                        }
-                        if (ViewBag.Tab == "c")
-                        {
-                            <partial name="MyPaymentPartial" />
-                        }
-                        if (ViewBag.Tab == "d")
-                        {
-                            <partial name="MyPromocodePartial" />
-                        }
-                        if (ViewBag.Tab == "e")
-                        {
-                            <partial name="QuestionRecordPartial" />
-                        }
-                    }
-                                
+                    }                               
                 </div>
             </div>
         </div>

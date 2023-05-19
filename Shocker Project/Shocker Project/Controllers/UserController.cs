@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Shocker_Project.Models;
 using Shocker_Project.ViewModels;
 using System.Security.Principal;
@@ -22,49 +24,64 @@ namespace Shocker_Project.Controllers
 			return View();
 		}
 		///User/GetAccount
-		[HttpGet]
-		public JsonResult GetAccount(/*string Account*/)
+		[HttpGet]//目前打網址沒東西
+		public JsonResult GetAccount(string LoginAccount, UserViewModel uvm)//要接登入驗證那裡傳回的Users.Account
 		{
-			var getAccount = from i in _context.Users
-								 //where i.Account==Account
+			LoginAccount = "Admin1";
+			var getaccount = from i in _context.Users.Where(a => a.Account == LoginAccount)
 							 select new
 							 {
-								 Account = i.Account,//Readonly
+								 Account = i.Account,
 								 Password = i.Password,
 								 Name = i.Name,
 								 Gender = i.Gender,
-								 BirthDate = i.BirthDate,//Readonly
+								 BirthDate = i.BirthDate,
 								 Email = i.Email,
 								 Phone = i.Phone,
-								 Role = i.Role, //Readonly
-								 RegisterDate = i.RegisterDate//Readonly
+								 Role = i.Role,
+								 RegisterDate = i.RegisterDate
 							 };
-			return Json(getAccount);
+			return Json(getaccount);
 		}
 		///User/UpdateAccount
-		//[HttpPost]
-		//public async Task<JsonResult> UpdateAccount([Bind("Account,Password,Name,Gender,BirthDate,Email")] UserViewModel updateusers)
-		//{
-		//	if (ModelState.IsValid)
-		//	{
-		//		try
-		//		{
-		//			Users u = await _context.Users.FindAsync(updateusers.Account);
-		//			u.Password = updateusers.Password;
-		//			u.Name = updateusers.Name;
-		//			u.Gender = updateusers.Gender;
-		//			u.BirthDate = updateusers.BirthDate;
-		//			u.Email = updateusers.Email;
-		//			_context.Update(u);
-		//			await _context.SaveChangesAsync();
-		//		}
-		//		catch (DbUpdateConcurrencyException)
-		//		{
-		//			if (!UsersExists(user))
+		[HttpPost]
+		public async Task<JsonResult> UpdateAccount([Bind("Account,Password,Name,Gender,BirthDate,Email")] UserViewModel uvm)
+		{
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					Users u = await _context.Users.FindAsync(uvm.Account);
+					u.Password = uvm.Password;
+					u.Name = uvm.Name;
+					u.Gender = uvm.Gender;
+					u.BirthDate = uvm.BirthDate;
+					u.Email = uvm.Email;
+					_context.Update(u);
+					await _context.SaveChangesAsync();
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!UsersExists(uvm.Account))
+					{
+						return Json(new { Result = "Error", Message = "此帳號不存在!" });
+					}
+					else
+					{
+						throw;
+					}
+				}
+				return Json(new { Result = "OK"});				
+			}
+			else
+			{
+				return Json(new { Result = "OK" });
+			}
+		}
 
-		//		}
-
-		//	}
-		//}
+		private bool UsersExists(string hasaccount)
+		{
+			return _context.Users.Any(u => u.Account == hasaccount);
+		}
 	}
 }
