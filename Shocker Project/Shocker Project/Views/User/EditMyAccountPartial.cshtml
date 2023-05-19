@@ -21,7 +21,7 @@
 					<td>姓名</td>
 					<td>性別</td>
 					<td>生日</td>
-					<td>Email</td>
+					<td>email</td>
 					<td>手機</td>
 					<td>身分</td>
 					<td>註冊日期</td>
@@ -38,24 +38,23 @@
 						<td><input v-model="item.password" /></td>
 						<td><input v-model="item.name" /></td>
 						<td><input v-model="item.gender" /></td>
-						<td><input v-model="item.birthDate" /></td>
+						<td><input v-model="item.birthdate" /></td>
 						<td><input v-model="item.email" /></td>
 						<td><input v-model="item.phone" /></td>
 						<td><input v-model="item.role" /></td>
 						<td><input v-model="item.registerDate" /></td>
 					</template>
 					<template v-else>
-						<td><button class="btn btn-primary" @@click="edit(item.employeeId)">編輯</button></td>
+						<td><button class="btn btn-primary" @@click="edit(item.employeeid)">編輯</button></td>
 						<td>{{item.account}}</td>
 						<td>{{item.password}}</td>
-						<td>
-							{{item.name}}<tdi>
-								<td>{{item.gender}}</td>
-								<td>{{item.birthDate}}</td>
-								<td>{{item.email}}</td>
-								<td>{{item.phone}}</td>
-								<td>{{item.role}}</td>
-								<td>{{item.registerDate}}</td>
+						<td>{{item.name}}<tdi>
+						<td>{{item.gender}}</td>
+						<td>{{item.birthdate}}</td>
+						<td>{{item.email}}</td>
+						<td>{{item.phone}}</td>
+						<td>{{item.role}}</td>
+						<td>{{item.registerDate}}</td>
 					</template>
 				</tr>
 			</tbody>
@@ -64,16 +63,6 @@
 	<div class="form-group">
 	</div>
 </div>
-
-@*<b-container fluid>
-						<b-row class="my-1">
-						<b-col sm="3">
-						<label for="input-none">No State:</label>
-						</b-col>
-						<b-col sm="9">
-						<b-form-input id="input-none" :state="null" placeholder="No validation"></b-form-input>
-						</b-col>
-						</b-row>*@
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
 <script src="~/axios/axios.min.js"></script>
@@ -102,11 +91,11 @@
 		},
 		methods: {
 			getUsers: function (account) {
-				//alert("getUsers")
+				alert("getUsers")
 				let _this = this;
 				//request.Account = isEmpty(login.userAccount) ? -1 : login.userAccount;
 				axios.get(`${baseAddress}/MyAccountInformation`).then(response => {
-					//alert(response.data);
+					alert(response.data);
 					var item = _this.Users = response.data;
 					for (var i = 0; i < _this.Users.length; i++) {
 						if (item.account == account) {
