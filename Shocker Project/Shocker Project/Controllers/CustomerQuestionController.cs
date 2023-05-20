@@ -21,7 +21,7 @@ namespace Shocker_Project.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index([Bind("QuestionCategoryId, Description")] CustomerQAViewModel cqavm)
+        public async Task<IActionResult> Index( CustomerQAViewModel cqavm)
         {
             if (ModelState.IsValid)
             {
