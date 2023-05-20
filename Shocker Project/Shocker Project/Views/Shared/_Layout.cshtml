@@ -65,7 +65,7 @@
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
                 <li class="active"><a href="./index.html">首頁</a></li>
-                <li><a asp-area="Shoppingcart" asp-controller="ShoppingCartProducts" asp-action="Product">開始購物sideBar</a></li>
+                <li><a asp-area="Shoppingcart" asp-controller="ShoppingCartProducts" asp-action="Product">開始購物</a></li>
                 <li>
                     <a href="#">客服中心</a>
                     <ul class="header__menu__dropdown">
@@ -280,7 +280,7 @@
     <script src="~/js/mixitup.min.js"></script>
     <script src="~/js/owl.carousel.min.js"></script>
     <script src="~/js/main.js"></script>
-
+    @await RenderSectionAsync("Scripts", required: false)
 
 
 </body>

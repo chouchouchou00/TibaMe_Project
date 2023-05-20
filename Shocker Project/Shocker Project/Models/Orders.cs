@@ -14,7 +14,6 @@ namespace Shocker_Project.Models
         }
 
         public int OrderId { get; set; }
-        public string SellerAccount { get; set; }
         public string BuyerAccount { get; set; }
         public string Address { get; set; }
         public DateTimeOffset OrderDate { get; set; }
@@ -25,7 +24,6 @@ namespace Shocker_Project.Models
 
         public virtual Addresses Addresses { get; set; }
         public virtual Users BuyerAccountNavigation { get; set; }
-        public virtual Users SellerAccountNavigation { get; set; }
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }
         public virtual ICollection<Ratings> Ratings { get; set; }
     }

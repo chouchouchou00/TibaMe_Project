@@ -10,6 +10,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
@@ -18,10 +19,7 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReturnReason)
-            </th>
+            </th>            
             <th>
                 @Html.DisplayNameFor(model => model.Coupon)
             </th>
@@ -42,10 +40,7 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReturnReason)
-            </td>
+            </td>            
             <td>
                 @Html.DisplayFor(modelItem => item.Coupon.CouponId)
             </td>
@@ -74,13 +69,26 @@
             </div>
         </div>
         <div class="form-group">
-            <span class="custom-control-label col-md-2">收件人信箱</span>
+            <span class="custom-control-label col-md-2">要求日期</span>
             <div class="col-md-10">
-            <input type="email" id="fEmail" name="fEmail" required="required" class="form-control" />
+                <input type="date" id="RequiredDate" name="RequiredDate" required="required" class="form-control" />
             </div>
         </div>
         <div class="form-group">
             <span class="control-label col-md-2">收件人地址</span>
             <div class="col-md-10">
+                <input type="text" id="Address" name="Address" required="required" class="form-control" />
+        </div>
+        </div>
+        <div class="form-group">
+            <span class="control-label col-md-2">收件人電話</span>
+            <div class="col-md-10">
+                <input type="text" id="BuyerPhone" name="BuyerPhone" required="required" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10"></div>
+                <input type="submit" value="確認訂購" class="btn btn-default" />
+            </div>
         </div>
 </form>

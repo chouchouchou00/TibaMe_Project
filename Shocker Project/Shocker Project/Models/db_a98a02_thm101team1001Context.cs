@@ -148,11 +148,10 @@ namespace Shocker_Project.Models
                     .HasColumnName("CouponID")
                     .IsFixedLength();
 
-                entity.Property(e => e.Quantity)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Quantity).HasColumnName("Quantity")
+                    .IsRequired();                    
 
-                entity.Property(e => e.Status)
+                entity.Property(e => e.Status).HasColumnName("Status")
                     .IsRequired()
                     .HasMaxLength(10);
 
@@ -193,25 +192,15 @@ namespace Shocker_Project.Models
                     .IsRequired()
                     .HasMaxLength(30);
 
-                entity.Property(e => e.SellerAccount)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
                 entity.Property(e => e.Status)
                     .IsRequired()
                     .HasMaxLength(30);
 
                 entity.HasOne(d => d.BuyerAccountNavigation)
-                    .WithMany(p => p.OrdersBuyerAccountNavigation)
+                    .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.BuyerAccount)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Orders_Users2");
-
-                entity.HasOne(d => d.SellerAccountNavigation)
-                    .WithMany(p => p.OrdersSellerAccountNavigation)
-                    .HasForeignKey(d => d.SellerAccount)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Orders_Users");
 
                 entity.HasOne(d => d.Addresses)
                     .WithMany(p => p.Orders)
@@ -288,8 +277,7 @@ namespace Shocker_Project.Models
                     .HasMaxLength(50);
 
                 entity.Property(e => e.UnitsInStock)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                    .IsRequired();
 
                 entity.HasOne(d => d.ProductCategory)
                     .WithMany(p => p.Products)
@@ -314,6 +302,15 @@ namespace Shocker_Project.Models
                 entity.Property(e => e.CategoryName)
                     .IsRequired()
                     .HasMaxLength(30);
+
+                entity.Property(e => e.CustomerTa)
+                    .HasMaxLength(300)
+                    .HasColumnName("CustomerTA");
+
+                entity.Property(e => e.Qaclass)
+                    .HasMaxLength(20)
+                    .HasColumnName("QAclass")
+                    .IsFixedLength();
             });
 
             modelBuilder.Entity<Ratings>(entity =>

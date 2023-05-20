@@ -10,7 +10,7 @@ namespace Shocker_Project.Models
         public int OrderId { get; set; }
         public int ProductId { get; set; }
         public string CouponId { get; set; }
-        public string Quantity { get; set; }
+        public int Quantity { get; set; }
         public string Status { get; set; }
         public string ReturnReason { get; set; }
 

@@ -20,7 +20,7 @@ namespace Shocker_Project.Models
         public string ProductName { get; set; }
         public int ProductCategoryId { get; set; }
         public string Description { get; set; }
-        public string UnitsInStock { get; set; }
+        public int UnitsInStock { get; set; }
         public string Sales { get; set; }
         public string UnitPrice { get; set; }
         public string Status { get; set; }
