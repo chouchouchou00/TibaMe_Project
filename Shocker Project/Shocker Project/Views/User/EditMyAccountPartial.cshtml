@@ -10,11 +10,85 @@
 }
 
 <div id="app" class="container">
-	<template v-if="Edit==true">
+	@*未編輯的頁面*@	
+	<template v-if="Edit==false">
+		@*<div class="mb-3 row">
+			<label for="staticAccount" class="col-sm-2 col-form-label">頭像</label>
+			<div class="col-sm-10">
+				<input type="file" @@change="selectpic" />
+				<input type="text" v-model="address" />
+				<button @@click="uploadpic">上傳</button>
+			</div>
+		</div>*@
 
+		<div class="mb-3 row">
+			<label for="staticAccount" class="col-sm-2 col-form-label">帳號</label>
+			<div class="col-sm-10">
+				<input type="text" readonly class="form-control-plaintext" id="staticAccount" v-model="account">
+			</div>
+		</div>
+
+		<div class="mb-3 row">
+			<label for="inputPassword" class="col-sm-2 col-form-label">密碼</label>
+			<div class="col-sm-10">
+				<input type="text" readonly class="form-control-plaintext" id="inputPassword" v-model="password">@*要屏蔽將input改為type="password"*@
+			</div>
+		</div>
+
+		<div class="mb-3 row">
+			<label for="inputName" class="col-sm-2 col-form-label">名字</label>
+			<div class="col-sm-10">
+				<input type="text" readonly class="form-control-plaintext" id="inputName" v-model="name">
+			</div>
+		</div>
+
+		<div class="mb-3 row">
+			<label for="inputGender" class="col-sm-2 col-form-label">性別</label>
+			<div class="col-sm-10">
+				<input type="text" readonly class="form-control-plaintext" id="inputGender" v-model="gender">
+			</div>
+		</div>
+
+		<div class="mb-3 row">
+			<label for="inputBirthDate" class="col-sm-2 col-form-label">生日</label>
+			<div class="col-sm-10">
+				<input type="text" readonly class="form-control-plaintext" id="inputBirthDate" v-model="birthDate">
+			</div>
+		</div>
+
+		<div class="mb-3 row">
+			<label for="inputEmail" class="col-sm-2 col-form-label">郵件</label>
+			<div class="col-sm-10">
+				<input type="text" readonly class="form-control-plaintext" id="inputEmail" v-model="email">
+			</div>
+		</div>
+
+		<div class="mb-3 row">
+			<label for="staticPhone" class="col-sm-2 col-form-label">手機</label>
+			<div class="col-sm-10">
+				<input type="text" readonly class="form-control-plaintext" id="staticPhone" v-model="phone">
+			</div>
+		</div>
+
+		<div class="mb-3 row">
+			<label for="staticRole" class="col-sm-2 col-form-label">身分</label>
+			<div class="col-sm-10">
+				<input type="text" readonly class="form-control-plaintext" id="staticRole" v-model="role">
+			</div>
+		</div>
+
+		<div class="mb-3 row">
+			<label for="staticRegisterDate" class="col-sm-2 col-form-label">帳號創辦時間</label>
+			<div class="col-sm-10">
+				<input type="text" readonly class="form-control-plaintext" id="staticRegisterDate" v-model="registerDate">
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<button type="button" class="btn btn-outline-info" @@click="editUsers">編輯</button>
+		</div>
 	</template>
+	@*編輯中的頁面*@
 	<template v-else>
-
 		<div class="mb-3 row">
 			<label for="staticAccount" class="col-sm-2 col-form-label">帳號</label>
 			<div class="col-sm-6">
@@ -33,14 +107,14 @@
 			<label for="inputName" class="col-sm-2 col-form-label">名字</label>
 			<div class="col-sm-10">
 				<input type="text" class="form-control" id="inputName" v-model="name">
-			</div>		
+			</div>
 		</div>
 
 		<div class="mb-3 row">
 			<label for="inputGender" class="col-sm-2 col-form-label">性別</label>
 			<div class="col-sm-10">
 				<input type="text" class="form-control" id="inputGender" v-model="gender">
-			</div>		
+			</div>
 		</div>
 
 		<div class="mb-3 row">
@@ -77,16 +151,33 @@
 				<input type="text" readonly class="form-control-plaintext" id="staticRegisterDate" v-model="registerDate">
 			</div>
 		</div>
-
 		<div class="row">
 			<div class="col-sm-3">
-				<button type="button" class="btn btn-outline-success" @@click="update">完成</button>@*用modal來做效果"確認完成以上變更?*@
+				<button type="button" class="btn btn-outline-success" @@click="updateUsers">完成</button>
 			</div>
 			<div class="col-sm-3">
-				<button type="button" class="btn btn-outline-danger">取消</button>
+				<button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#cancelModal">取消</button>
+				<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">取消變更</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								您確定要取消所有變更內容?
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">返回</button>
+								<button type="button" class="btn btn-danger" data-dismiss="modal" @@click="cancel">確定</button>
+							</div>
+						</div>
+					</div>
+				</div>			
 			</div>
 		</div>
-
 	</template>
 
 </div>
@@ -109,110 +200,67 @@
 			phone: "",
 			role: "",
 			registerDate: "",
+			//pic: "",
+			//address:"",
 			Edit: false
 		},
 		mounted: function () {
 			let _this = this;
-			_this.getUsers(); 
-			},
+			_this.getUsers();
+		},
 		methods: {
 			getUsers: function (account) {
 				alert("getUsers")
 				axios.get(`${baseAddress}/GetAccount`).then(response => {
 					alert(response.data);
 					this.Users = response.data;
-					this.account = this.Users.account;
-					this.password = this.Users.password;
-					this.name = this.Users.name;
-					this.gender = this.Users.gender;
-					this.birthDate = this.Users.birthDate;
-					this.email = this.Users.email;
-					this.phone = this.Users.phone;
-					this.role = this.Users.role;
-					this.registerDate = this.Users.registerDate;
-					//for (var i = 0; i < this.Users.length; i++) {
-					//	if (this.Users[i].account == account) {
-					//		this.account = this.Users[i].account;
-					//		this.password = this.Users[i].password;
-					//		this.name = this.Users[i].name;
-					//		this.gender = this.Users[i].gender;
-					//		this.birthDate = this.Users[i].birthDate;
-					//		this.email = this.Users[i].email;
-					//		this.phone = this.Users[i].phone;
-					//		this.role = this.Users[i].role;
-					//		this.registerDate = this.Users[i].registerDate;
-					//	}
-					//}
+					this.account = this.Users[0].account;
+					this.password = this.Users[0].password;
+					this.name = this.Users[0].name;
+					this.gender = this.Users[0].gender;
+					this.birthDate = this.Users[0].birthDate;
+					this.email = this.Users[0].email;
+					this.phone = this.Users[0].phone;
+					this.role = this.Users[0].role;
+					this.registerDate = this.Users[0].registerDate;
 				});
 			},
-			update: function () {
+			updateUsers: function () {
 				var request = {
-					Account: this.Users[i].account,
-					Password:this.password,
-					Name:this.name,
-					Gender:this.gender,
-					BirthDate:this.birthDate,
-					Email:this.email
+					Account: this.Users[0].account,
+					Password: this.password,
+					Name: this.name,
+					Gender: this.gender,
+					BirthDate: this.birthDate,
+					Email: this.email,
+					Phone: this.Users[0].phone,
+					Role: this.Users[0].role,
+					RegisterDate: this.Users[0].registerDatet
 				};
 				axios.post(`${baseAddress}/UpdateAccount`, request).then(response => {
 					this.getUsers();
+					this.Edit = false;
 				});
 			},
-			//cancel: function () {
-			//	let _this = this;
-			//	var employeeList = [];
-			//	for (var i = 0; i < _this.EmployeeDTOes.length; i++) {
-			//		var item = _this.EmployeeDTOes[i];
-			//		if (item.Edit == true) {
-			//			item.Edit = false;
-			//			item.firstName = _this.originFirstName;
-			//			item.lastName = _this.originLastName;
-			//			item.title = _this.originTitle;
+			editUsers: function () {
+				this.Edit = true;
+			},
+			cancel: function () {
+				this.Edit = false;
+				this.getUsers();
+			}
+
+			//selectpic: function (evemt) {
+			//	this.pic = event.target.files[0];
+			//},
+			//uploadpic: function () {
+			//	var d=new FormData();
+			//	d.append('pic',this.pic);
+			//	d.append('ad',this.address);
+			//	axios.post(function,d).then(response=>{
+			//		if(response.data){
+			//			alert('成功')
 			//		}
-			//		employeeList.push(item);
-			//	}
-			//	_this.EmployeeDTOes = employeeList
-			//},
-			//edit: function (employeeId) {
-			//	let _this = this;
-			//	var employeeList = [];
-			//	for (var i = 0; i < _this.EmployeeDTOes.length; i++) {
-			//		var item = _this.EmployeeDTOes[i];
-			//		if (employeeId == item.employeeId) {
-			//			item.Edit = true;
-			//			_this.originFirstName = item.firstName;
-			//			_this.originLastName = item.lastName;
-			//			_this.originTitle = item.title;
-			//		};
-			//		employeeList.push(item);
-			//	};
-			//	_this.EmployeeDTOes = employeeList;
-			//},
-			//deleteEmp: function (employeeId) {
-			//	let _this = this;//this指的是Vue物件
-			//	var ret = confirm("刪除要確捏?");
-			//	if (ret == true) {
-			//		axios.delete(`${baseAddress}api/Employees/${employeeId}`).then(response => {
-			//			alert(response.data);
-			//			_this.filterEmployeeDTOes();
-			//		});
-			//	}
-			//},
-			//showInsertPage: function () {
-			//	$("#insertPage").modal('show');
-			//},
-			//insert: function () {
-			//	let _this = this;
-			//	var empDTO = {
-			//		EmployeeId: 0,//因為要跟後端溝通，所以要寫EmployeeId這種頭大寫的DTO格式
-			//		FirstName: _this.firstName,
-			//		LastName: _this.lastName,
-			//		Title: _this.title
-			//	};
-			//	axios.post(`${baseAddress}api/Employees`, empDTO).then(response => {
-			//		alert(response.data);
-			//		$("#insertPage").modal('hide');
-			//		_this.filterEmployeeDTOes();
 			//	});
 			//}
 		}

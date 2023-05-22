@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Shocker_Project.ViewModels
+namespace Shocker_Project.ViewModels//
 {
     public class UserViewModel: IValidatableObject
     {
@@ -29,7 +29,10 @@ namespace Shocker_Project.ViewModels
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            throw new NotImplementedException();
-        }
+			if (string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Name))
+			{
+				yield return new ValidationResult("密碼跟名字為必填欄位"/*,new string[] {}*/);
+			}
+		}
     }
 }
