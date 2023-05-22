@@ -1,0 +1,24 @@
+[
+  {
+    "outputFileName": "wwwroot/assets/css/bundle.css",
+    "inputFiles": [
+      "wwwroot/assets/css/argon-dashboard.css",
+      "wwwroot/assets/css/nucleo-icons.css",
+      "wwwroot/assets/css/nucleo-svg.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/bundle.js",
+    "inputFiles": [
+      "wwwroot/js/bootstrap.min.js",
+      "wwwroot/js/jquery.nice-select.min.js",
+      "wwwroot/js/jquery.slicknav.js",
+      "wwwroot/js/jquery-3.3.1.min.js",
+      "wwwroot/js/jquery-ui.min.js",
+      "wwwroot/js/main.js",
+      "wwwroot/js/mixitup.min.js",
+      "wwwroot/js/owl.carousel.min.js",
+      "wwwroot/js/site.js"
+    ]
+  }
+]
