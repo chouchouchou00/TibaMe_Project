@@ -1,7 +1,4 @@
-﻿@*<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">*@
+﻿
 <title>購物車</title>
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
@@ -29,6 +26,7 @@
                     <i class="fas fa-shopping-cart"></i>
                     購物車
                     <div id="cartNumber">0</div>
+
                 </a>
             </li>
         </ul>
@@ -95,6 +93,9 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">
                     <i class="fas fa-times"></i> 關閉
                 </button>
+                <button id="Pay" type="button" class="btn btn-primary">
+                    <a asp-area="Shoppingcart" asp-controller="ShoppingCartProducts" asp-action="ShoppingCart"></a><i class="fas fa-credit-card"></i> 結帳
+                </button>
             </div>
         </div>
     </div>
@@ -112,10 +113,8 @@
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
-@section Scripts{
+
     <script src="~/js/chuyi/cart.min.js"></script>
-}
 
-@*</body>
 
-</html>*@
+

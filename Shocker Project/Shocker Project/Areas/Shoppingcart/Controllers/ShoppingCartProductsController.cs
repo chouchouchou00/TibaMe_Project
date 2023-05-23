@@ -187,7 +187,7 @@ namespace Shocker_Project.Areas.Shoppingcart.Controllers
         [HttpPost]
         public IActionResult ShoppingCart(DateTime RequiredDate, string PayMethod, string Address, int BuyerPhone)
         {
-        
+                    
                     string UserId = loginaccount;//User.Identity.Name;
                                                  //string guid = Guid.NewGuid().ToString();
                     Orders order = new Orders();
@@ -202,7 +202,7 @@ namespace Shocker_Project.Areas.Shoppingcart.Controllers
                 
             
  
-                       var carList = _context.OrderDetails.Where(m => m.Status == "購物車" && m.Order.BuyerAccount == UserId).ToList();
+                    var carList = _context.OrderDetails.Where(m => m.Status == "購物車" && m.Order.BuyerAccount == UserId).ToList();
             foreach (var item in carList)
             {
                 item.Status = "未出貨";
