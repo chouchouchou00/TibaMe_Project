@@ -177,41 +177,46 @@ namespace Shocker_Project.Areas.Shoppingcart.Controllers
         {
             return View();
         }
-
+        string loginaccount = "User2";
         public IActionResult ShoppingCart()
         {
-            string UserId = User.Identity.Name;
+            string UserId = loginaccount; //User.Identity.Name;
             var orderDetails = _context.OrderDetails.Where(m => m.Order.BuyerAccount == UserId && m.Status == "購物車").ToList();
             return View(orderDetails);
         }
         [HttpPost]
         public IActionResult ShoppingCart(DateTime RequiredDate, string PayMethod, string Address, int BuyerPhone)
         {
-            string UserId = User.Identity.Name;
-            //string guid = Guid.NewGuid().ToString();
-            Orders order = new Orders();
-            order.BuyerAccount = UserId;
-            order.Address = Address;
-            order.BuyerPhone = BuyerPhone;
-            order.OrderDate = DateTime.Now;
-            order.PayMethod = PayMethod;
-            order.RequiredDate = RequiredDate;
-            order.Status = "未出貨";
-            _context.Orders.Add(order);
-
-
-            var carList = _context.OrderDetails.Where(m => m.Status == "購物車" && m.Order.BuyerAccount == UserId).ToList();
+        
+                    string UserId = loginaccount;//User.Identity.Name;
+                                                 //string guid = Guid.NewGuid().ToString();
+                    Orders order = new Orders();
+                    order.BuyerAccount = UserId;
+                    order.Address = Address;
+                    order.BuyerPhone = BuyerPhone;
+                    order.OrderDate = DateTime.Now;
+                    order.PayMethod = PayMethod;
+                    order.RequiredDate = RequiredDate;
+                    order.Status = "未出貨";
+                    _context.Orders.Add(order);
+                
+            
+ 
+                       var carList = _context.OrderDetails.Where(m => m.Status == "購物車" && m.Order.BuyerAccount == UserId).ToList();
             foreach (var item in carList)
             {
                 item.Status = "未出貨";
             }
             _context.SaveChanges();
             return RedirectToAction("OrderList");
-        }
+            }
+     
+
+ 
         //建立訂單主檔列表
         public IActionResult OrderList()
         {
-            string UserId = User.Identity.Name;
+            string UserId = loginaccount;//User.Identity.Name;
             var orders = _context.Orders.Where(m => m.BuyerAccount == UserId).OrderByDescending(m => m.OrderDate).ToList();
             //目前會員的訂單主檔OrderList
             return View(orders);
@@ -223,7 +228,7 @@ namespace Shocker_Project.Areas.Shoppingcart.Controllers
         }
         public IActionResult AddCar(int ProductId)
         {
-            string UserId = User.Identity.Name;
+            string UserId = loginaccount;//User.Identity.Name;
             var currentcar = _context.OrderDetails.Where(m => m.ProductId == ProductId && m.Status =="購物車" && m.Order.BuyerAccount ==UserId).FirstOrDefault();
             if (currentcar == null)
             {

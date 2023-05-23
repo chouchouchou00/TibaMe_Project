@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="~/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="~/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="~/css/style.css" type="text/css">
+
 </head>
 
 <body>
@@ -42,7 +43,14 @@
         <div class="humberger__menu__cart">
             <ul>
                 <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>1</span></a></li>
+                <li><a asp-area="Shoppingcart" asp-controller="ShoppingCartProducts" asp-action="ShoppingCart"><i class="fa fa-shopping-bag" title="購物車"></i> <span>1</span></a></li>
+   @*             <li>
+                    <a id="navLinkItem" class="nav-link" href="#cartModal" data-toggle="modal">
+                        <i class="fas fa-shopping-cart"></i>
+                        購物車
+                        <div id="cartNumber">0</div>
+                    </a>
+                </li>*@
             </ul>
             <div class="header__cart__price">item: <span>$100.00</span></div>
         </div>
@@ -177,6 +185,7 @@
                     <div class="header__cart">
                         <ul>
                             <li><a href="#"><i class="fa fa-heart" title="願望清單"></i> <span>1</span></a></li>
+                            
                             <li><a asp-area="Shoppingcart" asp-controller="ShoppingCartProducts" asp-action="ShoppingCart"><i class="fa fa-shopping-bag" title="購物車"></i> <span>1</span></a></li>
                         </ul>
                         <div class="header__cart__price">item: <span>$100.00</span></div>
@@ -280,6 +289,7 @@
     <script src="~/js/mixitup.min.js"></script>
     <script src="~/js/owl.carousel.min.js"></script>
     <script src="~/js/main.js"></script>
+    <script src="~/js/chuyi/cart.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
 

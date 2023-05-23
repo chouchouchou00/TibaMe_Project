@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "wwwroot/js/chuyi/cart.min.js",
+    "inputFiles": [
+      "wwwroot/js/chuyi/cart.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/chuyi/style.min.css",
+    "inputFiles": [
+      "wwwroot/css/chuyi/style.css"
+    ]
+  }
+]

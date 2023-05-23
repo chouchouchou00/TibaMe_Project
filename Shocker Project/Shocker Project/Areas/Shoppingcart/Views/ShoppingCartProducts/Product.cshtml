@@ -2,14 +2,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">*@
-<title>JavaScript 購物車</title>
+<title>購物車</title>
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 <!-- bootstrap.css -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css">
 <!-- style.css -->
 @*<link rel="stylesheet" href="./css/style.css">*@
-<link href="~/css/chuyi/style.css" rel="stylesheet" />
+<link href="~/css/chuyi/style.min.css" rel="stylesheet" />
 @*</head>*@
 
 @*<body>*@
@@ -38,8 +38,7 @@
 <!-- header -->
 <div id="header" class="jumbotron">
     <div class="container">
-        <h1>JavaScript 購物車</h1>
-        <p>使用HTML5 LocalStorage API製作購物車</p>
+        <h1> 購物車</h1>
     </div>
 </div>
 <!-- header end -->
@@ -100,8 +99,8 @@
         </div>
     </div>
 </div>
-<!-- modal -->
-<!-- jquery.js -->
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <!-- popper.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
@@ -113,9 +112,10 @@
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
-<!-- cart.js -->
-@*<script src="./js/cart.js"></script>*@
-<script src="~/js/chuyi/cart.js"></script>
+@section Scripts{
+    <script src="~/js/chuyi/cart.min.js"></script>
+}
+
 @*</body>
 
 </html>*@

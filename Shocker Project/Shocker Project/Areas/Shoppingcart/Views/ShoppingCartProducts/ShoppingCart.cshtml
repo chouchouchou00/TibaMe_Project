@@ -11,23 +11,23 @@
     <a asp-action="Create">Create New</a>
 </p>
 
-<table class="table">
+<table id="ShoppingCartOrder" class="table" width="100%">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Quantity)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>            
-            <th>
                 @Html.DisplayNameFor(model => model.Coupon)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Order)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Product)
+
             </th>
             <th></th>
         </tr>
@@ -36,28 +36,31 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
+                @Html.DisplayFor(modelItem => item.Product.ProductName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>            
+            @Html.DisplayFor(modelItem => item.Product.UnitPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Coupon.CouponId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Order.Address)
+            
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Product.Currency)
-            </td>
-            <td>
-                    <a href="@Url.Action("DeleteCar")?OrderId=@item.OrderId" class="btn btn-danger" onclick="return confirm('確定放棄購買 @item.ProductId 嗎?')">刪除購物車</a>
+                <a href="@Url.Action("DeleteCar")?OrderId=@item.OrderId" class="btn btn-danger" onclick="return confirm('確定放棄購買 @item.ProductId 嗎?')">
+                    刪除購物車
+                </a>
             </td>
 
         </tr>
 }
     </tbody>
 </table>
+    <script src=""></script>
 <form action="@Url.Action("ShoppingCart")" method="post">
     <div class="form-horizontal">
         <h4>填寫訂單收件人資料</h4>
