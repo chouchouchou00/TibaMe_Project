@@ -196,14 +196,13 @@
 </div>
         <script>
             let app = new Vue({
-
                 el:"#app",
                 data:{
                     QA:[],
                 },
                 mounted:function(){
                     let self =this;
-                    axios('/api/QA/all').then(res=>self.QA =res.data)
+            axios.get('localhost:/https://localhost:7033/Admin/AdminCustomerQA/QA/all').then(res => self.QA = res.data)
                     
                 }
             })

@@ -4,6 +4,7 @@ using Shocker_Project.Models;
 
 namespace Shocker_Project.Areas.Admin.Controllers.Api
 {
+    [Area("Admin")]
     [Route("api/QA/{action}")]
     [ApiController]
     public class QAController : ControllerBase
