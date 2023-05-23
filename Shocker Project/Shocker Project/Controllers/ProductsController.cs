@@ -45,10 +45,10 @@ namespace Shocker_Project.Controllers
 
 		[HttpPost]
 		//[ValidateAntiForgeryToken]
-		public JsonResult GetProducts() //(string account)
+		public JsonResult GetProducts()//(string account)
 		{
 			var product = from p in _context.Products
-							  //where p.SellerAccount == User.Identity.Name
+						  //where p.SellerAccount == account
 						  select new
 						  {
 							  ProductId = p.ProductId,
@@ -65,7 +65,7 @@ namespace Shocker_Project.Controllers
 						  };
 			return Json(product);
 		}
-		[HttpGet]
+		[HttpPost]
 		//[ValidateAntiForgeryToken]
 		public async Task<JsonResult> Filter([FromBody] ProductsViewModel product)
 		{
@@ -73,8 +73,7 @@ namespace Shocker_Project.Controllers
 				p => /*p.SellerAccount == User.Identity.Name ||*/
 					 p.ProductName.Contains(product.ProductName) ||
 					 p.Description.Contains(product.Description) ||
-					 p.Status.Contains(product.Status) ||
-					 p.Currency.Contains(product.Currency))
+					 p.Status.Contains(product.Status))
 					 .Select(p => new Products
 					 {
 						 ProductId = p.ProductId,
@@ -108,15 +107,26 @@ namespace Shocker_Project.Controllers
 		}
 		[HttpGet]
 		//[ValidateAntiForgeryToken]
-		public async Task<JsonResult> Update([FromBody] ProductsViewModel product)
+		public async Task<JsonResult> Update(ProductsViewModel product)
 		{
 			if (ModelState.IsValid)
 			{
 				try
 				{
 					Products? p = await _context.Products.FindAsync(product.ProductId);
+					if (p == null) return Json(new { Results = "Error", Message = "記錄不存在" });
+					p.SellerAccount = product.SellerAccount;
+					if (p.Status == "未上架" && product.Status == "已上架")
+					{
+						p.LaunchDate = DateTimeOffset.Now;
+					}
 					p.ProductName = product.ProductName;
+					p.ProductCategoryId = product.ProductCategoryId;
 					p.Description = product.Description;
+					p.UnitsInStock = product.UnitsInStock;
+					p.UnitPrice = product.UnitPrice;
+					p.Status = product.Status;
+					p.Currency = product.Currency;
 					_context.Update(p);
 					await _context.SaveChangesAsync();
 				}
@@ -131,7 +141,7 @@ namespace Shocker_Project.Controllers
 						throw;
 					}
 				}
-				return Json(product);
+				return Json((new { Result = "OK", Message = "修改記錄成功" }));
 			}
 			else
 			{
@@ -144,7 +154,7 @@ namespace Shocker_Project.Controllers
 			return (_context.Products?.Any(p => p.ProductId == id)).GetValueOrDefault();
 		}
 
-		[HttpGet]
+		[HttpPost]
 		//[ValidateAntiForgeryToken]
 		public async Task<JsonResult> Delete(int id)
 		{
@@ -153,9 +163,16 @@ namespace Shocker_Project.Controllers
 			{
 				return Json(new { Result = "Error", Message = "找不到欲刪除記錄" });
 			}
-			_context.Products.Remove(product);
-			await _context.SaveChangesAsync();
-			return Json(product);
+			try
+			{
+				_context.Products.Remove(product);
+				await _context.SaveChangesAsync();
+			}
+			catch(DbUpdateException)
+			{
+				return Json(new { Result = "Error", Message = "刪除失敗" });
+			}
+			return Json(new { Result = "OK", Message = "刪除成功" });
 		}
 		[HttpGet]
 		//[ValidateAntiForgeryToken]

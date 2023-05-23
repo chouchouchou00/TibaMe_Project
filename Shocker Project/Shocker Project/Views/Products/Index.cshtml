@@ -108,7 +108,7 @@
 		</div>
 		</div>*@
 	</aside>
-	<main class="main-content position-relative border-radius-lg ">
+	<main id="app" class="main-content position-relative border-radius-lg ">
 		<!-- Navbar -->
 		<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="false">
 			<div class="container-fluid py-1 px-3">
@@ -125,7 +125,7 @@
 					<div class="ms-md-auto pe-md-3 d-flex align-items-center">
 						<div class="input-group">
 							<span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-							<input name="keyword" type="text" class="form-control" placeholder="關鍵字">
+							<input v-model="filter" type="text" class="form-control" placeholder="關鍵字" @@keyup="filterProducts">
 						</div>
 					</div>
 					<ul class="navbar-nav  justify-content-end">
@@ -133,7 +133,7 @@
 						<li class="nav-item d-flex align-items-center">
 							<a href="javascript:;" class="nav-link text-white font-weight-bold px-0">
 								<i class="fa fa-user me-sm-1"></i>
-								<span class="d-sm-inline d-none">User1</span>
+								<span class="d-sm-inline d-none">{{loginAccount}}</span>
 							</a>
 						</li>
 						@*左側選單*@
@@ -163,7 +163,7 @@
 			</div>
 		</nav>
 		<!-- End Navbar -->
-		<div id="app" class="container-fluid py-4">
+		<div class="container-fluid py-4">
 			<div v-if="this._products" class="row">
 				<div class="col-12">
 					<div class="card mb-4">
@@ -178,6 +178,7 @@
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">編號</th>
 											<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">名稱</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">庫存</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">銷量</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">上架狀態</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">上架時間</th>
 											<th class="text-secondary opacity-7"></th>
@@ -200,6 +201,9 @@
 											</td>
 											<td class="align-middle text-center">
 												<p class="text-xs font-weight-bold mb-0">{{item.UnitsInStock}}</p>
+											</td>
+											<td class="align-middle text-center">
+												<p class="text-xs font-weight-bold mb-0">{{item.Sales}}</p>
 											</td>
 											<td class="align-middle text-center text-sm">
 												<span class="badge badge-sm bg-gradient-success">{{item.Status}}</span>
@@ -234,6 +238,7 @@
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">編號</th>
 											<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">名稱</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">庫存</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">銷量</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">上架狀態</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">上架時間</th>
 											<th class="text-secondary opacity-7"></th>
@@ -256,6 +261,9 @@
 											</td>
 											<td class="align-middle text-center">
 												<p class="text-xs font-weight-bold mb-0">{{details.UnitsInStock}}</p>
+											</td>
+											<td class="align-middle text-center">
+												<p class="text-xs font-weight-bold mb-0">{{details.Sales}}</p>
 											</td>
 											<td class="align-middle text-center text-sm">
 												<div class="form-check form-switch ps-0 ms-auto my-auto">
@@ -288,8 +296,8 @@
 								<div class="col-md-3"></div>
 								<div class="col-md-3">
 									<div class="d-flex justify-content-between">
-										<a href="javascript:;" class="btn btn-primary btn-sm ms-auto">儲存</a>
-										<a href="javascript:;" class="btn btn-danger btn-sm ms-auto">刪除商品</a>
+										<a href="javascript:;" class="btn btn-primary btn-sm ms-auto" @@click="update(details)">儲存</a>
+										<a href="javascript:;" class="btn btn-danger btn-sm ms-auto" @@click="deleteProduct(details.ProductId)">刪除商品</a>
 									</div>
 								</div>
 							</div>
@@ -305,8 +313,8 @@
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="example-text-input" class="form-control-label">類型{{details.CategoryId}}</label>
-										<select v-model="details.CategoryId" class="form-control text-center">
+										<label for="example-text-input" class="form-control-label">類型</label>
+										<select v-model="details.ProductCategoryId" class="form-control text-center">
 											<option value="1">衣服</option>
 											<option value="2">文具</option>
 										</select>
@@ -314,7 +322,7 @@
 								</div>
 								<div class="col-md-2">
 									<div class="form-group">
-										<label for="example-text-input" class="form-control-label">貨幣{{details.Currency}}</label>
+										<label for="example-text-input" class="form-control-label">貨幣</label>
 										<select v-model="details.Currency" class="form-control text-center">
 											<option value="NTD">NTD</option>
 											<option value="USD">USD</option>
@@ -329,7 +337,7 @@
 								</div>
 								<div class="col-md-2">
 									<div class="form-group">
-										<label for="example-text-input" class="form-control-label">庫存量增減{{plus}}</label>
+										<label for="example-text-input" class="form-control-label">庫存量增減</label>
 										<div class="form-check form-switch ps-0 ms-auto my-auto">
 											<select v-model="plus" class="form-control text-center">
 												<option value="INC">增加</option>
@@ -361,6 +369,11 @@
 									<div class="form-group">
 										<label for="example-text-input" class="form-control-label">預覽</label>
 										<input class="form-control" type="file" @@change="selectedFile">
+										<div class="col-md-6">
+											<div class="form-group">
+												<img :src="this.preview" />
+											</div>
+										</div>										
 										<label for="example-text-input" class="form-control-label">圖片說明</label>
 										<textarea class="form-control" rows="5" cols="20" v-model="pictureText" value=""></textarea>
 										<p><button type="submit" class="btn btn-primary btn-sm ms-auto" @@click="uploadFile">新增</button></p>
@@ -543,36 +556,18 @@
 		var vueApp = {
 			data() {
 				return {
+					loginAccount: 'User1',
 					_products: false,
 					Products: [],
 					_details: false,
 					details: [],
 					_checked: false,
-					plus: '',
+					plus: 'INC',
 					increase: 0,
 					picture: '',
+					preview:'',
 					pictureText: '',
-					filter: '',
-					ProductId: '',
-					SellerAccount: '',
-					LaunchDate: '',
-					ProductName: '',
-					ProductCategoryId: '',
-					Description: '',
-					UnitsInStock: '',
-					Sales: '',
-					UnitPrice: '',
-					Status: '',
-					Currency: '',
-					productNameOld: '',
-					productCategoryIdOld: '',
-					salesOld: '',
-					descriptionOld: '',
-					unitsInStockOld: '',
-					salesOld: '',
-					unitPriceOld: '',
-					statusOld: '',
-					currencyOld: ''
+					filter: ''					
 				};
 			},
 			mounted: function () {
@@ -583,9 +578,9 @@
 				stock: function() {
 					let _this = this;
 					if (_this.plus == 'INC') {
-						_this.details.UnitsInStock += increase;
+						_this.details.UnitsInStock += _this.increase;
 					}
-					else _this.details.UnitsInStock -= increase;
+					else _this.details.UnitsInStock -= _this.increase;
 				},
 				shelf: function () {
 					let _this = this;
@@ -607,6 +602,7 @@
 					alert('selected');
 					var _this = this;
 					_this.picture = e.target.files[0];
+					_this.preview = URL.createObjectURL(_this.picture);
 				},
 				getProducts: function () {
 					//alert('getProducts');
@@ -621,50 +617,47 @@
 					_this.details = _this.Products[0];
 				},
 				filterProducts: function () {
-					alert('filter');
+					//alert('filter');
 					let _this = this;
 					_this._details = false;
 					_this._products = true;
 					var request = {};
 					request.ProductId = isNaN(parseInt(_this.filter)) ? -1 : parseInt(_this.filter);
-					request.ProductName = request.ProductCategoryId = request.Description = request.UnitsInStock = request.Sales = request.UnitPrices = request.Status = request.Currency;
-					axios.get(`${baseAddress}/Products/Filter`, request).then(response => {
-						_this.Products = response.data;
-						var ProductList = [];
-						for (var i = 0; i < _this.Products.length; i++) {
-							var item = _this.Products[i];
-							item.Edit = false;
-							ProductList.push(item);
+					request.ProductName = request.ProductCategoryId = request.Description = request.Status = _this.filter;
+					axios.post(`${baseAddress}/Products/Filter`, request).then(response => {
+						_this.Products = response.data;						
 						}
-						_this.Products = ProductList;
-					});
+					);
+					_this.details = _this.Products[0];					
 				},
 				edit: function (productId) {
 					//alert('edit');
 					let _this = this;
-					_this._products = false;
-					_this._details = true;
 					_this.Products.forEach(item => {
 						if (item.ProductId == productId) {
 							_this.details = item;
 						}
-						_this._checked = (_this.details.Status == '已上架') ? true : false;
+					_this._checked = (_this.details.Status == '已上架') ? true : false;
 					});
+					_this._products = false;
+					_this._details = true;
 				},
 				update: function (item) {
 					alert('update');
 					let _this = this;
 					var request = {};
-					stock();
+					_this.stock();
+					request.ProductId = item.ProductId;
+					request.SellerAccount = item.SellerAccount;
 					request.ProductName = item.ProductName;
 					request.ProductCategoryId = item.ProductCategoryId;
 					request.Description = item.Description;
+					request.UnitsInStock = item.UnitsInStock;
 					request.UnitPrice = item.UnitPrice;
-					request.Sales = item.Sales;
 					request.Status = item.Status;
 					request.Currency = item.Currency;
 
-					axios.get(`${baseAddress}/Products/Update/${item.ProductId}`, request).then(response => {
+					axios.get(`${baseAddress}/Products/Update/`, request).then(response => {
 						alert(response.data);
 						_this.cancel();
 						_this.getProducts();
@@ -674,31 +667,21 @@
 					//alert('cancel');
 					let _this = this;
 					_this._details = false;
-					_this._products = true;
-					var ProductList = [];
-					for (var i = 0; i < _this.Products.length; i++) {
-						var item = _this.Products[i];
-						if (item.Edit == true) {
-							item.ProductName = _this.productNameOld;
-							item.ProductCategoryId = _this.productCategoryIdOld;
-							item.Description = _item.descriptionOld;
-							item.UnitPrice = _this.unitPriceOld;
-							item.Sales = _this.salesOld;
-							item.Status = _this.statusOld;
-							item.Currency = _this.currencyOld;
-							_this.details.Edit = false;
+					_this._products = true;	
+					_this.Products.forEach(item => {
+						if (item.ProductId == _this.details.ProductId) {
+							_this.details = item;
 						}
-						ProductList.push(item);
-					}
-					_this.Products = ProductList;
+					});
+					_this.getProducts();
 				},
 				deleteProduct: function (productId) {
 					let _this = this;
 					var ret = confirm('確定要刪除嗎？');
 					if (ret == true) {
-						axios.get(`${baseAddress}/Products/Delete/${item.ProductId}`).then(response => {
+						axios.post(`${baseAddress}/Products/Delete/${productId}`).then(response => {
 							alert(response.data);
-							_this.filterProducts();
+							_this.getProducts();
 						});
 					}
 				},
