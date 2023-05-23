@@ -49,7 +49,8 @@
 			</a>
 		</div>
 		<hr class="horizontal dark mt-0">
-		<div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+		@*賣家中心選單*@
+		<div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main">
 			<ul class="navbar-nav">
 				<li class="nav-item">
 					<a class="nav-link " href="#">
@@ -61,6 +62,7 @@
 				</li>
 				<li class="nav-item">
 					<a class="nav-link active" href="#">
+						@*active*@
 						<div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
 							<i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
 						</div>
@@ -93,6 +95,7 @@
 				</li>
 			</ul>
 		</div>
+		@*footer*@
 		@*<div class="sidenav-footer mx-3 ">
 		<div class="card card-plain shadow-none" id="sidenavCard">
 		<img class="w-50 mx-auto" src="~/assets/img/illustrations/icon-documentation.svg" alt="sidebar_illustration">
@@ -107,29 +110,33 @@
 	</aside>
 	<main class="main-content position-relative border-radius-lg ">
 		<!-- Navbar -->
-		<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur" data-scroll="false">
+		<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="false">
 			<div class="container-fluid py-1 px-3">
 				<nav aria-label="breadcrumb">
 					<ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-						<li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">賣家中心</a></li>
-						<li class="breadcrumb-item text-sm text-white active" aria-current="page">商品管理</li>
+						<li class="breadcrumb-item text-sm">
+							<a asp-controller="Home" asp-action="Index" class="opacity-5 text-white">首頁</a>
+						</li>
+						<li class="breadcrumb-item text-sm text-white active" aria-current="page">賣家中心</li>
 					</ol>
-					@*<h6 class="font-weight-bolder text-white mb-0">Tables</h6>*@
+					<h6 class="font-weight-bolder text-white mb-0">賣家中心</h6>
 				</nav>
 				<div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
 					<div class="ms-md-auto pe-md-3 d-flex align-items-center">
 						<div class="input-group">
 							<span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-							<input type="text" class="form-control" placeholder="關鍵字">
+							<input name="keyword" type="text" class="form-control" placeholder="關鍵字">
 						</div>
 					</div>
 					<ul class="navbar-nav  justify-content-end">
+						@*必須先登入填入用戶帳號*@
 						<li class="nav-item d-flex align-items-center">
 							<a href="javascript:;" class="nav-link text-white font-weight-bold px-0">
 								<i class="fa fa-user me-sm-1"></i>
 								<span class="d-sm-inline d-none">User1</span>
 							</a>
 						</li>
+						@*左側選單*@
 						<li class="nav-item d-xl-none ps-3 d-flex align-items-center">
 							<a href="javascript:;" class="nav-link text-white p-0" id="iconNavbarSidenav">
 								<div class="sidenav-toggler-inner">
@@ -139,11 +146,13 @@
 								</div>
 							</a>
 						</li>
+						@*右側設定*@
 						<li class="nav-item px-3 d-flex align-items-center">
 							<a href="javascript:;" class="nav-link text-white p-0">
 								<i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
 							</a>
 						</li>
+						@*賣家通知*@
 						<li class="nav-item dropdown pe-2 d-flex align-items-center">
 							<a href="javascript:;" class="nav-link text-white p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
 								<i class="fa fa-bell cursor-pointer"></i>
@@ -155,7 +164,7 @@
 		</nav>
 		<!-- End Navbar -->
 		<div id="app" class="container-fluid py-4">
-			<div class="row">
+			<div v-if="this._products" class="row">
 				<div class="col-12">
 					<div class="card mb-4">
 						<div class="card-header pb-0">
@@ -166,7 +175,7 @@
 								<table class="table align-items-center mb-0">
 									<thead>
 										<tr>
-											<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">編號</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">編號</th>
 											<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">名稱</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">庫存</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">上架狀態</th>
@@ -176,64 +185,33 @@
 									</thead>
 									<tbody>
 										<tr v-for="item in Products">
-											<template v-if="item.Edit==false">
-												<td class="align-middle text-center">
-													<span class="text-secondary text-xs font-weight-bold">{{item.ProductId}}</span>
-												</td>
-												<td>
-													<div class="d-flex px-2 py-1">
-														<div>
-															<img src="#" class="avatar avatar-sm me-3" alt="">
-														</div>
-														<div class="d-flex flex-column justify-content-center">
-															<h6 class="mb-0 text-sm">{{item.ProductName}}</h6>
-														</div>
+											<td class="align-middle text-center">
+												<span class="text-secondary text-xs font-weight-bold">{{item.ProductId}}</span>
+											</td>
+											<td>
+												<div class="d-flex px-2 py-1">
+													<div>
+														<img src="#" class="avatar avatar-sm me-3" alt="">
 													</div>
-												</td>
-												<td>
-													<p class="text-xs font-weight-bold mb-0">{{item.UnitsInStock}}</p>
-												</td>
-												<td class="align-middle text-center text-sm">
-													<span class="badge badge-sm bg-gradient-success">{{item.Status}}</span>
-												</td>
-												<td class="align-middle text-center">
-													<span class="text-secondary text-xs font-weight-bold">{{item.LaunchDate}}</span>
-												</td>
-												<td class="align-middle">
-													<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" @@click="edit(item.ProductId)" @@click="details">
-														編輯
-													</a>
-												</td>
-											</template>
-											<template v-else="">
-												<td class="align-middle text-center">
-													<span class="text-secondary text-xs font-weight-bold">{{item.ProductId}}</span>
-												</td>
-												<td>
-													<div class="d-flex px-2 py-1">
-														<div>
-															<img src="#" class="avatar avatar-sm me-3" alt="">
-														</div>
-														<div class="d-flex flex-column justify-content-center">
-															<h6 class="mb-0 text-sm">{{item.ProductName}}</h6>
-														</div>
+													<div class="d-flex flex-column justify-content-center">
+														<h6 class="mb-0 text-sm">{{item.ProductName}}</h6>
 													</div>
-												</td>
-												<td>
-													<p class="text-xs font-weight-bold mb-0">{{item.UnitsInStock}}</p>
-												</td>
-												<td class="align-middle text-center text-sm">
-													<span class="badge badge-sm bg-gradient-success">{{item.Status}}</span>
-												</td>
-												<td class="align-middle text-center">
-													<span class="text-secondary text-xs font-weight-bold">{{item.LaunchDate}}</span>
-												</td>
-												<td class="align-middle">
-													<span class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" @@click="cancel" @@click="!details">
-														取消
-													</span>
-												</td>
-											</template>
+												</div>
+											</td>
+											<td class="align-middle text-center">
+												<p class="text-xs font-weight-bold mb-0">{{item.UnitsInStock}}</p>
+											</td>
+											<td class="align-middle text-center text-sm">
+												<span class="badge badge-sm bg-gradient-success">{{item.Status}}</span>
+											</td>
+											<td class="align-middle text-center">
+												<span class="text-secondary text-xs font-weight-bold">{{item.LaunchDate}}</span>
+											</td>
+											<td class="align-middle">
+												<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" @@click="edit(item.ProductId)">
+													<i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>編輯
+												</a>
+											</td>
 										</tr>
 									</tbody>
 								</table>
@@ -242,39 +220,93 @@
 					</div>
 				</div>
 			</div>
-
-			<div v-if="details" class="row">
+			<div v-if="this._details" class="row">
+				<div class="col-12">
+					<div class="card mb-4">
+						<div class="card-header pb-0">
+							<h6>商品管理</h6>
+						</div>
+						<div class="card-body px-0 pt-0 pb-2">
+							<div class="table-responsive p-0">
+								<table class="table align-items-center mb-0">
+									<thead>
+										<tr>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">編號</th>
+											<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">名稱</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">庫存</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">上架狀態</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">上架時間</th>
+											<th class="text-secondary opacity-7"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td class="align-middle text-center">
+												<span class="text-secondary text-xs font-weight-bold">{{details.ProductId}}</span>
+											</td>
+											<td>
+												<div class="d-flex px-2 py-1">
+													<div>
+														<img src="#" class="avatar avatar-sm me-3" alt="">
+													</div>
+													<div class="d-flex flex-column justify-content-center">
+														<h6 class="mb-0 text-sm">{{details.ProductName}}</h6>
+													</div>
+												</div>
+											</td>
+											<td class="align-middle text-center">
+												<p class="text-xs font-weight-bold mb-0">{{details.UnitsInStock}}</p>
+											</td>
+											<td class="align-middle text-center text-sm">
+												<div class="form-check form-switch ps-0 ms-auto my-auto">
+													<span class="badge badge-sm bg-gradient-success">{{details.Status}}</span>
+													<input v-model="this._checked" class="form-check-input mt-1 ms-auto" type="checkbox" @@change="shelf">
+												</div>
+											</td>
+											<td class="align-middle text-center">
+												<span class="text-secondary text-xs font-weight-bold">{{details.LaunchDate}}</span>
+											</td>
+											<td class="align-middle">
+												<a class="text-secondary font-weight-bold text-xs" @@click="cancel">
+													<i class="fas fa-arrow-circle-up text-dark me-2" aria-hidden="true"></i>取消
+												</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div v-if="this._details" class="row">
 				<div class="col-md-12">
 					<div class="card">
 						<div class="card-header pb-0">
 							<div class="d-flex align-items-center">
 								<p class="mb-0 col-5">編輯商品資訊</p>
-								<div class="col-md-1">
-									<div class="form-check form-switch ps-0 ms-auto my-auto">
-										<h6 class="mb-0">上架</h6>
-										<input v-model="item.status" class="form-check-input mt-1 ms-auto" type="checkbox" id="navbarFixed" onclick="navbarFixed(this)">
-									</div>
-								</div>
 								<div class="col-md-3"></div>
 								<div class="col-md-3">
-									<button class="btn btn-primary btn-sm ms-auto" @@click="update(item)">儲存</button>
-									<button class="btn btn-danger btn-sm ms-auto" @@click="delete(item)">刪除</button>
+									<div class="d-flex justify-content-between">
+										<a href="javascript:;" class="btn btn-primary btn-sm ms-auto">儲存</a>
+										<a href="javascript:;" class="btn btn-danger btn-sm ms-auto">刪除商品</a>
+									</div>
 								</div>
 							</div>
 						</div>
 						<div class="card-body">
-							<p class="text-uppercase text-sm">商品編號 {{item.productId}}</p>
+							<p class="text-uppercase text-sm">商品編號：{{details.ProductId}}</p>
 							<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="example-text-input" class="form-control-label">名稱</label>
-										<input v-model="item.productName" class="form-control text-center" type="text" value="牛仔褲">
+										<input v-model="details.ProductName" class="form-control text-center" type="text" value="牛仔褲">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="example-text-input" class="form-control-label">類型</label>
-										<select v-model="item.productCategoryId" class="form-control text-center" name="CategoryId">
+										<label for="example-text-input" class="form-control-label">類型{{details.CategoryId}}</label>
+										<select v-model="details.CategoryId" class="form-control text-center">
 											<option value="1">衣服</option>
 											<option value="2">文具</option>
 										</select>
@@ -282,8 +314,8 @@
 								</div>
 								<div class="col-md-2">
 									<div class="form-group">
-										<label for="example-text-input" class="form-control-label">貨幣</label>
-										<select v-model="item.currency" class="form-control text-center" name="CategoryId">
+										<label for="example-text-input" class="form-control-label">貨幣{{details.Currency}}</label>
+										<select v-model="details.Currency" class="form-control text-center">
 											<option value="NTD">NTD</option>
 											<option value="USD">USD</option>
 										</select>
@@ -292,14 +324,14 @@
 								<div class="col-md-4">
 									<div class="form-group">
 										<label for="example-text-input" class="form-control-label">單價</label>
-										<input v-model="item.unitPrice" class="form-control text-center" type="text" value="399">
+										<input v-model="details.UnitPrice" class="form-control text-center" type="text">
 									</div>
 								</div>
 								<div class="col-md-2">
 									<div class="form-group">
-										<label for="example-text-input" class="form-control-label">庫存量增減</label>
+										<label for="example-text-input" class="form-control-label">庫存量增減{{plus}}</label>
 										<div class="form-check form-switch ps-0 ms-auto my-auto">
-											<select v-model="increase" class="form-control text-center" name="CategoryId">
+											<select v-model="plus" class="form-control text-center">
 												<option value="INC">增加</option>
 												<option value="DEC">減少</option>
 											</select>
@@ -310,7 +342,7 @@
 									<div class="form-group">
 										<label for="example-text-input" class="form-control-label">變化數量</label>
 										<div class="form-check form-switch ps-0 ms-auto my-auto">
-											<input v-model="item.unitsInStock" class="form-control text-center" type="text" value="0">
+											<input v-model="increase" class="form-control text-center" type="text">
 										</div>
 									</div>
 								</div>
@@ -318,7 +350,7 @@
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="example-text-input" class="form-control-label">說明</label>
-										<textarea v-model="item.description" class="form-control" rows="5" cols="20" value="商品介紹"></textarea>
+										<textarea v-model="details.Description" class="form-control" rows="5" cols="20" placeholder="商品介紹"></textarea>
 									</div>
 								</div>
 							</div>
@@ -328,7 +360,10 @@
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="example-text-input" class="form-control-label">預覽</label>
-										<input v-model="path" class="form-control" type="text" value="">
+										<input class="form-control" type="file" @@change="selectedFile">
+										<label for="example-text-input" class="form-control-label">圖片說明</label>
+										<textarea class="form-control" rows="5" cols="20" v-model="pictureText" value=""></textarea>
+										<p><button type="submit" class="btn btn-primary btn-sm ms-auto" @@click="uploadFile">新增</button></p>
 									</div>
 								</div>
 							</div>
@@ -508,9 +543,16 @@
 		var vueApp = {
 			data() {
 				return {
-					filter: '',
-					details: '',
+					_products: false,
 					Products: [],
+					_details: false,
+					details: [],
+					_checked: false,
+					plus: '',
+					increase: 0,
+					picture: '',
+					pictureText: '',
+					filter: '',
 					ProductId: '',
 					SellerAccount: '',
 					LaunchDate: '',
@@ -524,6 +566,7 @@
 					Currency: '',
 					productNameOld: '',
 					productCategoryIdOld: '',
+					salesOld: '',
 					descriptionOld: '',
 					unitsInStockOld: '',
 					salesOld: '',
@@ -537,18 +580,51 @@
 				_this.getProducts();
 			},
 			methods: {
+				stock: function() {
+					let _this = this;
+					if (_this.plus == 'INC') {
+						_this.details.UnitsInStock += increase;
+					}
+					else _this.details.UnitsInStock -= increase;
+				},
+				shelf: function () {
+					let _this = this;
+					_this.details.Status = (_this._checked) ? '已上架' : '未上架';
+				},
+				uploadFile: function () {
+					alert('upload file');
+					var _this = this;
+					var formData = new FormData();
+					formData.append('Picture', _this.picture);
+					formData.append('ProductId', _this.details.ProductId);
+					formData.append('Description', _this.pictureText);
+					axios.post(`${baseAddress}/Products/UploadPicture`, formData)
+						.then(function (response) {
+							if (response.data) { alert('ok'); }
+						});
+				},
+				selectedFile: function (e) {
+					alert('selected');
+					var _this = this;
+					_this.picture = e.target.files[0];
+				},
 				getProducts: function () {
 					//alert('getProducts');
 					let _this = this;
-					axios.post(`${baseAddress}/Products/getProducts`).then(
+					_this._details = false;
+					_this._products = true;
+					axios.post(`${baseAddress}/Products/GetProducts`).then(
 						response => {
-							_this.Products = response.data.map(x => ({ ...x, Edit: false }));
+							_this.Products = response.data;
 						}
 					);
+					_this.details = _this.Products[0];
 				},
 				filterProducts: function () {
 					alert('filter');
 					let _this = this;
+					_this._details = false;
+					_this._products = true;
 					var request = {};
 					request.ProductId = isNaN(parseInt(_this.filter)) ? -1 : parseInt(_this.filter);
 					request.ProductName = request.ProductCategoryId = request.Description = request.UnitsInStock = request.Sales = request.UnitPrices = request.Status = request.Currency;
@@ -566,23 +642,20 @@
 				edit: function (productId) {
 					//alert('edit');
 					let _this = this;
+					_this._products = false;
+					_this._details = true;
 					_this.Products.forEach(item => {
 						if (item.ProductId == productId) {
-							item.Edit = true;
-							_this.productNameOld = item.ProductName;
-							_this.productCategoryIdOld = item.ProductCategoryId;
-							_this.descriptionOld = item.Description;
-							_this.unitPriceOld = item.UnitPrice;
-							_this.salesOld = item.Sales;
-							_this.statusOld = item.Status;
-							_this.currencyOld = item.Currency;
+							_this.details = item;
 						}
+						_this._checked = (_this.details.Status == '已上架') ? true : false;
 					});
 				},
 				update: function (item) {
 					alert('update');
 					let _this = this;
 					var request = {};
+					stock();
 					request.ProductName = item.ProductName;
 					request.ProductCategoryId = item.ProductCategoryId;
 					request.Description = item.Description;
@@ -590,16 +663,18 @@
 					request.Sales = item.Sales;
 					request.Status = item.Status;
 					request.Currency = item.Currency;
-					axios.get(`${baseAddress}/Products/${item.ProductId}`, request).then(response => {
+
+					axios.get(`${baseAddress}/Products/Update/${item.ProductId}`, request).then(response => {
 						alert(response.data);
 						_this.cancel();
-						_this.filterProducts();
-						//item.Edit = false;
+						_this.getProducts();
 					});
 				},
 				cancel: function () {
-					alert('cancel');
+					//alert('cancel');
 					let _this = this;
+					_this._details = false;
+					_this._products = true;
 					var ProductList = [];
 					for (var i = 0; i < _this.Products.length; i++) {
 						var item = _this.Products[i];
@@ -611,6 +686,7 @@
 							item.Sales = _this.salesOld;
 							item.Status = _this.statusOld;
 							item.Currency = _this.currencyOld;
+							_this.details.Edit = false;
 						}
 						ProductList.push(item);
 					}
@@ -651,7 +727,7 @@
 					);
 				}
 			}
-		}
+		};
 		var app = Vue.createApp(vueApp).mount('#app');
 	</script>
 	<!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
