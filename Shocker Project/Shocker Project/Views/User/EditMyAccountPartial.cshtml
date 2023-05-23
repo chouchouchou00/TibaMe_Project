@@ -10,17 +10,17 @@
 }
 
 <div id="app" class="container">
-	@*未編輯的頁面*@	
-	<template v-if="Edit==false">
-		@*<div class="mb-3 row">
-			<label for="staticAccount" class="col-sm-2 col-form-label">頭像</label>
-			<div class="col-sm-10">
-				<input type="file" @@change="selectpic" />
-				<input type="text" v-model="address" />
-				<button @@click="uploadpic">上傳</button>
-			</div>
-		</div>*@
+	@*未編輯的頁面*@
+	<div class="mb-3 row">
+		<label for="staticPicture" class="col-sm-2 col-form-label">頭像</label>
+		<div class="col-sm-10">
+			<img style="width:240px;height:180px" :src="picture" />
+			<input type="file" @@change="selectpicture" />
+			<button @@click="uploadpicture">上傳</button>
+		</div>
+	</div>
 
+	<template v-if="Edit==false">
 		<div class="mb-3 row">
 			<label for="staticAccount" class="col-sm-2 col-form-label">帳號</label>
 			<div class="col-sm-10">
@@ -31,7 +31,7 @@
 		<div class="mb-3 row">
 			<label for="inputPassword" class="col-sm-2 col-form-label">密碼</label>
 			<div class="col-sm-10">
-				<input type="text" readonly class="form-control-plaintext" id="inputPassword" v-model="password">@*要屏蔽將input改為type="password"*@
+				<input type="password" readonly class="form-control-plaintext" id="inputPassword" v-model="password">
 			</div>
 		</div>
 
@@ -175,7 +175,7 @@
 							</div>
 						</div>
 					</div>
-				</div>			
+				</div>
 			</div>
 		</div>
 	</template>
@@ -200,13 +200,13 @@
 			phone: "",
 			role: "",
 			registerDate: "",
-			//pic: "",
-			//address:"",
+			picture: "",
+			uploadPic:{},
+			address: "",
 			Edit: false
 		},
 		mounted: function () {
-			let _this = this;
-			_this.getUsers();
+			this.getUsers();			
 		},
 		methods: {
 			getUsers: function (account) {
@@ -222,7 +222,9 @@
 					this.email = this.Users[0].email;
 					this.phone = this.Users[0].phone;
 					this.role = this.Users[0].role;
-					this.registerDate = this.Users[0].registerDate;
+					this.registerDate = this.Users[0].registerDate;					
+					this.address = window.location.protocol + '//' + window.location.host + '/';
+					this.picture = this.address + this.Users[0].picture
 				});
 			},
 			updateUsers: function () {
@@ -248,21 +250,25 @@
 			cancel: function () {
 				this.Edit = false;
 				this.getUsers();
+			},
+			selectpicture: function (evemt) {
+				var _this = this;
+				_this.uploadPic = event.target.files[0];
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					_this.picture = e.target.result;
+				}
+				reader.readAsDataURL(_this.uploadPic);
+			},
+			uploadpicture: function () {
+				var formdata = new FormData();
+				formdata.append('Picture', this.uploadPic);
+				axios.post(`${baseAddress}/Uploadpicture`, formdata).then(response => {
+					if (response.data) {
+						alert('成功')
+					}
+				});
 			}
-
-			//selectpic: function (evemt) {
-			//	this.pic = event.target.files[0];
-			//},
-			//uploadpic: function () {
-			//	var d=new FormData();
-			//	d.append('pic',this.pic);
-			//	d.append('ad',this.address);
-			//	axios.post(function,d).then(response=>{
-			//		if(response.data){
-			//			alert('成功')
-			//		}
-			//	});
-			//}
 		}
 	});
 </script>

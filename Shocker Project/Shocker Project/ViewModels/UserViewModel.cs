@@ -27,7 +27,7 @@ namespace Shocker_Project.ViewModels//
 		[Display(Name = "註冊日期")]
 		public DateTimeOffset RegisterDate { get; set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
 			if (string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Name))
 			{

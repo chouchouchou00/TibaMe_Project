@@ -4,18 +4,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Shocker_Project.Models;
 using Shocker_Project.ViewModels;
+using System.Net.Sockets;
 using System.Security.Principal;
 
 namespace Shocker_Project.Controllers
 {
-	[Route("{controller}/{action}/{id?}")]
+    [Route("{controller}/{action}/{id?}")]
 	public class UserController : Controller
 	{
 		private readonly db_a98a02_thm101team1001Context _context;
+		private readonly IWebHostEnvironment _environment;
 
-		public UserController(db_a98a02_thm101team1001Context context)
+		public UserController(db_a98a02_thm101team1001Context context, IWebHostEnvironment environment)
 		{
 			_context = context;
+			_environment = environment;
 		}
 		[HttpGet]
 		public async Task<IActionResult> MyAccount(string tab)
@@ -25,7 +28,7 @@ namespace Shocker_Project.Controllers
 		}
 		///User/GetAccount
 		[HttpGet]
-		public JsonResult GetAccount(string LoginAccount, UserViewModel uvm)//要接登入驗證那裡傳回的Users.Account
+		public JsonResult GetAccount(string LoginAccount)//要接登入驗證那裡傳回的Users.Account
 		{
 			LoginAccount = "Admin1";
 			var getaccount = from i in _context.Users.Where(a => a.Account == LoginAccount)
@@ -39,7 +42,8 @@ namespace Shocker_Project.Controllers
 								 email = i.Email,
 								 phone = i.Phone,
 								 role = i.Role,
-								 registerDate = i.RegisterDate
+								 registerDate = i.RegisterDate,
+								 picture=i.PicturePath
 							 };
 			return Json(getaccount);
 		}
@@ -75,22 +79,43 @@ namespace Shocker_Project.Controllers
 						throw;
 					}
 				}
-				return Json(new { Result = "OK" });
+				return Json(new { Result = "OK", Message ="修改成功!" });
 			}
 			else
 			{
 				return Json(new { Result = "Error", Message = "修改失敗!" });
 			}
 		}
-
+		[HttpPost]
+		public async Task<JsonResult> Uploadpicture(PictureViewModel pvm)
+		{
+			if (ModelState.IsValid)
+			{
+				var root=$@"{_environment.WebRootPath}\img\userphoto";
+				var time = DateTime.Now.Ticks;
+				var unid=Guid.NewGuid();
+				var path = $@"{root}\{unid}-{time}-{pvm.Picture.FileName}";
+				using(var st = System.IO.File.Create(path))
+				{
+					pvm.Picture.CopyTo(st);
+				}
+				await _context.SaveChangesAsync();
+				return Json(new { Result = "OK",Message = "上傳成功!" });
+			}
+			else
+			{
+				return Json(new { Result = "Error", Message = "上傳失敗!" });
+			}
+		}
 		private bool UsersExists(string hasaccount)
 		{
 			return _context.Users.Any(u => u.Account == hasaccount);
 		}
-		//public IActionResult uploadpic(IFormFile pic,string ad)
+
+		//public IActionResult Uploadpicture(IFormFile pic, string ad)
 		//{
 		//	//DateTime.Now.Ticks:精細記下當時的時間
-		//	using (var stream = System.IO.File.Create(圖片欲存路徑){ad}
+		//	using (var stream = System.IO.File.Create("C:\Users\Tibame_T14\Desktop\第一組專題\Shocker Project\Shocker Project\wwwroot\img"){ ad}
 		//	{ pic.FileName})
 		//	{
 		//		pic.CopyTo(stream);
