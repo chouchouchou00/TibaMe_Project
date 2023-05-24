@@ -9,9 +9,10 @@ using System.Security.Principal;
 
 namespace Shocker_Project.Controllers
 {
-    [Route("{controller}/{action}/{id?}")]
+	[Route("{controller}/{action}/{id?}")]
 	public class UserController : Controller
 	{
+		private string loginAccount= "Admin1";
 		private readonly db_a98a02_thm101team1001Context _context;
 		private readonly IWebHostEnvironment _environment;
 
@@ -28,26 +29,24 @@ namespace Shocker_Project.Controllers
 		}
 		///User/GetAccount
 		[HttpGet]
-		public JsonResult GetAccount(string LoginAccount)//要接登入驗證那裡傳回的Users.Account
+		public JsonResult GetAccount()//要接登入驗證那裡傳回的Users.Account
 		{
-			LoginAccount = "Admin1";
-			var getaccount = from i in _context.Users.Where(a => a.Account == LoginAccount)
+			var getaccount = from u in _context.Users.Where(a => a.Account == loginAccount)
 							 select new
 							 {
-								 account = i.Account,
-								 password = i.Password,
-								 name = i.Name,
-								 gender = i.Gender,
-								 birthDate = i.BirthDate,
-								 email = i.Email,
-								 phone = i.Phone,
-								 role = i.Role,
-								 registerDate = i.RegisterDate,
-								 picture=i.PicturePath
+								 account = u.Account,
+								 password = u.Password,
+								 name = u.Name,
+								 gender = u.Gender,
+								 birthDate = u.BirthDate,
+								 email = u.Email,
+								 phone = u.Phone,
+								 role = u.Role,
+								 registerDate = u.RegisterDate,
+								 picture = u.PicturePath
 							 };
 			return Json(getaccount);
 		}
-		///User/UpdateAccount
 		[HttpPost]
 		public async Task<JsonResult> UpdateAccount([FromBody] UserViewModel uvm)
 		{
@@ -79,7 +78,7 @@ namespace Shocker_Project.Controllers
 						throw;
 					}
 				}
-				return Json(new { Result = "OK", Message ="修改成功!" });
+				return Json(new { Result = "OK", Message = "修改成功!" });
 			}
 			else
 			{
@@ -91,36 +90,58 @@ namespace Shocker_Project.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				var root=$@"{_environment.WebRootPath}\img\userphoto";
-				var time = DateTime.Now.Ticks;
-				var unid=Guid.NewGuid();
-				var path = $@"{root}\{unid}-{time}-{pvm.Picture.FileName}";
-				using(var st = System.IO.File.Create(path))
+				try
 				{
-					pvm.Picture.CopyTo(st);
+					Users u = await _context.Users.FindAsync(pvm.Account);
+					var root = $@"{_environment.WebRootPath}\img\userphoto";
+					var time = DateTime.Now.Ticks;
+					var unid = Guid.NewGuid();
+					var path = $@"{root}\{unid}-{time}-{pvm.Picture.FileName}";
+					using (var st = System.IO.File.Create(path))
+					{
+						pvm.Picture.CopyTo(st);
+					}
+					u.PicturePath = $@"img\userphoto\{unid}-{time}-{pvm.Picture.FileName}";
+					await _context.SaveChangesAsync();
 				}
-				await _context.SaveChangesAsync();
-				return Json(new { Result = "OK",Message = "上傳成功!" });
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!UsersExists(pvm.Account))
+					{
+						return Json(new { Result = "Error", Message = "此帳號不存在!" });
+					}
+					else
+					{
+						throw;
+					}
+				}
+				return Json(new { Result = "OK", Message = "上傳成功!" });
 			}
 			else
 			{
 				return Json(new { Result = "Error", Message = "上傳失敗!" });
 			}
 		}
+		///User/GetOrders
+		public JsonResult GetOrders()
+		{
+			var getorders = from o in _context.Orders.Where(a => a.BuyerAccount== loginAccount)/*.Include(o=>o.OrderDetails).ThenInclude(od=>od.Product).ThenInclude(p=>p.ProductCategory)*/						
+							 select new
+							 {
+								buyerAccount=o.BuyerAccount,
+								orderId=o.OrderId,
+								address=o.Address,
+								orderDate=o.OrderDate,
+								requiredDate=o.RequiredDate,
+								buyerPhone=o.BuyerPhone,
+								paymethod=o.PayMethod,
+								status=o.Status,							
+							 };
+			return Json(getorders);
+		}
 		private bool UsersExists(string hasaccount)
 		{
 			return _context.Users.Any(u => u.Account == hasaccount);
 		}
-
-		//public IActionResult Uploadpicture(IFormFile pic, string ad)
-		//{
-		//	//DateTime.Now.Ticks:精細記下當時的時間
-		//	using (var stream = System.IO.File.Create("C:\Users\Tibame_T14\Desktop\第一組專題\Shocker Project\Shocker Project\wwwroot\img"){ ad}
-		//	{ pic.FileName})
-		//	{
-		//		pic.CopyTo(stream);
-		//	}
-		//	return Ok("true");
-		//}
 	}
 }

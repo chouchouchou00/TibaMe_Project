@@ -5,8 +5,8 @@ namespace Shocker_Project.ViewModels
 {
     public class PictureViewModel
     {
-		//[Display(Name = "用戶頭像")]
-		//public string PicturePath { get; set; }
+		[Display(Name = "帳號名稱")]//Readonly
+		public string Account { get; set; }
 		[Display(Name = "圖片")]
 		public IFormFile Picture { get; set; }
 	}
