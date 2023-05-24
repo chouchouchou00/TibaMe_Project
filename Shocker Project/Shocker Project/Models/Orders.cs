@@ -14,18 +14,16 @@ namespace Shocker_Project.Models
         }
 
         public int OrderId { get; set; }
-        public string SellerAccount { get; set; }
         public string BuyerAccount { get; set; }
         public string Address { get; set; }
-        public DateTimeOffset OrderDate { get; set; }
-        public DateTimeOffset RequiredDate { get; set; }
-        public int BuyerPhone { get; set; }
+        public DateTime OrderDate { get; set; }
+        public DateTime RequiredDate { get; set; }
+        public string BuyerPhone { get; set; }
         public string PayMethod { get; set; }
         public string Status { get; set; }
 
         public virtual Addresses Addresses { get; set; }
         public virtual Users BuyerAccountNavigation { get; set; }
-        public virtual Users SellerAccountNavigation { get; set; }
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }
         public virtual ICollection<Ratings> Ratings { get; set; }
     }

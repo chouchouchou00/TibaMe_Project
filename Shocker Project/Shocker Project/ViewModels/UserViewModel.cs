@@ -16,7 +16,7 @@ namespace Shocker_Project.ViewModels//
 		[Display(Name = "性別")]
 		public string Gender { get; set; }
 		[Display(Name = "我的生日")]//Readonly
-		public DateTimeOffset? BirthDate { get; set; }
+		public DateTime? BirthDate { get; set; }
 		[EmailAddress(ErrorMessage = "電子郵件格式錯誤")]
 		[Display(Name = "我的郵件")]
 		public string Email { get; set; }
@@ -25,7 +25,7 @@ namespace Shocker_Project.ViewModels//
 		[Display(Name = "身分")]
 		public string Role { get; set; }
 		[Display(Name = "註冊日期")]
-		public DateTimeOffset RegisterDate { get; set; }
+		public DateTime RegisterDate { get; set; }
 
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

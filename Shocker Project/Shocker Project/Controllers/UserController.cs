@@ -123,6 +123,7 @@ namespace Shocker_Project.Controllers
 			}
 		}
 		///User/GetOrders
+		[HttpGet]
 		public JsonResult GetOrders()
 		{
 			var getorders = from o in _context.Orders.Where(a => a.BuyerAccount== loginAccount)/*.Include(o=>o.OrderDetails).ThenInclude(od=>od.Product).ThenInclude(p=>p.ProductCategory)*/						
@@ -139,6 +140,17 @@ namespace Shocker_Project.Controllers
 							 };
 			return Json(getorders);
 		}
+		///Get/Coupons
+		[HttpGet]
+		//public JsonResult GetCoupons()
+		//{
+		//	var getcoupons = from c in _context.Coupons.Where(c => c.HolderAccount == loginAccount)
+		//					 select new
+		//					 {
+		//						 holderAccount=c.HolderAccount,
+		//						 exp
+		//					 };
+		//}
 		private bool UsersExists(string hasaccount)
 		{
 			return _context.Users.Any(u => u.Account == hasaccount);

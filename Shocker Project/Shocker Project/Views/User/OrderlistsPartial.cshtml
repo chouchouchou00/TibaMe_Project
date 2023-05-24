@@ -73,9 +73,10 @@
 		mounted: function () {
 			this.getOrders();
 		},
-		methods:function(){
+		methods:{
 			getOrders:function(){
-
+				alert('getOreders')
+				axios(`${baseAddress}/GetOrders`)
 			}
 		}
 </script>
