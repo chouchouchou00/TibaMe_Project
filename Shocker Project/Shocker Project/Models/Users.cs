@@ -14,8 +14,7 @@ namespace Shocker_Project.Models
             ClientCasesUserAccountNavigation = new HashSet<ClientCases>();
             CouponsHolderAccountNavigation = new HashSet<Coupons>();
             CouponsPublisherAccountNavigation = new HashSet<Coupons>();
-            OrdersBuyerAccountNavigation = new HashSet<Orders>();
-            OrdersSellerAccountNavigation = new HashSet<Orders>();
+            Orders = new HashSet<Orders>();
             Products = new HashSet<Products>();
         }
 
@@ -37,8 +36,7 @@ namespace Shocker_Project.Models
         public virtual ICollection<ClientCases> ClientCasesUserAccountNavigation { get; set; }
         public virtual ICollection<Coupons> CouponsHolderAccountNavigation { get; set; }
         public virtual ICollection<Coupons> CouponsPublisherAccountNavigation { get; set; }
-        public virtual ICollection<Orders> OrdersBuyerAccountNavigation { get; set; }
-        public virtual ICollection<Orders> OrdersSellerAccountNavigation { get; set; }
+        public virtual ICollection<Orders> Orders { get; set; }
         public virtual ICollection<Products> Products { get; set; }
     }
 }

@@ -42,6 +42,7 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\" />
     <Folder Include="wwwroot\img\" />
+    <Folder Include="wwwroot\productpictures\" />
   </ItemGroup>
 
 </Project>
