@@ -13,7 +13,7 @@ namespace Shocker_Project.Models
         }
 
         public string CouponId { get; set; }
-        public DateTimeOffset ExpirationDate { get; set; }
+        public DateTime ExpirationDate { get; set; }
         public string HolderAccount { get; set; }
         public int ProductCategoryId { get; set; }
         public string Discount { get; set; }

@@ -13,7 +13,7 @@ namespace Shocker_Project.Models
         public string AdminAccount { get; set; }
         public string Description { get; set; }
         public string Status { get; set; }
-        public DateTimeOffset? CloseDate { get; set; }
+        public DateTime? CloseDate { get; set; }
         public string Reply { get; set; }
 
         public virtual Users AdminAccountNavigation { get; set; }
