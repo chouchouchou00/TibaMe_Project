@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Shocker_Project.Areas.Admin.Models;
 using Shocker_Project.Models;
 using System.Security.Claims;
@@ -14,13 +15,14 @@ namespace Shocker_Project.Areas.Admin.Controllers
            _context = context ;
         }
 
-        public IActionResult Index()
+        public async Task <IActionResult> Index()
         {
-            return View();
+            var QAT =_context.ClientCases.Include(p => p.Description);
+            return View(await QAT.ToListAsync());
         }
 
         [HttpPost]
-        public async Task<IActionResult> index (QAViewModels qav) 
+        public async Task<IActionResult> Index (QAViewModels qav) 
         {
             ClientCases cc = new ClientCases()
             {

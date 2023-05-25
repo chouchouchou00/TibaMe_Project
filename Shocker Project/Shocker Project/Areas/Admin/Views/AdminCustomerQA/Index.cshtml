@@ -201,9 +201,18 @@
                     QA:[],
                 },
                 mounted:function(){
-                    let self =this;
-            axios.get('localhost:/https://localhost:7033/Admin/AdminCustomerQA/QA/all').then(res => self.QA = res.data)
-                    
+                },
+                methods:{
+                    getQA:function(){
+                        try{
+                        let self =this;
+                axios.post('https://localhost:7033/Admin/AdminCustomerQA/index').then(res=>{console.log(res.data)})
+                    }
+                    catch(e)
+                    {
+                        console.log(e);
+                    }
+                    }
                 }
-            })
+            )}
         </script>
