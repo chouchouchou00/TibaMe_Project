@@ -57,6 +57,8 @@ namespace Shocker_Project.Models
 
                 entity.Property(e => e.AdminAccount).HasMaxLength(50);
 
+                entity.Property(e => e.CloseDate).HasColumnType("smalldatetime");
+
                 entity.Property(e => e.Description).IsRequired();
 
                 entity.Property(e => e.QuestionCategoryId).HasColumnName("QuestionCategoryID");
@@ -100,6 +102,8 @@ namespace Shocker_Project.Models
                 entity.Property(e => e.Discount)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.ExpirationDate).HasColumnType("smalldatetime");
 
                 entity.Property(e => e.HolderAccount)
                     .IsRequired()
@@ -148,10 +152,7 @@ namespace Shocker_Project.Models
                     .HasColumnName("CouponID")
                     .IsFixedLength();
 
-                entity.Property(e => e.Quantity).HasColumnName("Quantity")
-                    .IsRequired();                    
-
-                entity.Property(e => e.Status).HasColumnName("Status")
+                entity.Property(e => e.Status)
                     .IsRequired()
                     .HasMaxLength(10);
 
@@ -188,9 +189,17 @@ namespace Shocker_Project.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.BuyerPhone)
+                    .IsRequired()
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.OrderDate).HasColumnType("smalldatetime");
+
                 entity.Property(e => e.PayMethod)
                     .IsRequired()
                     .HasMaxLength(30);
+
+                entity.Property(e => e.RequiredDate).HasColumnType("smalldatetime");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
@@ -218,9 +227,7 @@ namespace Shocker_Project.Models
                     .HasMaxLength(50)
                     .HasColumnName("PictureID");
 
-                entity.Property(e => e.Path)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Path).IsRequired();
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
@@ -256,13 +263,13 @@ namespace Shocker_Project.Models
 
                 entity.Property(e => e.Description).IsRequired();
 
+                entity.Property(e => e.LaunchDate).HasColumnType("smalldatetime");
+
                 entity.Property(e => e.ProductCategoryId).HasColumnName("ProductCategoryID");
 
                 entity.Property(e => e.ProductName)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.Sales).HasMaxLength(50);
 
                 entity.Property(e => e.SellerAccount)
                     .IsRequired()
@@ -271,13 +278,6 @@ namespace Shocker_Project.Models
                 entity.Property(e => e.Status)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.UnitPrice)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.UnitsInStock)
-                    .IsRequired();
 
                 entity.HasOne(d => d.ProductCategory)
                     .WithMany(p => p.Products)
@@ -302,15 +302,6 @@ namespace Shocker_Project.Models
                 entity.Property(e => e.CategoryName)
                     .IsRequired()
                     .HasMaxLength(30);
-
-                entity.Property(e => e.CustomerTa)
-                    .HasMaxLength(300)
-                    .HasColumnName("CustomerTA");
-
-                entity.Property(e => e.Qaclass)
-                    .HasMaxLength(20)
-                    .HasColumnName("QAclass")
-                    .IsFixedLength();
             });
 
             modelBuilder.Entity<Ratings>(entity =>
@@ -350,6 +341,8 @@ namespace Shocker_Project.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.BirthDate).HasColumnType("date");
+
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -366,7 +359,7 @@ namespace Shocker_Project.Models
                     .IsRequired()
                     .HasMaxLength(30);
 
-                entity.Property(e => e.PicturePath).HasMaxLength(50);
+                entity.Property(e => e.RegisterDate).HasColumnType("date");
 
                 entity.Property(e => e.Role)
                     .IsRequired()

@@ -2,10 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using Shocker_Project.Models;
-using Shocker_Project.Areas.Shoppingcart.Controllers.Api;
+
 namespace Shocker_Project.Models
 {
     public partial class Orders
@@ -15,18 +12,13 @@ namespace Shocker_Project.Models
             OrderDetails = new HashSet<OrderDetails>();
             Ratings = new HashSet<Ratings>();
         }
-        [DisplayName("訂單編號")]
+
         public int OrderId { get; set; }
-        [DisplayName("買家帳號")]
         public string BuyerAccount { get; set; }
-        [DisplayName("地址")]
         public string Address { get; set; }
-        public DateTimeOffset OrderDate { get; set; }
-        public DateTimeOffset RequiredDate { get; set; }
-        [DisplayName("電話")]
-        [RegularExpression("@{0-9}[10]", ErrorMessage = "電話號碼必須10個數字")]
-        public int BuyerPhone { get; set; }
-        
+        public DateTime OrderDate { get; set; }
+        public DateTime RequiredDate { get; set; }
+        public string BuyerPhone { get; set; }
         public string PayMethod { get; set; }
         public string Status { get; set; }
 
@@ -36,71 +28,3 @@ namespace Shocker_Project.Models
         public virtual ICollection<Ratings> Ratings { get; set; }
     }
 }
-
-public static class OrdersEndpoints
-{
-    //public static void MapOrdersEndpoints(this IEndpointRouteBuilder routes)
-    //{
-    //    routes.MapGet("/api/Orders", async (db_a98a02_thm101team1001Context db) =>
-    //    {
-    //        return await db.Orders.ToListAsync();
-    //    })
-    //    .WithName("GetAllOrderss")
-    //    .Produces<List<Orders>>(StatusCodes.Status200OK);
-
-    //    routes.MapGet("/api/Orders/{id}", async (int OrderId, db_a98a02_thm101team1001Context db) =>
-    //    {
-    //        return await db.Orders.FindAsync(OrderId)
-    //            is Orders model
-    //                ? Results.Ok(model)
-    //                : Results.NotFound();
-    //    })
-    //    .WithName("GetOrdersById")
-    //    .Produces<Orders>(StatusCodes.Status200OK)
-    //    .Produces(StatusCodes.Status404NotFound);
-
-    //    routes.MapPut("/api/Orders/{id}", async (int OrderId, Orders orders, db_a98a02_thm101team1001Context db) =>
-    //    {
-    //        var foundModel = await db.Orders.FindAsync(OrderId);
-
-    //        if (foundModel is null)
-    //        {
-    //            return Results.NotFound();
-    //        }
-
-    //        db.Update(orders);
-
-    //        await db.SaveChangesAsync();
-
-    //        return Results.NoContent();
-    //    })
-    //    .WithName("UpdateOrders")
-    //    .Produces(StatusCodes.Status404NotFound)
-    //    .Produces(StatusCodes.Status204NoContent);
-
-    //    routes.MapPost("/api/Orders/", async (Orders orders, db_a98a02_thm101team1001Context db) =>
-    //    {
-    //        db.Orders.Add(orders);
-    //        await db.SaveChangesAsync();
-    //        return Results.Created($"/Orderss/{orders.OrderId}", orders);
-    //    })
-    //    .WithName("CreateOrders")
-    //    .Produces<Orders>(StatusCodes.Status201Created);
-
-
-    //    routes.MapDelete("/api/Orders/{id}", async (int OrderId, db_a98a02_thm101team1001Context db) =>
-    //    {
-    //        if (await db.Orders.FindAsync(OrderId) is Orders orders)
-    //        {
-    //            db.Orders.Remove(orders);
-    //            await db.SaveChangesAsync();
-    //            return Results.Ok(orders);
-    //        }
-
-    //        return Results.NotFound();
-    //    })
-    //    .WithName("DeleteOrders")
-    //    .Produces<Orders>(StatusCodes.Status200OK)
-    //    .Produces(StatusCodes.Status404NotFound);
-    //}
-/*}*/}

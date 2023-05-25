@@ -2,20 +2,14 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
 namespace Shocker_Project.Models
 {
     public partial class OrderDetails
     {
-        
         public int OrderId { get; set; }
-        [DisplayName("產品編號")]
         public int ProductId { get; set; }
-        [DisplayName("優惠券")]
         public string CouponId { get; set; }
-        [DisplayName("數量")]
         public int Quantity { get; set; }
         public string Status { get; set; }
         public string ReturnReason { get; set; }
