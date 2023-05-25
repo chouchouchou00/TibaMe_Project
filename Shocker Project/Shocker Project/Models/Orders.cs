@@ -16,8 +16,8 @@ namespace Shocker_Project.Models
         public int OrderId { get; set; }
         public string BuyerAccount { get; set; }
         public string Address { get; set; }
-        public DateTimeOffset OrderDate { get; set; }
-        public DateTimeOffset RequiredDate { get; set; }
+        public DateTime OrderDate { get; set; }
+        public DateTime RequiredDate { get; set; }
         public string BuyerPhone { get; set; }
         public string PayMethod { get; set; }
         public string Status { get; set; }

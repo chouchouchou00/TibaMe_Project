@@ -16,7 +16,7 @@ namespace Shocker_Project.Models
 
         public int ProductId { get; set; }
         public string SellerAccount { get; set; }
-        public DateTimeOffset LaunchDate { get; set; }
+        public DateTime LaunchDate { get; set; }
         public string ProductName { get; set; }
         public int ProductCategoryId { get; set; }
         public string Description { get; set; }

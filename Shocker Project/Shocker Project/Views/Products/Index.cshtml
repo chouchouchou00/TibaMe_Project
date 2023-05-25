@@ -125,7 +125,7 @@
 					<div class="ms-md-auto pe-md-3 d-flex align-items-center">
 						<div class="input-group">
 							<span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-							<input v-model="filter" type="text" class="form-control" placeholder="關鍵字" @@keyup="filterProducts">
+							<input v-model="filter" type="text" class="form-control" placeholder="#商品關鍵字" @@keyup.enter="filterProducts">
 						</div>
 					</div>
 					<ul class="navbar-nav  justify-content-end">
@@ -168,32 +168,37 @@
 				<div class="col-12">
 					<div class="card mb-4">
 						<div class="card-header pb-0">
-							<h6>商品管理</h6>
+							<div class="d-flex align-items-center">
+								<h6 class="mb-0">商品管理</h6>
+								<button class="btn btn-primary btn-sm ms-auto" @@click="create">新增商品</button>
+							</div>
 						</div>
 						<div class="card-body px-0 pt-0 pb-2">
 							<div class="table-responsive p-0">
 								<table class="table align-items-center mb-0">
 									<thead>
 										<tr>
+											<th class="text-secondary opacity-7"></th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">編號</th>
 											<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">名稱</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">庫存</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">銷量</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">上架狀態</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">上架時間</th>
-											<th class="text-secondary opacity-7"></th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr v-for="item in Products">
 											<td class="align-middle text-center">
+												<a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" @@click="edit(item.ProductId)">
+													<i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>編輯
+												</a>
+											</td>
+											<td class="align-middle text-center">
 												<span class="text-secondary text-xs font-weight-bold">{{item.ProductId}}</span>
 											</td>
 											<td>
 												<div class="d-flex px-2 py-1">
-													<div>
-														<img src="#" class="avatar avatar-sm me-3" alt="">
-													</div>
 													<div class="d-flex flex-column justify-content-center">
 														<h6 class="mb-0 text-sm">{{item.ProductName}}</h6>
 													</div>
@@ -210,11 +215,6 @@
 											</td>
 											<td class="align-middle text-center">
 												<span class="text-secondary text-xs font-weight-bold">{{item.LaunchDate}}</span>
-											</td>
-											<td class="align-middle">
-												<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" @@click="edit(item.ProductId)">
-													<i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>編輯
-												</a>
 											</td>
 										</tr>
 									</tbody>
@@ -235,25 +235,27 @@
 								<table class="table align-items-center mb-0">
 									<thead>
 										<tr>
+											<th class="text-secondary opacity-7"></th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">編號</th>
 											<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">名稱</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">庫存</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">銷量</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">上架狀態</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">上架時間</th>
-											<th class="text-secondary opacity-7"></th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr>
 											<td class="align-middle text-center">
+												<a href="javascript:;" class="text-secondary font-weight-bold text-xs" @@click="cancel">
+													<i class="fas fa-arrow-circle-up text-dark me-2" aria-hidden="true"></i>取消
+												</a>
+											</td>
+											<td class="align-middle text-center">
 												<span class="text-secondary text-xs font-weight-bold">{{details.ProductId}}</span>
 											</td>
 											<td>
 												<div class="d-flex px-2 py-1">
-													<div>
-														<img src="#" class="avatar avatar-sm me-3" alt="">
-													</div>
 													<div class="d-flex flex-column justify-content-center">
 														<h6 class="mb-0 text-sm">{{details.ProductName}}</h6>
 													</div>
@@ -267,17 +269,12 @@
 											</td>
 											<td class="align-middle text-center text-sm">
 												<div class="form-check form-switch ps-0 ms-auto my-auto">
-													<span class="badge badge-sm bg-gradient-success">{{details.Status}}</span>
 													<input v-model="this._checked" class="form-check-input mt-1 ms-auto" type="checkbox" @@change="shelf">
+													<span class="badge badge-sm bg-gradient-success">{{details.Status}}</span>
 												</div>
 											</td>
 											<td class="align-middle text-center">
 												<span class="text-secondary text-xs font-weight-bold">{{details.LaunchDate}}</span>
-											</td>
-											<td class="align-middle">
-												<a class="text-secondary font-weight-bold text-xs" @@click="cancel">
-													<i class="fas fa-arrow-circle-up text-dark me-2" aria-hidden="true"></i>取消
-												</a>
 											</td>
 										</tr>
 									</tbody>
@@ -289,16 +286,15 @@
 			</div>
 			<div v-if="this._details" class="row">
 				<div class="col-md-12">
-					<div class="card">
+					<div class="card mb-4">
 						<div class="card-header pb-0">
 							<div class="d-flex align-items-center">
-								<p class="mb-0 col-5">編輯商品資訊</p>
-								<div class="col-md-3"></div>
-								<div class="col-md-3">
-									<div class="d-flex justify-content-between">
-										<a href="javascript:;" class="btn btn-primary btn-sm ms-auto" @@click="update(details)">儲存</a>
-										<a href="javascript:;" class="btn btn-danger btn-sm ms-auto" @@click="deleteProduct(details.ProductId)">刪除商品</a>
-									</div>
+								<p class="col-4 mb-0">編輯商品資訊</p>
+								<button v-if="this._create" class="btn btn-primary btn-sm ms-auto" @@click="createSave(details)">儲存新增</button>
+								<div class="col-md-4 col-1"></div>
+								<div v-if="!this._create" class="col-md-4 col-7 d-flex justify-content-between">
+									<button class="btn btn-primary btn-sm ms-auto" @@click="update(details)">儲存</button>
+									<button class="btn btn-danger btn-sm ms-auto" @@click="deleteProduct(details.ProductId)">刪除商品</button>
 								</div>
 							</div>
 						</div>
@@ -317,6 +313,8 @@
 										<select v-model="details.ProductCategoryId" class="form-control text-center">
 											<option value="1">衣服</option>
 											<option value="2">文具</option>
+											<option value="3">生鮮食材</option>
+											<option value="4">電玩</option>
 										</select>
 									</div>
 								</div>
@@ -337,7 +335,7 @@
 								</div>
 								<div class="col-md-2">
 									<div class="form-group">
-										<label for="example-text-input" class="form-control-label">庫存量增減</label>
+										<label for="example-text-input" class="form-control-label">庫存增減</label>
 										<div class="form-check form-switch ps-0 ms-auto my-auto">
 											<select v-model="plus" class="form-control text-center">
 												<option value="INC">增加</option>
@@ -364,7 +362,8 @@
 							</div>
 							<hr class="horizontal dark">
 							<p class="text-uppercase text-sm">新增圖片</p>
-							<div class="row">
+							<p v-if="this._create" class="text-uppercase text-sm">請先儲存新增商品</p>
+							<div v-if="!this._create" class="row">
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="example-text-input" class="form-control-label">預覽</label>
@@ -373,69 +372,75 @@
 											<div class="form-group">
 												<img :src="this.preview" />
 											</div>
-										</div>										
+										</div>
+									</div>
+									<div class="form-group">
 										<label for="example-text-input" class="form-control-label">圖片說明</label>
 										<textarea class="form-control" rows="5" cols="20" v-model="pictureText" value=""></textarea>
-										<p><button type="submit" class="btn btn-primary btn-sm ms-auto" @@click="uploadFile">新增</button></p>
+									</div>
+									<div class="form-group">
+										<div class="d-flex align-items-center">											
+											<div class="col-md-8 col-5"></div>
+											<div class="col-md-4 col-7 d-flex justify-content-between">
+												<button class="btn btn-primary btn-sm ms-auto" @@click="uploadFile">新增</button>
+												<button class="btn btn-outline-primary btn-sm ms-auto" @@click="getPictures(this.details.ProductId)">查看圖片</button>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
-							@*<div class="col-lg-5">
-							<div class="card card-carousel overflow-hidden h-100 p-0">
-							<div id="carouselExampleCaptions" class="carousel slide h-100" data-bs-ride="carousel">
-							<div class="carousel-inner border-radius-lg h-100">
-							<div class="carousel-item h-100 active" style="background-image: url('~/assets/img/carousel-1.jpg'); background-size: cover;">
-							<div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
-							<div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
-							<i class="ni ni-camera-compact text-dark opacity-10"></i>
-							</div>
-							<h5 class="text-white mb-1">Get started with Argon</h5>
-							<p>There’s nothing I really wanted to do in life that I wasn’t able to get good at.</p>
-							</div>
-							</div>
-							<div class="carousel-item h-100" style="background-image: url('~/assets/img/carousel-2.jpg'); background-size: cover;">
-							<div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
-							<div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
-							<i class="ni ni-bulb-61 text-dark opacity-10"></i>
-							</div>
-							<h5 class="text-white mb-1">Faster way to create web pages</h5>
-							<p>That’s my skill. I’m not really specifically talented at anything except for the ability to learn.</p>
-							</div>
-							</div>
-							<div class="carousel-item h-100" style="background-image: url('~/assets/img/carousel-3.jpg'); background-size: cover;">
-							<div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
-							<div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
-							<i class="ni ni-trophy text-dark opacity-10"></i>
-							</div>
-							<h5 class="text-white mb-1">Share with us your design tips!</h5>
-							<p>Don’t be afraid to be wrong because you can’t learn anything from a compliment.</p>
-							</div>
-							</div>
-							</div>
-							<button class="carousel-control-prev w-5 me-3" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Previous</span>
-							</button>
-							<button class="carousel-control-next w-5 me-3" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-							<span class="carousel-control-next-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Next</span>
-							</button>
-							</div>
-							</div>
-							</div>*@
 						</div>
 					</div>
 				</div>
 			</div>
-
+			<div v-if="this._pictures" class="row">
+				<div class="col-12">
+					<div class="card mb-4">
+						<div class="card-header pb-0">
+							<div class="d-flex align-items-center">
+								<h6 class="mb-0">商品圖片管理</h6>
+							</div>
+						</div>
+						<div class="card-body px-0 pt-0 pb-2">
+							<div class="table-responsive p-0">
+								<table class="table align-items-center mb-0">
+									<thead>
+										<tr>
+											<th class="text-secondary opacity-7"></th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">商品圖片</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">圖片說明</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="item in Pictures">
+											<td class="align-middle text-center">
+												<p><a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" @@click="updatePicture(item)">
+													<i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>儲存圖片說明</a></p>
+												<p><a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" @@click="deletePicture(item.PictureId)">
+													<i class="far fa-trash-alt me-2" aria-hidden="true"></i>刪除商品圖片</a></p>
+											</td>
+											<td class="align-middle text-center">
+												<img :src="item.Path" />
+											</td>
+											<td>
+												<textarea class="form-control" rows="2" cols="20" v-model="item.Description"></textarea>
+											</td>											
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>		
 			@*Footer*@
 			<footer class="footer pt-3">
-				<div class="container-fluid py-12">
+				<div class="container-fluid py-5">
 					<div class="row align-items-center justify-content-lg-between">
 						<div class="col-lg-6 mb-lg-0 mb-4">
 							<div class="copyright text-center text-sm text-muted text-lg-start">
 								© <script>
-							  document.write(new Date().getFullYear())
+							   document.write(new Date().getFullYear())
 								</script>,
 								made with <i class="fa fa-heart"></i> by
 								<a href="#" class="font-weight-bold" target="_blank">Creative Tim</a>
@@ -552,22 +557,25 @@
 	<script src="~/lib/vue/vue.global.prod.js"></script>
 	<script src="~/lib/axios/axios.min.js"></script>
 	<script>
-		var baseAddress = "https://localhost:7033";
+		var baseAddress = `${window.location.protocol}//${window.location.host}`;
 		var vueApp = {
 			data() {
 				return {
-					loginAccount: 'User1',
+					loginAccount: 'User2',
 					_products: false,
 					Products: [],
 					_details: false,
 					details: [],
+					_create: false,
+					_pictures: false,
+					Pictures: [],
 					_checked: false,
 					plus: 'INC',
 					increase: 0,
 					picture: '',
-					preview:'',
+					preview: '',
 					pictureText: '',
-					filter: ''					
+					filter: ''
 				};
 			},
 			mounted: function () {
@@ -575,19 +583,18 @@
 				_this.getProducts();
 			},
 			methods: {
-				stock: function() {
+				stock: function () {
 					let _this = this;
 					if (_this.plus == 'INC') {
-						_this.details.UnitsInStock += _this.increase;
+						_this.details.UnitsInStock += parseInt(_this.increase);
 					}
-					else _this.details.UnitsInStock -= _this.increase;
+					else _this.details.UnitsInStock -= parseInt(_this.increase);
 				},
 				shelf: function () {
 					let _this = this;
 					_this.details.Status = (_this._checked) ? '已上架' : '未上架';
 				},
 				uploadFile: function () {
-					alert('upload file');
 					var _this = this;
 					var formData = new FormData();
 					formData.append('Picture', _this.picture);
@@ -599,17 +606,55 @@
 						});
 				},
 				selectedFile: function (e) {
-					alert('selected');
 					var _this = this;
 					_this.picture = e.target.files[0];
 					_this.preview = URL.createObjectURL(_this.picture);
 				},
+				getPictures: function (productId) {
+					let _this = this;
+					_this._pictures = !_this._pictures;
+					if (_this._pictures) {
+						axios.post(`${baseAddress}/Products/GetPictures/${productId}`).then(
+							response => {
+								_this.Pictures = response.data;
+								_this.Pictures.forEach(item => {
+									item.Path =`${window.location.protocol}//${window.location.host}/productpictures/${item.PictureId}-${item.Path}`;
+								});
+							}
+						);
+					}
+				},
+				updatePicture: function (item) {
+					let _this = this;
+					var request = {};
+					_this.stock();
+					request.PictureId = item.PictureId;
+					request.ProductId = item.ProductId;
+					request.Path = item.Path;
+					request.Description = item.Description;
+					var ret = confirm('確定要儲存嗎？');
+					if (ret == true) {
+						axios.post(`${baseAddress}/Products/UpdatePicture/`, request).then(response => {
+							alert(response.data);
+						});
+					}
+					_this._pictures = false;
+				},
+				deletePicture: function (pictureId) {
+					let _this = this;
+					var ret = confirm('確定要刪除嗎？');
+					if (ret == true) {
+						axios.post(`${baseAddress}/Products/DeletePicture/${pictureId}`).then(response => {
+							alert(response.data);
+						});
+					}
+					_this._pictures = false;
+				},
 				getProducts: function () {
-					//alert('getProducts');
 					let _this = this;
 					_this._details = false;
 					_this._products = true;
-					axios.post(`${baseAddress}/Products/GetProducts`).then(
+					axios.post(`${baseAddress}/Products/GetProducts/`).then(
 						response => {
 							_this.Products = response.data;
 						}
@@ -617,33 +662,33 @@
 					_this.details = _this.Products[0];
 				},
 				filterProducts: function () {
-					//alert('filter');
 					let _this = this;
 					_this._details = false;
 					_this._products = true;
 					var request = {};
-					request.ProductId = isNaN(parseInt(_this.filter)) ? -1 : parseInt(_this.filter);
-					request.ProductName = request.ProductCategoryId = request.Description = request.Status = _this.filter;
+					request.SellerAccount = _this.loginAccount;
+					request.ProductId = request.ProductCategoryId = request.UnitsInStock = request.UnitPrice = isNaN(parseInt(_this.filter)) ? -1 : parseInt(_this.filter);
+					request.ProductName = request.Description = request.Status = request.Currency = _this.filter;
 					axios.post(`${baseAddress}/Products/Filter`, request).then(response => {
-						_this.Products = response.data;						
-						}
+						_this.Products = response.data;
+					}
 					);
-					_this.details = _this.Products[0];					
+					_this.details = _this.Products[0];
 				},
 				edit: function (productId) {
-					//alert('edit');
 					let _this = this;
+					_this.details = _this.Products[0];
 					_this.Products.forEach(item => {
 						if (item.ProductId == productId) {
 							_this.details = item;
 						}
-					_this._checked = (_this.details.Status == '已上架') ? true : false;
+						_this._checked = (_this.details.Status == '已上架') ? true : false;
 					});
 					_this._products = false;
 					_this._details = true;
+					_this._pictures = false;
 				},
 				update: function (item) {
-					alert('update');
 					let _this = this;
 					var request = {};
 					_this.stock();
@@ -656,23 +701,29 @@
 					request.UnitPrice = item.UnitPrice;
 					request.Status = item.Status;
 					request.Currency = item.Currency;
-
-					axios.get(`${baseAddress}/Products/Update/`, request).then(response => {
-						alert(response.data);
-						_this.cancel();
-						_this.getProducts();
-					});
+					var ret = confirm('確定要儲存嗎？');
+					if (ret == true) {
+						axios.post(`${baseAddress}/Products/Update/`, request).then(response => {
+							alert(response.data);
+							_this.cancel();
+						});
+					}
 				},
 				cancel: function () {
-					//alert('cancel');
 					let _this = this;
+					_this._create = false;
+					_this._pictures = false;
 					_this._details = false;
-					_this._products = true;	
+					_this._products = true;
 					_this.Products.forEach(item => {
 						if (item.ProductId == _this.details.ProductId) {
 							_this.details = item;
 						}
 					});
+					_this.increase = 0;
+					_this.picture = '';
+					_this.preview = '';
+					_this.pictureText = '';
 					_this.getProducts();
 				},
 				deleteProduct: function (productId) {
@@ -681,33 +732,53 @@
 					if (ret == true) {
 						axios.post(`${baseAddress}/Products/Delete/${productId}`).then(response => {
 							alert(response.data);
-							_this.getProducts();
+							_this.cancel();
 						});
 					}
 				},
-				showModal: function () {
-					alert('show');
-					$('#insertModal').modal('show');
-				},
-				insert: function () {
-					alert('insert');
+				create: function () {
+					alert('create');
 					var _this = this;
+					_this._products = false;
+					_this._details = true;
+					_this._create = true;
+					_this.details = _this.Products[0];
+					_this.details.ProductId = 0;
+					_this.details.SellerAccount = _this.loginAccount;
+					_this.details.LaunchDate = '';
+					_this.details.ProductName = '';
+					_this.details.ProductCategoryId = 1;
+					_this.details.Description = '';
+					_this.details.UnitsInStock = 0;
+					_this.details.Sales = 0;
+					_this.details.UnitPrice = '';
+					_this.details.Status = '未上架';
+					_this.details.Currency = 'NTD';
+					_this._checked = false;
+					_this.plus = 'INC';
+					_this.increase = 0;
+					_this._create = true;
+				},
+				createSave: function (item) {
+					let _this = this;
 					var request = {};
+					_this.stock();
 					request.ProductId = 0;
-					request.ProductName = _this.ProductName;
-					request.ProductCategoryId = _this.ProductCategoryId;
-					request.Description = _this.Description;
-					request.UnitPrice = _this.UnitPrice;
-					request.Sales = _this.Sales;
-					request.Ptatus = _this.Status;
-					request.Purrency = _this.Currency;
-					axios.get(`${baseAddress}/Products/Create`, request).then(
-						response => {
+					request.SellerAccount = item.SellerAccount;
+					request.ProductName = item.ProductName;
+					request.ProductCategoryId = item.ProductCategoryId;
+					request.Description = item.Description;
+					request.UnitsInStock = item.UnitsInStock;
+					request.UnitPrice = item.UnitPrice;
+					request.Status = item.Status;
+					request.Currency = item.Currency;
+					var ret = confirm('確定要新增嗎？');
+					if (ret == true) {
+						axios.post(`${baseAddress}/Products/Create/`, request).then(response => {
 							alert(response.data);
-							$('#insertModal').modal('hide');
-							_this.filterProducts();
-						}
-					);
+							_this.cancel();
+						});
+					}
 				}
 			}
 		};

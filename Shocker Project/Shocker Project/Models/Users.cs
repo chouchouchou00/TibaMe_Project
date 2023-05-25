@@ -23,11 +23,11 @@ namespace Shocker_Project.Models
         public string Password { get; set; }
         public string Name { get; set; }
         public string Gender { get; set; }
-        public DateTimeOffset? BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Role { get; set; }
-        public DateTimeOffset RegisterDate { get; set; }
+        public DateTime RegisterDate { get; set; }
         public string PicturePath { get; set; }
         public string AboutSeller { get; set; }
 
