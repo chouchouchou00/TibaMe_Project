@@ -13,7 +13,7 @@ namespace Shocker_Project.Models.ViewModel
         public DateTimeOffset RequiredDate { get; set; }
         [DisplayName("行動電話")]
         [RegularExpression("@{0-9}[10]", ErrorMessage = "電話號碼必須10個數字")]
-        public int BuyerPhone { get; set; }
+        public string BuyerPhone { get; set; }
         public string? PayMethod { get; set; }
     }
 }

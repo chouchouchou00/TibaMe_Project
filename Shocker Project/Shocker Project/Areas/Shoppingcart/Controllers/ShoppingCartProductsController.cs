@@ -33,87 +33,35 @@ namespace Shocker_Project.Areas.Shoppingcart.Controllers
         }
 
         // GET: Shoppingcart/ShoppingCartProducts/Details/5 
-        
+
 
         // GET: Shoppingcart/ShoppingCartProducts/Create
-       
-      
+
+
 
         // GET: Shoppingcart/ShoppingCartProducts/Edit/5
-       
+
 
         // POST: Shoppingcart/ShoppingCartProducts/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,SellerAccount,LaunchDate,ProductName,ProductCategoryId,Description,UnitsInStock,Sales,UnitPrice,Status,Currency")] Products products)
-        {
-            if (id != products.ProductId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(products);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductsExists(products.ProductId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ProductCategoryId"] = new SelectList(_context.ProductCategories, "CategoryId", "CategoryName", products.ProductCategoryId);
-            ViewData["SellerAccount"] = new SelectList(_context.Users, "Account", "Account", products.SellerAccount);
-            return View(products);
-        }
-
-        // GET: Shoppingcart/ShoppingCartProducts/Delete/5
-       
-
-        // POST: Shoppingcart/ShoppingCartProducts/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Products == null)
-            {
-                return Problem("Entity set 'db_a98a02_thm101team1001Context.Products'  is null.");
-            }
-            var products = await _context.Products.FindAsync(id);
-            if (products != null)
-            {
-                _context.Products.Remove(products);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        
 
         private bool ProductsExists(int id)
         {
-          return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();
+            return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();
         }
         public IActionResult Product()
         {
             return View();
         }
         string loginaccount = "User2";
-        public IActionResult ShoppingCart(/*ShoppingCartOrderDetailViewModel orderDetailViewModel*/)
+        public IActionResult ShoppingCart(ShoppingCartOrderDetailViewModel orderDetailViewModel)
         {
             string UserId = loginaccount; //User.Identity.Name;
-            var orderDetails = _context.OrderDetails.Where(m => m.Order.BuyerAccount == UserId && m.Status == "購物車")/*.ToList()*/;
+            var orderDetails = _context.OrderDetails.Where(m => m.Order.BuyerAccount == UserId && m.Status == "購物車").ToList();
             return View(orderDetails);
         }
         [HttpPost]
@@ -127,7 +75,7 @@ namespace Shocker_Project.Areas.Shoppingcart.Controllers
                                              //string guid = Guid.NewGuid().ToString();
                 Orders order = new Orders();
                 order.BuyerAccount = UserId;
-                order.Address =  viewModel.Address;
+                order.Address = viewModel.Address;
                 order.BuyerPhone = viewModel.BuyerPhone;
                 order.OrderDate = DateTime.Now;
                 order.PayMethod = viewModel.PayMethod;
@@ -139,17 +87,17 @@ namespace Shocker_Project.Areas.Shoppingcart.Controllers
 
                 foreach (var item in carList)
                 {
-                    item.Status = "未出貨";    
+                    item.Status = "未出貨";
                 }
                 _context.SaveChanges();
                 return RedirectToAction("OrderList");
             }
-            return ShoppingCart ();
+            return View();
         }
 
 
 
- 
+
         //建立訂單主檔列表
         public IActionResult OrderList()
         {
@@ -166,7 +114,7 @@ namespace Shocker_Project.Areas.Shoppingcart.Controllers
         public IActionResult AddCar(int ProductId)
         {
             string UserId = loginaccount;//User.Identity.Name;
-            var currentcar = _context.OrderDetails.Where(m => m.ProductId == ProductId && m.Status =="購物車" && m.Order.BuyerAccount ==UserId).FirstOrDefault();
+            var currentcar = _context.OrderDetails.Where(m => m.ProductId == ProductId && m.Status == "購物車" && m.Order.BuyerAccount == UserId).FirstOrDefault();
             if (currentcar == null)
             {
                 var product = _context.Products.Where(m => m.ProductId == ProductId).FirstOrDefault();

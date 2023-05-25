@@ -26,10 +26,6 @@ namespace Shocker_Project
 			builder.Services.AddControllersWithViews().AddJsonOptions(options => 
 				options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
-               builder.Services.AddEndpointsApiExplorer();
-
-               builder.Services.AddSwaggerGen();
-
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
@@ -43,12 +39,6 @@ namespace Shocker_Project
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 			}
-
-               if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-};
 
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
@@ -71,8 +61,6 @@ namespace Shocker_Project
 				name: "default",
 				pattern: "{controller=Home}/{action=Index}/{id?}");
 			app.MapRazorPages();
-
-               //app.MapOrdersEndpoints();
 
 			app.Run();
 		}
