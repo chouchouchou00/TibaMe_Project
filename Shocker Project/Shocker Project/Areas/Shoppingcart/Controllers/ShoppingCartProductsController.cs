@@ -5,9 +5,11 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Shocker_Project.Models;
+using Shocker_Project.Models.ViewModel;
 
 namespace Shocker_Project.Areas.Shoppingcart.Controllers
 {
@@ -30,68 +32,14 @@ namespace Shocker_Project.Areas.Shoppingcart.Controllers
         }
 
         // GET: Shoppingcart/ShoppingCartProducts/Details/5 
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Products == null)
-            {
-                return NotFound();
-            }
-
-            var products = await _context.Products
-                .Include(p => p.ProductCategory)
-                .Include(p => p.SellerAccountNavigation)
-                .FirstOrDefaultAsync(m => m.ProductId == id);
-            if (products == null)
-            {
-                return NotFound();
-            }
-
-            return View(products);
-        }
+        
 
         // GET: Shoppingcart/ShoppingCartProducts/Create
-        public IActionResult Create()
-        {
-            ViewData["ProductCategoryId"] = new SelectList(_context.ProductCategories, "CategoryId", "CategoryName");
-            ViewData["SellerAccount"] = new SelectList(_context.Users, "Account", "Account");
-            return View();
-        }
-
-        // POST: Shoppingcart/ShoppingCartProducts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,SellerAccount,LaunchDate,ProductName,ProductCategoryId,Description,UnitsInStock,Sales,UnitPrice,Status,Currency")] Products products)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(products);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ProductCategoryId"] = new SelectList(_context.ProductCategories, "CategoryId", "CategoryName", products.ProductCategoryId);
-            ViewData["SellerAccount"] = new SelectList(_context.Users, "Account", "Account", products.SellerAccount);
-            return View(products);
-        }
+       
+      
 
         // GET: Shoppingcart/ShoppingCartProducts/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Products == null)
-            {
-                return NotFound();
-            }
-
-            var products = await _context.Products.FindAsync(id);
-            if (products == null)
-            {
-                return NotFound();
-            }
-            ViewData["ProductCategoryId"] = new SelectList(_context.ProductCategories, "CategoryId", "CategoryName", products.ProductCategoryId);
-            ViewData["SellerAccount"] = new SelectList(_context.Users, "Account", "Account", products.SellerAccount);
-            return View(products);
-        }
+       
 
         // POST: Shoppingcart/ShoppingCartProducts/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -181,36 +129,42 @@ namespace Shocker_Project.Areas.Shoppingcart.Controllers
         public IActionResult ShoppingCart()
         {
             string UserId = loginaccount; //User.Identity.Name;
-            var orderDetails = _context.OrderDetails.Where(m => m.Order.BuyerAccount == UserId && m.Status == "購物車").ToList();
+            var orderDetails = _context.OrderDetails.Where(m => m.Order.BuyerAccount == UserId && m.Status == "購物車")/*.ToList()*/;
             return View(orderDetails);
         }
         [HttpPost]
-        public IActionResult ShoppingCart(DateTime RequiredDate, string PayMethod, string Address, int BuyerPhone)
+        [ValidateAntiForgeryToken]
+        public IActionResult ShoppingCart(/*[Bind("PayMethod,Address,BuyerPhone")]*/ ShoppingCartOrderViewModel viewModel)
         {
-                    
-                    string UserId = loginaccount;//User.Identity.Name;
-                                                 //string guid = Guid.NewGuid().ToString();
-                    Orders order = new Orders();
-                    order.BuyerAccount = UserId;
-                    order.Address = Address;
-                    order.BuyerPhone = BuyerPhone;
-                    order.OrderDate = DateTime.Now;
-                    order.PayMethod = PayMethod;
-                    order.RequiredDate = RequiredDate;
-                    order.Status = "未出貨";
-                    _context.Orders.Add(order);
-                
-            
- 
-                    var carList = _context.OrderDetails.Where(m => m.Status == "購物車" && m.Order.BuyerAccount == UserId).ToList();
-            foreach (var item in carList)
+           
+
+            if (ModelState.IsValid)
             {
-                item.Status = "未出貨";
+                string UserId = loginaccount;//User.Identity.Name;
+                                             //string guid = Guid.NewGuid().ToString();
+                Orders order = new Orders();
+                order.BuyerAccount = UserId;
+                order.Address =  viewModel.Address;
+                order.BuyerPhone = viewModel.BuyerPhone;
+                order.OrderDate = DateTime.Now;
+                order.PayMethod = viewModel.PayMethod;
+                order.Status = "未出貨";
+                _context.Orders.Add(order);
+
+                var carList = _context.OrderDetails.Where(m => m.Status == "購物車" && m.Order.BuyerAccount == UserId)/*.ToList()*/;
+
+
+                foreach (var item in carList)
+                {
+                    item.Status = "未出貨";    
+                }
+                _context.SaveChanges();
+                return RedirectToAction("OrderList");
             }
-            _context.SaveChanges();
-            return RedirectToAction("OrderList");
-            }
-     
+            return ShoppingCart ();
+        }
+
+
 
  
         //建立訂單主檔列表
