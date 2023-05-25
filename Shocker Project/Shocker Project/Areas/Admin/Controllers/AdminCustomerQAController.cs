@@ -17,21 +17,25 @@ namespace Shocker_Project.Areas.Admin.Controllers
 
         public async Task <IActionResult> Index()
         {
-            var QAT =_context.ClientCases.Include(p => p.Description);
-            return View(await QAT.ToListAsync());
+            //var QAT =_context.ClientCases.Include(p => p.Description);
+            //return View(await QAT.ToListAsync());
+            return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Index (QAViewModels qav) 
         {
-            ClientCases cc = new ClientCases()
-            {
-                Status = qav.Status,
-                UserAccount = qav.UserAccount,
-                Description = qav.Description,
-                QuestionCategoryId = qav.QuestionCategoryId,
-            };
-            return Ok();
+            //ClientCases cc = new ClientCases()
+            //{
+            //    Status = qav.Status,
+            //    UserAccount = qav.UserAccount,
+            //    Description = qav.Description,
+            //    QuestionCategoryId = qav.QuestionCategoryId,
+            //};
+            //var userAccount=_context.ClientCases.Select(x => x.UserAccount);
+
+            //return Ok();
+            return View(qav);
         }
     }
 }

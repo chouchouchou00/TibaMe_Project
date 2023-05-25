@@ -20,7 +20,7 @@ namespace Shocker_Project.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index( CustomerQAViewModel cqavm)
         {
             if (ModelState.IsValid)
@@ -38,12 +38,7 @@ namespace Shocker_Project.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                ViewBag.ss = "error";
-                return RedirectToAction("Error", "Home");
-            }
-
+            return View();
         }
     }
 }
