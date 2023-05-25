@@ -12,7 +12,7 @@ namespace Shocker_Project.Controllers
 	[Route("{controller}/{action}/{id?}")]
 	public class UserController : Controller
 	{
-		private string loginAccount= "Admin1";
+		private string loginAccount= "Admin1";//暫時寫死，等登入的參數
 		private readonly db_a98a02_thm101team1001Context _context;
 		private readonly IWebHostEnvironment _environment;
 
@@ -31,8 +31,8 @@ namespace Shocker_Project.Controllers
 		[HttpGet]
 		public JsonResult GetAccount()//要接登入驗證那裡傳回的Users.Account
 		{
-			var getaccount = from u in _context.Users.Where(a => a.Account == loginAccount)
-							 select new
+			var getaccount = from u in _context.Users.Where(a => a.Account == loginAccount)//暫時寫死，等登入的參數
+                             select new
 							 {
 								 account = u.Account,
 								 password = u.Password,
@@ -126,8 +126,8 @@ namespace Shocker_Project.Controllers
 		[HttpGet]
 		public JsonResult GetOrders()
 		{
-			var getorders = from o in _context.Orders.Where(a => a.BuyerAccount== loginAccount)/*.Include(o=>o.OrderDetails).ThenInclude(od=>od.Product).ThenInclude(p=>p.ProductCategory)*/						
-							 select new
+			var getorders = from o in _context.Orders.Include(o => o.OrderDetails).ThenInclude(od => od.Product).ThenInclude(p => p.ProductCategory).Where(a => a.BuyerAccount== loginAccount)//暫時寫死，等登入的參數
+                            select new
 							 {
 								buyerAccount=o.BuyerAccount,
 								orderId=o.OrderId,
@@ -135,10 +135,44 @@ namespace Shocker_Project.Controllers
 								orderDate=o.OrderDate,
 								requiredDate=o.RequiredDate,
 								buyerPhone=o.BuyerPhone,
-								paymethod=o.PayMethod,
-								status=o.Status,							
-							 };
+								payMethod=o.PayMethod,
+								productId = o.OrderDetails.Select(od=>od.ProductId).ToList(),
+								quantity=o.OrderDetails.Select(od=>od.Quantity).ToList(),
+								odstatus= o.OrderDetails.Select(od => od.Status).ToList(),
+								sellerAccount=o.OrderDetails.Select(od => od.Product.SellerAccount).ToList(),
+								productName=o.OrderDetails.Select(od => od.Product.ProductName).ToList(),
+								productCategoryId=o.OrderDetails.Select(od => od.Product.ProductCategoryId).ToList(),
+								unitPrice = o.OrderDetails.Select(od => od.Product.UnitPrice).ToList(),
+								categoryName=o.OrderDetails.Select(od => od.Product.ProductCategory.CategoryName).ToList(),
+							};
 			return Json(getorders);
+		}
+		///User/UserOrderDetails
+		[HttpGet]
+        public async Task<IActionResult> UserOrderDetails(int? id)
+		{
+			id = 19;
+            var getorderdetails = from o in _context.Orders.Include(o => o.OrderDetails).ThenInclude(od => od.Product).ThenInclude(p => p.ProductCategory).Where(a => a.OrderId == id)
+                            select new
+                            {
+                                buyerAccount = o.BuyerAccount,
+                                orderId = o.OrderId,
+                                address = o.Address,
+                                orderDate = o.OrderDate,
+                                requiredDate = o.RequiredDate,
+                                buyerPhone = o.BuyerPhone,
+                                payMethod = o.PayMethod,
+                                productId = o.OrderDetails.Select(od => od.ProductId).ToList(),
+                                quantity = o.OrderDetails.Select(od => od.Quantity).ToList(),
+                                odstatus = o.OrderDetails.Select(od => od.Status).ToList(),
+                                sellerAccount = o.OrderDetails.Select(od => od.Product.SellerAccount).ToList(),
+                                productName = o.OrderDetails.Select(od => od.Product.ProductName).ToList(),
+                                productCategoryId = o.OrderDetails.Select(od => od.Product.ProductCategoryId).ToList(),
+                                unitPrice = o.OrderDetails.Select(od => od.Product.UnitPrice).ToList(),
+                                categoryName = o.OrderDetails.Select(od => od.Product.ProductCategory.CategoryName).ToList(),
+                            };
+            var result = await Task.FromResult(getorderdetails);
+            return View(result);
 		}
 		///Get/Coupons
 		[HttpGet]

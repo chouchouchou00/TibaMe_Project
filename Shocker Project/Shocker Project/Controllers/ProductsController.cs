@@ -118,7 +118,7 @@ namespace Shocker_Project.Controllers
 					p.SellerAccount = product.SellerAccount;
 					if (p.Status == "未上架" && product.Status == "已上架")
 					{
-						p.LaunchDate = DateTimeOffset.Now;
+						p.LaunchDate = DateTime.Now;
 					}
 					p.ProductName = product.ProductName;
 					p.ProductCategoryId = product.ProductCategoryId;
