@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Shocker_Project.Areas.Shoppingcart.Views.ViewModel;
 using Shocker_Project.Models;
 using Shocker_Project.Models.ViewModel;
 
@@ -79,24 +80,7 @@ namespace Shocker_Project.Areas.Shoppingcart.Controllers
         }
 
         // GET: Shoppingcart/ShoppingCartProducts/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Products == null)
-            {
-                return NotFound();
-            }
-
-            var products = await _context.Products
-                .Include(p => p.ProductCategory)
-                .Include(p => p.SellerAccountNavigation)
-                .FirstOrDefaultAsync(m => m.ProductId == id);
-            if (products == null)
-            {
-                return NotFound();
-            }
-
-            return View(products);
-        }
+       
 
         // POST: Shoppingcart/ShoppingCartProducts/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -126,7 +110,7 @@ namespace Shocker_Project.Areas.Shoppingcart.Controllers
             return View();
         }
         string loginaccount = "User2";
-        public IActionResult ShoppingCart()
+        public IActionResult ShoppingCart(/*ShoppingCartOrderDetailViewModel orderDetailViewModel*/)
         {
             string UserId = loginaccount; //User.Identity.Name;
             var orderDetails = _context.OrderDetails.Where(m => m.Order.BuyerAccount == UserId && m.Status == "購物車")/*.ToList()*/;
@@ -136,7 +120,6 @@ namespace Shocker_Project.Areas.Shoppingcart.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ShoppingCart(/*[Bind("PayMethod,Address,BuyerPhone")]*/ ShoppingCartOrderViewModel viewModel)
         {
-           
 
             if (ModelState.IsValid)
             {
