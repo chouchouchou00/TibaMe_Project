@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Shocker_Project.Models.OrderDetails>
+
+@{
+    ViewData["Title"] = "訂單明細";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>訂單明細</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReturnReason)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Coupon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReturnReason)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Coupon.CouponId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Currency)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Shocker_Project.Models.Orders>
+
+@{
+    ViewData["Title"] = "會員訂單列表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>會員訂單列表</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RequiredDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BuyerPhone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PayMethod)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Addresses)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BuyerAccountNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequiredDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BuyerPhone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PayMethod)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Addresses.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BuyerAccountNavigation.Account)
+            </td>
+@*            <td>
+                    <a href="@Url.Action("OrderDetails")?OrderId=@item.OrderId" class="btn btn-info">訂單明細</a>
+            </td>*@
+        </tr>
+}
+    </tbody>
+</table>

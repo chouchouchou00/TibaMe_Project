@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Shocker_Project.Data;
 using Shocker_Project.Models;
 
+
 namespace Shocker_Project
 {
 	public class Program

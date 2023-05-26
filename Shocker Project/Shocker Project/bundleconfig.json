@@ -1,24 +1,14 @@
 [
   {
-    "outputFileName": "wwwroot/assets/css/bundle.css",
+    "outputFileName": "wwwroot/js/chuyi/cart.min.js",
     "inputFiles": [
-      "wwwroot/assets/css/argon-dashboard.css",
-      "wwwroot/assets/css/nucleo-icons.css",
-      "wwwroot/assets/css/nucleo-svg.css"
+      "wwwroot/js/chuyi/cart.js"
     ]
   },
   {
-    "outputFileName": "wwwroot/js/bundle.js",
+    "outputFileName": "wwwroot/css/chuyi/style.min.css",
     "inputFiles": [
-      "wwwroot/js/bootstrap.min.js",
-      "wwwroot/js/jquery.nice-select.min.js",
-      "wwwroot/js/jquery.slicknav.js",
-      "wwwroot/js/jquery-3.3.1.min.js",
-      "wwwroot/js/jquery-ui.min.js",
-      "wwwroot/js/main.js",
-      "wwwroot/js/mixitup.min.js",
-      "wwwroot/js/owl.carousel.min.js",
-      "wwwroot/js/site.js"
+      "wwwroot/css/chuyi/style.css"
     ]
   }
 ]
