@@ -1,72 +1,68 @@
 ﻿@model IEnumerable<Shocker_Project.Models.ClientCases>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "客戶問題";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1 class="text-white">客戶問題</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CloseDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Reply)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AdminAccountNavigation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.QuestionCategory)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserAccountNavigation)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CloseDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Reply)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AdminAccountNavigation.Account)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QuestionCategory.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserAccountNavigation.Account)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CaseId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CaseId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CaseId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0">
+                    <h3>問題表</h3>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr class="text-white">
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">@Html.DisplayNameFor(model => model.QuestionCategory) </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">客戶資訊</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">@Html.DisplayNameFor(model => model.CloseDate)</th>
+                                    <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7"> 操作</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">@Html.DisplayNameFor(model => model.Status)</th>
+                               
+                                </tr>
+                            </thead>
+                            <tbody>
+                               @foreach (var item in Model) {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                     
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-sm">@Html.DisplayFor(modelItem => item.QuestionCategory.CategoryName)</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                            <p class="text-xs font-weight-bold mb-0">@Html.DisplayFor(modelItem => item.UserAccountNavigation.Name)</p>
+                                            <p class="text-xs text-secondary mb-0"> @Html.DisplayFor(modelItem => item.UserAccountNavigation.Email)</p>
+                                    </td>
+                                        <td class="align-middle">
+                                            @Html.DisplayFor(modelItem => item.CloseDate)
+                                        </td>
+                                    <td class="align-middle text-center">
+                                            <span class="text-secondary text-xs font-weight-bold">
+                                                
+                                                <a asp-action="Edit" class="btn btn-info btn-sm" asp-route-id="@item.CaseId">Edit</a>
+                                                <a asp-controller ="CustomerReply" asp-action="Delete" class="btn btn-danger btn-sm">Delete</a>
+                                            </span>
+                                    </td>                        
+                                    <td class="align-middle text-center text-sm">
+                                           <span class="badge badge-sm bg-gradient-success"> @Html.DisplayFor(modelItem => item.Status)</span>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
