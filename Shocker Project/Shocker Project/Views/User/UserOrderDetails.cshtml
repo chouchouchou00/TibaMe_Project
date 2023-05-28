@@ -79,7 +79,7 @@
 													</div>
 													<div class="modal-footer">
 														<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-														<button type="button" class="btn btn-danger" data-dismiss="modal" @@click="updateodreturnreason">確定</button>
+														<button type="button" class="btn btn-danger" data-dismiss="modal" @@click="updateodreturnreason(item.productId[index])">確定</button>
 													</div>
 												</div>
 											</div>
@@ -96,7 +96,6 @@
 												<a class="dropdown-item" @@click="createRating(item.productId[index],5)">5</a>
 											</div>
 										</div>
-										@*<button type="button" class="btn btn-outline-warning">評價</button>*@
 									</template>
 								</td>
 							</tr>
@@ -108,6 +107,7 @@
 
 		<div>
 			{{this.totalPrice[0]}}
+			@*收貨按鈕:Status:od3*@
 		</div>
 
 		<div class="input-group">
@@ -200,11 +200,18 @@
 				}
 				axios.post(`${baseAddress}/CreateRating`, request).then(response => {
 					alert('完成評價!')
+					this.getUserOrderDetails();
 				})
 			},
-			updateodreturnreason: function () {
-				axios.post(`${baseAddress}/Updateodreturnreason`, this.returnreason).then(reponse => {
-					alert('送出退貨原因')
+			updateodreturnreason: function (productId) {
+				var request = {
+					ProductId: productId,
+					OrderId: this.orderDetails[0].orderId,
+					Returnreason: this.returnreason
+				}
+				axios.post(`${baseAddress}/Updateodreturnreason`, request).then(reponse => {
+					alert('成功送出退貨申請')
+					this.getUserOrderDetails();
 				})
 			}
 		}

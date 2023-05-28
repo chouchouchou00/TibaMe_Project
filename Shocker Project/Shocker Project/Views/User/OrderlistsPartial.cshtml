@@ -41,7 +41,7 @@
 											<li>電話:{{item.buyerPhone}}</li>
 											<li>下單時間:{{item.orderDate}}</li>
 											<li v-for="(productName, index) in item.productName">商品名稱:{{productName}}||數量:{{item.quantity[index]}}||取貨狀態:{{item.statusName}}</li>
-											<li>領貨時間:{{item.requiredDate}}</li>
+											<li>領貨時間:{{item.arrivalDate}}</li>
 											<li>付款方式:{{item.payMethod}}</li>
 										</ul>
 										@*useless:
@@ -59,7 +59,7 @@
 						</div>
 					</td>
 					<td>{{item.productName.join(',')}}</td>					
-					<td>{{item.statusName}}</td>
+					<td>{{item.statusName}}</td>@*非已收貨可取消訂單*@
 					<td>{{item.payMethod}}</td>
 					<td>{{totalPrice[index]}}</td>
 				</tr>
@@ -79,7 +79,7 @@
 			//buyerAccount: "",
 			//address: "",
 			//orderDate: "",
-			//requiredDate: "",
+			//arrivalDate: "",
 			//buyerPhone: "",
 			//payMethod: "",
 			//quantity: "",

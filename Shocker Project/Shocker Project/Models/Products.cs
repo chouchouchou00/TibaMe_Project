@@ -12,6 +12,7 @@ namespace Shocker_Project.Models
             OrderDetails = new HashSet<OrderDetails>();
             Pictures = new HashSet<Pictures>();
             Ratings = new HashSet<Ratings>();
+            Shopping = new HashSet<Shopping>();
         }
 
         public int ProductId { get; set; }
@@ -32,5 +33,6 @@ namespace Shocker_Project.Models
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }
         public virtual ICollection<Pictures> Pictures { get; set; }
         public virtual ICollection<Ratings> Ratings { get; set; }
+        public virtual ICollection<Shopping> Shopping { get; set; }
     }
 }

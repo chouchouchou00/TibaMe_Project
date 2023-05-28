@@ -14,7 +14,6 @@ namespace Shocker_Project.Controllers
 	public class UserController : Controller
 	{
 		private string loginAccount = "Admin1";//暫時寫死，等登入的參數
-		private int theOrderID { get; set; }
 		private readonly db_a98a02_thm101team1001Context _context;
 		private readonly IWebHostEnvironment _environment;
 
@@ -135,12 +134,12 @@ namespace Shocker_Project.Controllers
 								orderId = o.OrderId,
 								address = o.Address,
 								orderDate = o.OrderDate,
-								requiredDate = o.RequiredDate,
+								arrivalDate = o.ArrivalDate,
 								buyerPhone = o.BuyerPhone,
 								payMethod = o.PayMethod,
 								quantity = o.OrderDetails.Select(od => od.Quantity).ToList(),
-								productName = o.OrderDetails.Select(od => od.Product.ProductName).ToList(),
-								unitPrice = o.OrderDetails.Select(od => od.Product.UnitPrice).ToList(),
+								productName = o.OrderDetails.Select(od => od.ProductName).ToList(),
+								unitPrice = o.OrderDetails.Select(od => od.UnitPrice).ToList(),
 								statusName = o.StatusNavigation.StatusName,
 							};
 			return Json(getorders);
@@ -151,38 +150,33 @@ namespace Shocker_Project.Controllers
 		//								sellerAccount
 		//								categoryName
 
-		//public void GettheOrderID(int orderid)
-		//{
-		//	theOrderID = orderid;
-		//}
-		public IActionResult UserOrderDetails(int id)
+		public IActionResult UserOrderDetails(int id)//全丟抓參數
 		{
-			theOrderID = id;
 			return View();
 		}
 		///User/GetUserOrderDetails
 		[HttpGet]
 		public JsonResult GetUserOrderDetails()
 		{
-			//var getorderdetails = from o in _context.Orders.Include(o => o.OrderDetails).ThenInclude(od => od.Product).ThenInclude(p => p.ProductCategory).Where(a => a.OrderId == theOrderID)
-			var getorderdetails = from o in _context.Orders.AsNoTracking().Include(o => o.OrderDetails).ThenInclude(od => od.Product).ThenInclude(p => p.Pictures).Where(a => a.OrderId == theOrderID)
+			var getorderdetails = from o in _context.Orders.AsNoTracking().Include(o => o.OrderDetails).ThenInclude(od => od.Product).ThenInclude(p => p.Pictures).Where(a => a.OrderId == 19)
 								  select new
 								  {
 									  buyerAccount = o.BuyerAccount,
 									  orderId = o.OrderId,
 									  address = o.Address,
 									  orderDate = o.OrderDate,
-									  requiredDate = o.RequiredDate,
+									  arrivalDate = o.ArrivalDate,
 									  buyerPhone = o.BuyerPhone,
 									  payMethod = o.PayMethod,
 									  productId = o.OrderDetails.Select(od => od.ProductId).ToList(),
 									  quantity = o.OrderDetails.Select(od => od.Quantity).ToList(),
 									  sellerAccount = o.OrderDetails.Select(od => od.Product.SellerAccount).ToList(),
-									  productName = o.OrderDetails.Select(od => od.Product.ProductName).ToList(),
-									  unitPrice = o.OrderDetails.Select(od => od.Product.UnitPrice).ToList(),
+									  productName = o.OrderDetails.Select(od => od.ProductName).ToList(),
+									  unitPrice = o.OrderDetails.Select(od => od.UnitPrice).ToList(),
 									  categoryName = o.OrderDetails.Select(od => od.Product.ProductCategory.CategoryName).ToList(),
 									  path = o.OrderDetails.Select(od => od.Product.Pictures.Select(p => p.Path)).ToList(),
 									  statusName = o.OrderDetails.Select(od => od.StatusNavigation.StatusName),
+									  //評價內容
 									  starCount = o.Ratings.Select(od => od.StarCount).ToList(),
 								  };
 			return Json(getorderdetails);
@@ -197,9 +191,12 @@ namespace Shocker_Project.Controllers
 				{
 					ProductId = rvm.ProductId,
 					StarCount = rvm.StarCount,
-					OrderId = rvm.OrderId,
+					OrderId = rvm.OrderId,					
 				};
+				OrderDetails o = await _context.OrderDetails.Where(od => od.OrderId == rvm.OrderId && od.ProductId == rvm.ProductId).FirstOrDefaultAsync();
+				o.Status = "od6";
 				_context.Ratings.Add(r);
+				_context.Update(o);
 				await _context.SaveChangesAsync();
 				return Json(new { Result = "OK", Message = "新增評價成功!" });
 			}
@@ -209,25 +206,39 @@ namespace Shocker_Project.Controllers
 			}
 		}
 		[HttpPost]
-		//public async Task<JsonResult> Updateodreturnreason([FromBody] OrderDetails returnreason)
-		//{
-		//	if ()
-		//	{
-		//		Ratings r = new Ratings
-		//		{
-		//			ProductId = rvm.ProductId,
-		//			StarCount = rvm.StarCount,
-		//			OrderId = rvm.OrderId,
-		//		};
-		//		_context.Ratings.Add(r);
-		//		await _context.SaveChangesAsync();
-		//		return Json(new { Result = "OK", Message = "新增評價成功!" });
-		//	}
-		//	else
-		//	{
-		//		return Json(new { Result = "Error", Message = "新增評價失敗!" });
-		//	}
-		//}
+		public async Task<JsonResult> Updateodreturnreason([FromBody] ReturnreasonViewModel rrvm)
+		{
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					OrderDetails o = await _context.OrderDetails.Where(od => od.OrderId == rrvm.OrderId && od.ProductId == rrvm.ProductId).FirstOrDefaultAsync();
+					o.ReturnReason = rrvm.ReturnReason;
+					o.Status = "od4";
+					_context.Update(o);
+					await _context.SaveChangesAsync();
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!OrderDetailsExists(rrvm.OrderId))
+					{
+						return Json(new { Result = "Error", Message = "此訂單不存在!" });
+					}
+					else
+					{
+						throw;
+					}
+				}
+				return Json(new { Result = "OK", Message = "上傳訂單評價成功!" });
+			}
+			else
+			{
+				return Json(new { Result = "Error", Message = "上傳訂單評價失敗!" });
+			}
+		}
+
+
+
 		///Get/Coupons
 		//[HttpGet]
 		//public JsonResult GetCoupons()
@@ -239,6 +250,10 @@ namespace Shocker_Project.Controllers
 		//						 exp
 		//					 };
 		//}
+		private bool OrderDetailsExists(int hasorderId)
+		{
+			return _context.OrderDetails.Any(o => o.OrderId == hasorderId);
+		}
 		private bool UsersExists(string hasaccount)
 		{
 			return _context.Users.Any(u => u.Account == hasaccount);
