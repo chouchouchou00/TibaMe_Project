@@ -14,8 +14,6 @@ namespace Shocker_Project.Models
 
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public string CustomerTa { get; set; }
-        public string Qaclass { get; set; }
 
         public virtual ICollection<ClientCases> ClientCases { get; set; }
     }

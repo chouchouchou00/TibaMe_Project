@@ -1,12 +1,5 @@
-﻿@model Shocker_Project.ViewModels.UserViewModel
-@section Styles
-	{
-	<style>
-		thead {
-			background-color: pink;
-			color: mediumvioletred;
-		}
-	</style>
+﻿@section Styles
+{
 }
 
 <div id="app" class="container">
@@ -22,17 +15,12 @@
 				</tr>
 			</thead>
 			<tbody>
-				@*<tr v-for="item in Orders">
-					<td scope="row">1</td>
-					<td input v-model="item.buyerAccount"></td>
-					<td input v-model="item.address"></td>
-					<td input v-model="item.buyerPhone"></td>
-					<td input v-model="item.paymethod"></td>
-				</tr>*@
 				<tr v-for="(item,index) in Orders">
 					<td scope="row">
 						<!-- Button trigger modal -->
-						<a button type="button" class="btn btn-outline-primary" asp-controller="User" asp-action="UserOrderDetails" asp-route-id="{{item.orderId}}">訂單詳情頁面</a>
+						@*<a button type="button" class="btn btn-outline-primary" asp-controller="User" asp-action="UserOrderDetails" asp-route-id="{{item.orderId}}">訂單詳情頁面</a>*@
+						<a button type="button" class="btn btn-outline-primary" :href="'/User/UserOrderDetails?id='+item.orderId">訂單詳情頁面</a>
+						@*<a href="@Url.Action("UserOrderDetails","User")/{{item.orderId}}">訂單詳情頁面傳參</a>	*@				
 						<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
 							訂單詳情
 						</button>
@@ -52,7 +40,7 @@
 											<li>收件地址:{{item.address}}</li>
 											<li>電話:{{item.buyerPhone}}</li>
 											<li>下單時間:{{item.orderDate}}</li>
-											<li v-for="(productName, index) in item.productName">商品名稱:{{productName}}||數量:{{item.quantity[index]}}||取貨狀態:{{item.odstatus[index]}}</li>
+											<li v-for="(productName, index) in item.productName">商品名稱:{{productName}}||數量:{{item.quantity[index]}}||取貨狀態:{{item.statusName}}</li>
 											<li>領貨時間:{{item.requiredDate}}</li>
 											<li>付款方式:{{item.payMethod}}</li>
 										</ul>
@@ -64,15 +52,14 @@
 										*@																			
 									</div>
 									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-										<button type="button" class="btn btn-primary">Save changes</button>
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">確認</button>
 									</div>
 								</div>
 							</div>
 						</div>
 					</td>
 					<td>{{item.productName.join(',')}}</td>					
-					<td>{{item.odstatus.join(',')}}</td>
+					<td>{{item.statusName}}</td>
 					<td>{{item.payMethod}}</td>
 					<td>{{totalPrice[index]}}</td>
 				</tr>
@@ -111,7 +98,7 @@
 			getOrders:function(){
 				alert('getOrders')
 				axios.get(`${baseAddress}/GetOrders`).then(response=>{
-					alert(response.data);
+					alert(JSON.stringify(response.data));
 					this.Orders=response.data;
 					var value = 0;
 					for(var i=0;i<this.Orders.length;i++){
@@ -122,7 +109,15 @@
 						this.totalPrice.push(value)
 					}
 				});
-			}
+			},
+			//getUserOrderDetails:function(item){
+			//	var orderid=item;
+			//	axios.post(`${baseAddress}/GettheOrderID`, orderid).then(reponse=>{
+			//		alert("傳遞orderid成功")
+			//	})
+			//}
 		}
+		//window.location.href="/controller/action/?orderId=19"
+		//		window.location.href.search ="orderId = 19" 
 	});
 </script>						

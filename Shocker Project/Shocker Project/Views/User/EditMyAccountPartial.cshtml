@@ -1,9 +1,6 @@
 ﻿@model Shocker_Project.ViewModels.UserViewModel
 @section Styles
-	{
-	<style>
-
-	</style>
+{
 }
 
 <div id="app" class="container">
@@ -207,7 +204,7 @@
 			getUsers: function (account) {
 				//alert("getUsers")
 				axios.get(`${baseAddress}/GetAccount`).then(response => {
-					//alert(response.data);
+					//alert(JSON.stringify(response.data));
 					this.Users = response.data;
 					this.account = this.Users[0].account;
 					this.password = this.Users[0].password;

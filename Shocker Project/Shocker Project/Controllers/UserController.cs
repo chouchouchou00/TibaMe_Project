@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
@@ -12,7 +13,8 @@ namespace Shocker_Project.Controllers
 	[Route("{controller}/{action}/{id?}")]
 	public class UserController : Controller
 	{
-		private string loginAccount= "Admin1";//暫時寫死，等登入的參數
+		private string loginAccount = "Admin1";//暫時寫死，等登入的參數
+		private int theOrderID { get; set; }
 		private readonly db_a98a02_thm101team1001Context _context;
 		private readonly IWebHostEnvironment _environment;
 
@@ -31,8 +33,8 @@ namespace Shocker_Project.Controllers
 		[HttpGet]
 		public JsonResult GetAccount()//要接登入驗證那裡傳回的Users.Account
 		{
-			var getaccount = from u in _context.Users.Where(a => a.Account == loginAccount)//暫時寫死，等登入的參數
-                             select new
+			var getaccount = from u in _context.Users.AsNoTracking().Where(a => a.Account == loginAccount)//暫時寫死，等登入的參數
+							 select new
 							 {
 								 account = u.Account,
 								 password = u.Password,
@@ -78,11 +80,11 @@ namespace Shocker_Project.Controllers
 						throw;
 					}
 				}
-				return Json(new { Result = "OK", Message = "修改成功!" });
+				return Json(new { Result = "OK", Message = "修改帳號成功!" });
 			}
 			else
 			{
-				return Json(new { Result = "Error", Message = "修改失敗!" });
+				return Json(new { Result = "Error", Message = "修改帳號失敗!" });
 			}
 		}
 		[HttpPost]
@@ -115,73 +117,125 @@ namespace Shocker_Project.Controllers
 						throw;
 					}
 				}
-				return Json(new { Result = "OK", Message = "上傳成功!" });
+				return Json(new { Result = "OK", Message = "上傳照片成功!" });
 			}
 			else
 			{
-				return Json(new { Result = "Error", Message = "上傳失敗!" });
+				return Json(new { Result = "Error", Message = "上傳照片失敗!" });
 			}
 		}
 		///User/GetOrders
 		[HttpGet]
 		public JsonResult GetOrders()
 		{
-			var getorders = from o in _context.Orders.Include(o => o.OrderDetails).ThenInclude(od => od.Product).ThenInclude(p => p.ProductCategory).Where(a => a.BuyerAccount== loginAccount)//暫時寫死，等登入的參數
-                            select new
-							 {
-								buyerAccount=o.BuyerAccount,
-								orderId=o.OrderId,
-								address=o.Address,
-								orderDate=o.OrderDate,
-								requiredDate=o.RequiredDate,
-								buyerPhone=o.BuyerPhone,
-								payMethod=o.PayMethod,
-								productId = o.OrderDetails.Select(od=>od.ProductId).ToList(),
-								quantity=o.OrderDetails.Select(od=>od.Quantity).ToList(),
-								odstatus= o.OrderDetails.Select(od => od.Status).ToList(),
-								sellerAccount=o.OrderDetails.Select(od => od.Product.SellerAccount).ToList(),
-								productName=o.OrderDetails.Select(od => od.Product.ProductName).ToList(),
-								productCategoryId=o.OrderDetails.Select(od => od.Product.ProductCategoryId).ToList(),
+			var getorders = from o in _context.Orders.AsNoTracking().Include(o => o.OrderDetails).ThenInclude(od => od.Product).ThenInclude(p => p.ProductCategory).Where(a => a.BuyerAccount == loginAccount)//暫時寫死，等登入的參數
+							select new
+							{
+								buyerAccount = o.BuyerAccount,
+								orderId = o.OrderId,
+								address = o.Address,
+								orderDate = o.OrderDate,
+								requiredDate = o.RequiredDate,
+								buyerPhone = o.BuyerPhone,
+								payMethod = o.PayMethod,
+								quantity = o.OrderDetails.Select(od => od.Quantity).ToList(),
+								productName = o.OrderDetails.Select(od => od.Product.ProductName).ToList(),
 								unitPrice = o.OrderDetails.Select(od => od.Product.UnitPrice).ToList(),
-								categoryName=o.OrderDetails.Select(od => od.Product.ProductCategory.CategoryName).ToList(),
+								statusName = o.StatusNavigation.StatusName,
 							};
 			return Json(getorders);
 		}
-		///User/UserOrderDetails
-		[HttpGet]
-        public async Task<IActionResult> UserOrderDetails(int? id)
+		//useless:
+		//								productId
+		//								productCategoryId
+		//								sellerAccount
+		//								categoryName
+
+		//public void GettheOrderID(int orderid)
+		//{
+		//	theOrderID = orderid;
+		//}
+		public IActionResult UserOrderDetails(int id)
 		{
-			id = 19;
-            var getorderdetails = from o in _context.Orders.Include(o => o.OrderDetails).ThenInclude(od => od.Product).ThenInclude(p => p.ProductCategory).Where(a => a.OrderId == id)
-                            select new
-                            {
-                                buyerAccount = o.BuyerAccount,
-                                orderId = o.OrderId,
-                                address = o.Address,
-                                orderDate = o.OrderDate,
-                                requiredDate = o.RequiredDate,
-                                buyerPhone = o.BuyerPhone,
-                                payMethod = o.PayMethod,
-                                productId = o.OrderDetails.Select(od => od.ProductId).ToList(),
-                                quantity = o.OrderDetails.Select(od => od.Quantity).ToList(),
-                                odstatus = o.OrderDetails.Select(od => od.Status).ToList(),
-                                sellerAccount = o.OrderDetails.Select(od => od.Product.SellerAccount).ToList(),
-                                productName = o.OrderDetails.Select(od => od.Product.ProductName).ToList(),
-                                productCategoryId = o.OrderDetails.Select(od => od.Product.ProductCategoryId).ToList(),
-                                unitPrice = o.OrderDetails.Select(od => od.Product.UnitPrice).ToList(),
-                                categoryName = o.OrderDetails.Select(od => od.Product.ProductCategory.CategoryName).ToList(),
-                            };
-            var result = await Task.FromResult(getorderdetails);
-            return View(result);
+			theOrderID = id;
+			return View();
 		}
-		///Get/Coupons
+		///User/GetUserOrderDetails
 		[HttpGet]
+		public JsonResult GetUserOrderDetails()
+		{
+			//var getorderdetails = from o in _context.Orders.Include(o => o.OrderDetails).ThenInclude(od => od.Product).ThenInclude(p => p.ProductCategory).Where(a => a.OrderId == theOrderID)
+			var getorderdetails = from o in _context.Orders.AsNoTracking().Include(o => o.OrderDetails).ThenInclude(od => od.Product).ThenInclude(p => p.Pictures).Where(a => a.OrderId == theOrderID)
+								  select new
+								  {
+									  buyerAccount = o.BuyerAccount,
+									  orderId = o.OrderId,
+									  address = o.Address,
+									  orderDate = o.OrderDate,
+									  requiredDate = o.RequiredDate,
+									  buyerPhone = o.BuyerPhone,
+									  payMethod = o.PayMethod,
+									  productId = o.OrderDetails.Select(od => od.ProductId).ToList(),
+									  quantity = o.OrderDetails.Select(od => od.Quantity).ToList(),
+									  sellerAccount = o.OrderDetails.Select(od => od.Product.SellerAccount).ToList(),
+									  productName = o.OrderDetails.Select(od => od.Product.ProductName).ToList(),
+									  unitPrice = o.OrderDetails.Select(od => od.Product.UnitPrice).ToList(),
+									  categoryName = o.OrderDetails.Select(od => od.Product.ProductCategory.CategoryName).ToList(),
+									  path = o.OrderDetails.Select(od => od.Product.Pictures.Select(p => p.Path)).ToList(),
+									  statusName = o.OrderDetails.Select(od => od.StatusNavigation.StatusName),
+									  starCount = o.Ratings.Select(od => od.StarCount).ToList(),
+								  };
+			return Json(getorderdetails);
+		}
+
+		[HttpPost]
+		public async Task<JsonResult> CreateRating([FromBody] RatingViewModel rvm)
+		{
+			if (ModelState.IsValid)
+			{
+				Ratings r = new Ratings
+				{
+					ProductId = rvm.ProductId,
+					StarCount = rvm.StarCount,
+					OrderId = rvm.OrderId,
+				};
+				_context.Ratings.Add(r);
+				await _context.SaveChangesAsync();
+				return Json(new { Result = "OK", Message = "新增評價成功!" });
+			}
+			else
+			{
+				return Json(new { Result = "Error", Message = "新增評價失敗!" });
+			}
+		}
+		[HttpPost]
+		//public async Task<JsonResult> Updateodreturnreason([FromBody] OrderDetails returnreason)
+		//{
+		//	if ()
+		//	{
+		//		Ratings r = new Ratings
+		//		{
+		//			ProductId = rvm.ProductId,
+		//			StarCount = rvm.StarCount,
+		//			OrderId = rvm.OrderId,
+		//		};
+		//		_context.Ratings.Add(r);
+		//		await _context.SaveChangesAsync();
+		//		return Json(new { Result = "OK", Message = "新增評價成功!" });
+		//	}
+		//	else
+		//	{
+		//		return Json(new { Result = "Error", Message = "新增評價失敗!" });
+		//	}
+		//}
+		///Get/Coupons
+		//[HttpGet]
 		//public JsonResult GetCoupons()
 		//{
 		//	var getcoupons = from c in _context.Coupons.Where(c => c.HolderAccount == loginAccount)
 		//					 select new
 		//					 {
-		//						 holderAccount=c.HolderAccount,
+		//						 holderAccount = c.HolderAccount,
 		//						 exp
 		//					 };
 		//}

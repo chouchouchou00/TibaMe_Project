@@ -1,193 +1,212 @@
-﻿@model Shocker_Project.ViewModels.UserViewModel
-@section Styles
-    {
-    <style>
+﻿@section Styles
+	{
 
-    </style>
 }
 
 <!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <div class="breadcrumb__text">
-                    <h2>Shopping Cart</h2>
-                    <div class="breadcrumb__option">
-                        <a href="./index.html">Home</a>
-                        <span>Shopping Cart</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<div class="container">
+	<div class="row">
+		<div class="col-lg-12 text-center">
+			<div class="breadcrumb__text">
+				<h2>Shopping Cart</h2>
+				<div class="breadcrumb__option">
+					<a href="./index.html">Home</a>
+					<span>Shopping Cart</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 <!-- Breadcrumb Section End -->
 <!-- Shoping Cart Section Begin -->
 <section class="shoping-cart spad">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="shoping__cart__table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="shoping__product">Products</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="shoping__cart__item">
-                                    <img src="img/cart/cart-1.jpg" alt="">
-                                    <h5>Vegetable’s Package</h5>
-                                </td>
-                                <td class="shoping__cart__price">
-                                    $55.00
-                                </td>
-                                <td class="shoping__cart__quantity">
-                                    <div class="quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" value="1">
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="shoping__cart__total">
-                                    $110.00
-                                </td>
-                                <td class="shoping__cart__item__close">
-                                    <span class="icon_close"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="shoping__cart__item">
-                                    <img src="img/cart/cart-2.jpg" alt="">
-                                    <h5>Fresh Garden Vegetable</h5>
-                                </td>
-                                <td class="shoping__cart__price">
-                                    $39.00
-                                </td>
-                                <td class="shoping__cart__quantity">
-                                    <div class="quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" value="1">
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="shoping__cart__total">
-                                    $39.99
-                                </td>
-                                <td class="shoping__cart__item__close">
-                                    <span class="icon_close"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="shoping__cart__item">
-                                    <img src="img/cart/cart-3.jpg" alt="">
-                                    <h5>Organic Bananas</h5>
-                                </td>
-                                <td class="shoping__cart__price">
-                                    $69.00
-                                </td>
-                                <td class="shoping__cart__quantity">
-                                    <div class="quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" value="1">
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="shoping__cart__total">
-                                    $69.99
-                                </td>
-                                <td class="shoping__cart__item__close">
-                                    <span class="icon_close"></span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="shoping__cart__btns">
-                    <a href="#" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-                    <a href="#" class="primary-btn cart-btn cart-btn-right">
-                        <span class="icon_loading"></span>
-                        Upadate Cart
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="shoping__continue">
-                    <div class="shoping__discount">
-                        <h5>Discount Codes</h5>
-                        <form action="#">
-                            <input type="text" placeholder="Enter your coupon code">
-                            <button type="submit" class="site-btn">APPLY COUPON</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="shoping__checkout">
-                    <h5>Cart Total</h5>
-                    <ul>
-                        <li>Subtotal <span>$454.98</span></li>
-                        <li>Total <span>$454.98</span></li>
-                    </ul>
-                    <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div id="app" class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="shoping__cart__table" v-for="item in orderDetails">
+					<table>
+						<thead>
+							<tr>
+								<th class="shoping__product">商品</th>
+								<th>商品名稱</th>
+								<th>商品種類</th>
+								<th>賣家</th>
+								<th>價錢</th>
+								<th>數量</th>
+								<th>評價</th>
+								<th>收貨狀態</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="(productName, index) in item.productId">
+								<td class="shoping__cart__item">
+									<img style="width:250px;height:250px" :src="item.path[index][0]" alt="">
+								</td>
+								<td class="shoping__cart__price">
+									{{item.productName[index]}}
+								</td>
+								<td class="shoping__cart__price">
+									{{item.categoryName[index]}}
+								</td>
+								<td class="shoping__cart__price">
+									{{item.sellerAccount[index]}}
+								</td>
+								<td class="shoping__cart__quantity">
+									{{item.unitPrice[index]}}
+								</td>
+								<td class="shoping__cart__total">
+									{{item.quantity[index]}}
+								</td>
+								<td class="shoping__cart__price">
+									{{item.starCount[index]}}
+								</td>
+								<td class="shoping__cart__price">
+									{{item.statusName[index]}}
+									<template v-if="item.statusName[index]=='已收貨'">
+										<button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#returnModal">退貨</button>
+										<div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="exampleModalLabel">退貨原因</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+															<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+													<div class="form-group">
+														<label for="exampleFormControlTextarea1">您為甚麼想要退貨?</label>
+														<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" v-model="returnreason"></textarea>
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+														<button type="button" class="btn btn-danger" data-dismiss="modal" @@click="updateodreturnreason">確定</button>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="dropdown">
+											<button class="btn btn-outline-warning dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+												評價
+											</button>
+											<div class="dropdown-menu">
+												<a class="dropdown-item" @@click="createRating(item.productId[index],1)">1</a>
+												<a class="dropdown-item" @@click="createRating(item.productId[index],2)">2</a>
+												<a class="dropdown-item" @@click="createRating(item.productId[index],3)">3</a>
+												<a class="dropdown-item" @@click="createRating(item.productId[index],4)">4</a>
+												<a class="dropdown-item" @@click="createRating(item.productId[index],5)">5</a>
+											</div>
+										</div>
+										@*<button type="button" class="btn btn-outline-warning">評價</button>*@
+									</template>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<div>
+			{{this.totalPrice[0]}}
+		</div>
+
+		<div class="input-group">
+			<div class="input-group-prepend">
+				<span class="input-group-text">With textarea</span>
+			</div>
+			<textarea class="form-control" aria-label="With textarea"></textarea>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="shoping__cart__btns">
+					<a href="#" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
+					<a href="#" class="primary-btn cart-btn cart-btn-right">
+						<span class="icon_loading"></span>
+						Upadate Cart
+					</a>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="shoping__continue">
+					<div class="shoping__discount">
+						<h5>Discount Codes</h5>
+						<form action="#">
+							<input type="text" placeholder="Enter your coupon code">
+							<button type="submit" class="site-btn">APPLY COUPON</button>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="shoping__checkout">
+					<h5>Cart Total</h5>
+					<ul>
+						<li>Subtotal <span>$454.98</span></li>
+						<li>Total <span>$454.98</span></li>
+					</ul>
+					<a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 <!-- Shoping Cart Section End -->
 <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
 <script src="~/axios/axios.min.js"></script>
+<script src="~/js/jquery-3.3.1.min.js"></script>
+<script src="~/js/star-rating.min.js"></script>
+<script src="~/js/popper.min.js"></script>
 <script>
-    var baseAddress = "https://localhost:7033/User";
-    var Vue = new Vue({
-        el: '#app',
-        data: {
-            Orders: [],
-            buyerAccount: "",
-            address: "",
-            orderDate: "",
-            requiredDate: "",
-            buyerPhone: "",
-            payMethod: "",
-            quantity: "",
-            status: "",
-            sellerAccount: "",
-            productName: "",
-            unitPrice: "",
-            categoryName: "",
-            starCount: "",
-            totalPrice: []
-        },
-        mounted: function () {
-            this.getOrders();
-        },
-        methods: {
-            getOrders: function () {
-                alert('getOrders')
-                axios.get(`${baseAddress}/GetOrders`).then(response => {
-                    alert(response.data);
-                    this.Orders = response.data;
-                    var value = 0;
-                    for (var i = 0; i < this.Orders.length; i++) {
-                        value = 0;
-                        for (var j = 0; j < this.Orders[i].quantity.length; j++) {
-                            value += this.Orders[i].quantity[j] * this.Orders[i].unitPrice[j];
-                        }
-                        this.totalPrice.push(value)
-                    }
-                });
-            }
-        }
-    });
+	var baseAddress = "https://localhost:7033/User";
+	var Vue = new Vue({
+		el: '#app',
+		data: {
+			orderDetails: [],
+			pictures: [],
+			address: "",
+			totalPrice: [],
+			returnreason: []
+		},
+		mounted: function () {
+			this.getUserOrderDetails();
+		},
+		methods: {
+			getUserOrderDetails: function () {
+				alert('getUserOrderDetails')
+				axios.get(`${baseAddress}/GetUserOrderDetails`).then(response => {
+					alert(JSON.stringify(response.data));
+					this.orderDetails = response.data;
+					var value = 0;
+					for (var i = 0; i < this.orderDetails[0].quantity.length; i++) {
+						value = 0;
+						value += this.orderDetails[0].quantity[i] * this.orderDetails[0].unitPrice[i];
+						this.totalPrice.push(value)
+					}
+
+					this.address = window.location.protocol + '//' + window.location.host + '/';
+					for (var j = 0; j < this.orderDetails[0].path.length; j++) {
+						for (var k = 0; k < this.orderDetails[0].path[j].length; k++) {
+							this.orderDetails[0].path[j][k] = this.address + this.orderDetails[0].path[j][k]
+						}
+					}
+				});
+			},
+			createRating: function (productId, rating) {
+				var request = {
+					ProductId: productId,
+					StarCount: rating,
+					OrderId: this.orderDetails[0].orderId
+				}
+				axios.post(`${baseAddress}/CreateRating`, request).then(response => {
+					alert('完成評價!')
+				})
+			},
+			updateodreturnreason: function () {
+				axios.post(`${baseAddress}/Updateodreturnreason`, this.returnreason).then(reponse => {
+					alert('送出退貨原因')
+				})
+			}
+		}
+	});
 </script>			
