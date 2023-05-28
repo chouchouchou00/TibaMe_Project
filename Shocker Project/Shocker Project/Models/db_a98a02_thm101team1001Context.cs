@@ -63,9 +63,7 @@ namespace Shocker_Project.Models
 
                 entity.Property(e => e.QuestionCategoryId).HasColumnName("QuestionCategoryID");
 
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(30);
+                entity.Property(e => e.Status).HasMaxLength(10);
 
                 entity.Property(e => e.UserAccount)
                     .IsRequired()
@@ -115,9 +113,7 @@ namespace Shocker_Project.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(30);
+                entity.Property(e => e.Status).HasMaxLength(10);
 
                 entity.HasOne(d => d.HolderAccountNavigation)
                     .WithMany(p => p.CouponsHolderAccountNavigation)
@@ -152,9 +148,11 @@ namespace Shocker_Project.Models
                     .HasColumnName("CouponID")
                     .IsFixedLength();
 
-                entity.Property(e => e.Status)
+                entity.Property(e => e.ProductName)
                     .IsRequired()
-                    .HasMaxLength(10);
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Status).HasMaxLength(10);
 
                 entity.HasOne(d => d.Coupon)
                     .WithMany(p => p.OrderDetails)
@@ -185,6 +183,8 @@ namespace Shocker_Project.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.ArrivalDate).HasColumnType("smalldatetime");
+
                 entity.Property(e => e.BuyerAccount)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -199,11 +199,7 @@ namespace Shocker_Project.Models
                     .IsRequired()
                     .HasMaxLength(30);
 
-                entity.Property(e => e.RequiredDate).HasColumnType("smalldatetime");
-
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(30);
+                entity.Property(e => e.Status).HasMaxLength(10);
 
                 entity.HasOne(d => d.BuyerAccountNavigation)
                     .WithMany(p => p.Orders)
@@ -275,9 +271,7 @@ namespace Shocker_Project.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Status).HasMaxLength(10);
 
                 entity.HasOne(d => d.ProductCategory)
                     .WithMany(p => p.Products)
@@ -313,9 +307,7 @@ namespace Shocker_Project.Models
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(10);
+                entity.Property(e => e.Status).HasMaxLength(10);
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.Ratings)

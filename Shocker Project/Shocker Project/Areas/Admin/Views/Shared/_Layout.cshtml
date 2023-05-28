@@ -33,6 +33,8 @@
     <link href="~/assets/css/nucleo-svg.css" rel="stylesheet" />
     <!-- CSS Files -->
     <link id="pagestyle" href="~/assets/css/argon-dashboard.css?v=2.0.4" rel="stylesheet" />
+    
+    @await RenderSectionAsync("Styles",required:false)
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
@@ -50,7 +52,7 @@
         <div class="collapse navbar-collapse w-auto ps ps--active-y" id="sidenav-collapse-main">
             <ul class="navbar-nav"> <!--伸縮的左側欄位 按鈕-->
                 <li class="nav-item">
-                    <a class="nav-link active" href="./pages/dashboard.html">
+                    <a class="nav-link active" asp-area="Admin" asp-controller="CustomerReply" asp-action="index" >
                         <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
                         </div>
@@ -358,7 +360,7 @@
     <script src="~/assets/js/plugins/perfect-scrollbar.min.js"></script>
     <script src="~/assets/js/plugins/smooth-scrollbar.min.js"></script>
     <script src="~/assets/js/plugins/chartjs.min.js"></script>
-    <script>
+    @*<script>
         var ctx1 = document.getElementById("chart-line").getContext("2d");
 
         var gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);
@@ -440,8 +442,8 @@
                 },
             },
         });
-    </script>
-    <script>
+    </script>*@
+   @* <script>
         var win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {
             var options = {
@@ -532,48 +534,46 @@
         }
         // ]]>
     </script>
-
+*@
 
     <!-- Code injected by live-server -->
     <script>
         // <![CDATA[  <-- For SVG support
-        if ('WebSocket' in window) {
-            (function () {
-                function refreshCSS() {
-                    var sheets = [].slice.call(document.getElementsByTagName("link"));
-                    var head = document.getElementsByTagName("head")[0];
-                    for (var i = 0; i < sheets.length; ++i) {
-                        var elem = sheets[i];
-                        var parent = elem.parentElement || head;
-                        parent.removeChild(elem);
-                        var rel = elem.rel;
-                        if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-                            var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-                            elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-                        }
-                        parent.appendChild(elem);
-                    }
-                }
-                var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-                var address = protocol + window.location.host + window.location.pathname + '/ws';
-                var socket = new WebSocket(address);
-                socket.onmessage = function (msg) {
-                    if (msg.data == 'reload') window.location.reload();
-                    else if (msg.data == 'refreshcss') refreshCSS();
-                };
-                if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-                    console.log('Live reload enabled.');
-                    sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-                }
-            })();
-        }
-        else {
-            console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-        }
-            // ]]>
+        //if ('WebSocket' in window) {
+        //    (function () {
+        //        function refreshCSS() {
+        //            var sheets = [].slice.call(document.getElementsByTagName("link"));
+        //            var head = document.getElementsByTagName("head")[0];
+        //            for (var i = 0; i < sheets.length; ++i) {
+        //                var elem = sheets[i];
+        //                var parent = elem.parentElement || head;
+        //                parent.removeChild(elem);
+        //                var rel = elem.rel;
+        //                if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+        //                    var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+        //                    elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+        //                }
+        //                parent.appendChild(elem);
+        //            }
+        //        }
+        //        var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+        //        var address = protocol + window.location.host + window.location.pathname + '/ws';
+        //        var socket = new WebSocket(address);
+        //        socket.onmessage = function (msg) {
+        //            if (msg.data == 'reload') window.location.reload();
+        //            else if (msg.data == 'refreshcss') refreshCSS();
+        //        };
+        //        if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+        //            console.log('Live reload enabled.');
+        //            sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+        //        }
+        //    })();
+        //}
+        //else {
+        //    console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+        //}
+        //    // ]]>
     </script>
-
-
 </body>
-
+@await RenderSectionAsync("Scripts",required:false)
 </html>

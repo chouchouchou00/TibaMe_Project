@@ -13,6 +13,8 @@ namespace Shocker_Project.Models
         public int Quantity { get; set; }
         public string Status { get; set; }
         public string ReturnReason { get; set; }
+        public string ProductName { get; set; }
+        public int UnitPrice { get; set; }
 
         public virtual Coupons Coupon { get; set; }
         public virtual Orders Order { get; set; }

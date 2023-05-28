@@ -1,13 +1,11 @@
-﻿@model IEnumerable<Shocker_Project.Models.ClientCases>
-
-@{
+﻿@{
     ViewData["Title"] = "客戶問題";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
 <h1 class="text-white">客戶問題</h1>
 
-<div class="container-fluid py-4">
+<div class="container-fluid py-4" id="app">
     <div class="row">
         <div class="col-12">
             <div class="card mb-4">
@@ -16,47 +14,49 @@
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
-                        <table class="table align-items-center mb-0">
+                        <table class="table align-items-center mb-0" id="CustomerReplyDT">
                             <thead>
                                 <tr class="text-white">
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">@Html.DisplayNameFor(model => model.QuestionCategory) </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">問題類別 </th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">客戶資訊</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">@Html.DisplayNameFor(model => model.CloseDate)</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">結案時間</th>
                                     <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7"> 操作</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">@Html.DisplayNameFor(model => model.Status)</th>
-                               
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">狀態</th>
                                 </tr>
                             </thead>
                             <tbody>
-                               @foreach (var item in Model) {
-                                <tr>
+                                <tr v-for="item in QA">
                                     <td>
                                         <div class="d-flex px-2 py-1">
-                                     
                                             <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">@Html.DisplayFor(modelItem => item.QuestionCategory.CategoryName)</h6>
+                                                <p v-if="item.QuestionCategoryId==1" class="text-xs font-weight-bold mb-0">帳戶問題</p>
+                                                <p v-if="item.QuestionCategoryId==2" class="text-xs font-weight-bold mb-0">付款問題</p>
+                                                <p v-if="item.QuestionCategoryId==3" class="text-xs font-weight-bold mb-0">退款問題</p>
+                                                <p v-if="item.QuestionCategoryId==4" class="text-xs font-weight-bold mb-0">更改出貨地址</p>
+                                                <p v-if="item.QuestionCategoryId==5" class="text-xs font-weight-bold mb-0">其他類別</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                            <p class="text-xs font-weight-bold mb-0">@Html.DisplayFor(modelItem => item.UserAccountNavigation.Name)</p>
-                                            <p class="text-xs text-secondary mb-0"> @Html.DisplayFor(modelItem => item.UserAccountNavigation.Email)</p>
+                                        <p class="text-xs font-weight-bold mb-0">{{item.UserAccount}}</p>
+                                        <p class="text-xs text-secondary mb-0"></p>
                                     </td>
-                                        <td class="align-middle">
-                                            @Html.DisplayFor(modelItem => item.CloseDate)
-                                        </td>
+                                    <td class="align-middle">
+                                        <p class="text-xs font-weight-bold mb-0">{{item.CloseDate}}</p>
+                                    </td>
                                     <td class="align-middle text-center">
-                                            <span class="text-secondary text-xs font-weight-bold">
-                                                
-                                                <a asp-action="Edit" class="btn btn-info btn-sm" asp-route-id="@item.CaseId">Edit</a>
-                                                <a asp-controller ="CustomerReply" asp-action="Delete" class="btn btn-danger btn-sm">Delete</a>
-                                            </span>
-                                    </td>                        
+                                        <span class="text-secondary text-xs font-weight-bold">
+
+                                            <a asp-action="Edit" class="btn btn-info btn-sm" asp-controller="CustomerReply" asp-area="admin" asp-route-id="id" v-on:click="" ">Edit</a>
+
+                                        </span>
+                                    </td>
                                     <td class="align-middle text-center text-sm">
-                                           <span class="badge badge-sm bg-gradient-success"> @Html.DisplayFor(modelItem => item.Status)</span>
+                                        <span v-if="item.Status=='cc0'" class="badge badge-sm bg-gradient-danger">未回應</span>
+                                        <span v-if="item.Status=='cc1'" class="badge badge-sm bg-gradient-success">已回應</span>
                                     </td>
                                 </tr>
-                                }
+
                             </tbody>
                         </table>
                     </div>
@@ -66,3 +66,43 @@
     </div>
 
 </div>
+
+ @section Scripts
+{
+    <script src="~/lib/axios/axios.min.js"></script>
+    <script src="~/lib/vue/vue.global.prod.js"></script>
+    <script>
+        var VueApp = {
+            data() {
+                return {
+                    QA: [],
+                    Account: 'Admin1',
+                    Reply: '',
+                };
+            },
+            mounted: function () {
+                this.GetQA();
+            },
+            methods: {
+                GetQA: function () {
+                    var _this = this;
+                    axios.post(`${window.location.origin}/Admin/CustomerReply/GetQA`)
+                        .then((response) => { _this.QA = response.data })
+                },
+                ReplyQA: function (Re) {
+                    var _this = this;
+                    var input1 = {};
+                    input1.CaseId = _this.CaseId
+                    input1.AdminAccount = _this.Account;
+                    input1.Reply = _this.Reply;
+                    axios.post()(`${window.location.origin}/Admin/CustomerReply/ReplyQA`, input1)
+                        .then((response) => { _this.QA = response.data })
+                }
+            },
+        };
+        var app = Vue.createApp(VueApp).mount('#app');
+
+
+
+    </script>
+}
