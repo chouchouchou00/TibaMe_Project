@@ -18,9 +18,7 @@
 				<tr v-for="(item,index) in Orders">
 					<td scope="row">
 						<!-- Button trigger modal -->
-						@*<a button type="button" class="btn btn-outline-primary" asp-controller="User" asp-action="UserOrderDetails" asp-route-id="{{item.orderId}}">訂單詳情頁面</a>*@
-						<a button type="button" class="btn btn-outline-primary" :href="'/User/UserOrderDetails?id='+item.orderId">訂單詳情頁面</a>
-						@*<a href="@Url.Action("UserOrderDetails","User")/{{item.orderId}}">訂單詳情頁面傳參</a>	*@				
+						<a button type="button" class="btn btn-outline-primary" :href="'/User/UserOrderDetails?id='+item.orderId">訂單詳情頁面</a>				
 						<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
 							訂單詳情
 						</button>
@@ -59,7 +57,30 @@
 						</div>
 					</td>
 					<td>{{item.productName.join(',')}}</td>					
-					<td>{{item.statusName}}</td>@*非已收貨可取消訂單*@
+					<td>{{item.statusName}}
+						<template v-if="item.statusName=='未出貨'">
+							<button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#cancelordersModal">取消訂單</button>
+							<div class="modal fade" id="cancelordersModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="exampleModalLabel">取消訂單</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+															<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+													<div class="form-group">
+														<label for="exampleFormControlTextarea1">您確定要取消{{item.orderId}}訂單?裡面總共有{{item.productName.join(',')}}等品項</label>														
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+														<button type="button" class="btn btn-danger" data-dismiss="modal" @@click="cancelOrders(item.orderId)">確定</button>
+													</div>
+												</div>
+											</div>
+										</div>
+						</template>
+					</td>
 					<td>{{item.payMethod}}</td>
 					<td>{{totalPrice[index]}}</td>
 				</tr>
@@ -110,12 +131,15 @@
 					}
 				});
 			},
-			//getUserOrderDetails:function(item){
-			//	var orderid=item;
-			//	axios.post(`${baseAddress}/GettheOrderID`, orderid).then(reponse=>{
-			//		alert("傳遞orderid成功")
-			//	})
-			//}
+			cancelOrders:function(orderId){
+				var request={
+					OrderID:orderId,
+				}
+				axios.post(`${baseAddress}/CancelOrders`,request).then(reponse=>{
+					alert('取消訂單成功');
+					this.getOrders();
+				});			
+			},			
 		}
 		//window.location.href="/controller/action/?orderId=19"
 		//		window.location.href.search ="orderId = 19" 

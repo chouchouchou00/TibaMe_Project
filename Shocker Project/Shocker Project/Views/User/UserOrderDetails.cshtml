@@ -1,6 +1,47 @@
 ﻿@section Styles
 	{
+	<style>
+		.orderdetail_column {
+			table-layout: fixed;
+			width: 100%;
+		}
 
+		.shoping__cart__table th.product_column {
+			width: 25%
+		}
+
+		.shoping__cart__table th.productname_column {
+			width: 10%
+		}
+
+		.shoping__cart__table th.categoryname_column {
+			width: 10%
+		}
+
+		.shoping__cart__table th.selleraccount_column {
+			width: 10%
+		}
+
+		.shoping__cart__table th.unitprice_column {
+			width: 5%
+		}
+
+		.shoping__cart__table th.quantity_column {
+			width: 5%
+		}
+
+		.shoping__cart__table th.starcount_column {
+			width: 5%
+		}
+
+		.shoping__cart__table th.description_column {
+			width: 15%
+		}
+
+		.shoping__cart__table th.statusname_column {
+			width: 15%
+		}
+	</style>
 }
 
 <!-- Breadcrumb Section Begin -->
@@ -23,18 +64,19 @@
 	<div id="app" class="container">
 		<div class="row">
 			<div class="col-lg-12">
-				<div class="shoping__cart__table" v-for="item in orderDetails">
+				<div class="shoping__cart__table orderdetail_column" v-for="item in orderDetails">
 					<table>
 						<thead>
 							<tr>
-								<th class="shoping__product">商品</th>
-								<th>商品名稱</th>
-								<th>商品種類</th>
-								<th>賣家</th>
-								<th>價錢</th>
-								<th>數量</th>
-								<th>評價</th>
-								<th>收貨狀態</th>
+								<th class="shoping__product product_column">商品</th>
+								<th class="productname_column">商品名稱</th>
+								<th class="categoryname_column">商品種類</th>
+								<th class="selleraccount_column">賣家</th>
+								<th class="unitprice_column">價錢</th>
+								<th class="quantity_column">數量</th>
+								<th class="starcount_column">評價</th>
+								<th class="description_column">評價內容</th>
+								<th class="statusname_column">收貨狀態</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -61,39 +103,87 @@
 									{{item.starCount[index]}}
 								</td>
 								<td class="shoping__cart__price">
+									{{item.description[index]}}
+								</td>
+								<td class="shoping__cart__price">
 									{{item.statusName[index]}}
-									<template v-if="item.statusName[index]=='已收貨'">
-										<button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#returnModal">退貨</button>
+									<div>
+										<template v-if="item.statusName[index]=='已收貨'">
+											<button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#returnModal">退貨</button>
+											<div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+												<div class="modal-dialog">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h5 class="modal-title" id="exampleModalLabel">退貨原因</h5>
+															<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+														</div>
+														<div class="form-group">
+															<label for="exampleFormControlTextarea1">您為甚麼想要退貨?</label>
+															<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" v-model="returnreason"></textarea>
+														</div>
+														<div class="modal-footer">
+															<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+															<button type="button" class="btn btn-danger" data-dismiss="modal" @@click="updateOdReturnreason(item.productId[index])">確定</button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="dropdown">
+												<button class="btn btn-outline-warning dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+													評價
+												</button>
+												<div class="dropdown-menu">
+													<a class="dropdown-item" @@click="createRating(item.productId[index],1)">1</a>
+													<a class="dropdown-item" @@click="createRating(item.productId[index],2)">2</a>
+													<a class="dropdown-item" @@click="createRating(item.productId[index],3)">3</a>
+													<a class="dropdown-item" @@click="createRating(item.productId[index],4)">4</a>
+													<a class="dropdown-item" @@click="createRating(item.productId[index],5)">5</a>
+												</div>
+											</div>
+										</template>
+									</div>
+									<template v-if="item.statusName[index]=='已評價'">
+										<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#returnModal">新增評價內容</button>
 										<div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 											<div class="modal-dialog">
 												<div class="modal-content">
 													<div class="modal-header">
-														<h5 class="modal-title" id="exampleModalLabel">退貨原因</h5>
+														<h5 class="modal-title" id="exampleModalLabel">評價內容</h5>
 														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 															<span aria-hidden="true">&times;</span>
 														</button>
 													</div>
 													<div class="form-group">
-														<label for="exampleFormControlTextarea1">您為甚麼想要退貨?</label>
-														<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" v-model="returnreason"></textarea>
+														<label for="exampleFormControlTextarea1">給此商品一點回饋?</label>
+														<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" v-model="ratingDescription"></textarea>
 													</div>
 													<div class="modal-footer">
 														<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-														<button type="button" class="btn btn-danger" data-dismiss="modal" @@click="updateodreturnreason(item.productId[index])">確定</button>
+														<button type="button" class="btn btn-danger" data-dismiss="modal" @@click="updateRatingDescription(item.productId[index])">送出</button>
 													</div>
 												</div>
 											</div>
 										</div>
-										<div class="dropdown">
-											<button class="btn btn-outline-warning dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-												評價
-											</button>
-											<div class="dropdown-menu">
-												<a class="dropdown-item" @@click="createRating(item.productId[index],1)">1</a>
-												<a class="dropdown-item" @@click="createRating(item.productId[index],2)">2</a>
-												<a class="dropdown-item" @@click="createRating(item.productId[index],3)">3</a>
-												<a class="dropdown-item" @@click="createRating(item.productId[index],4)">4</a>
-												<a class="dropdown-item" @@click="createRating(item.productId[index],5)">5</a>
+									</template>
+									<template v-if="item.statusName[index]=='未收貨'">
+										<button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#takeproductModal">完成收貨</button>
+										<div class="modal fade" id="takeproductModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="exampleModalLabel">確定完成收貨</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+															<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+													<div class="modal-body">收到商品了嗎?如果已經收到，請按「完成」便可給予商品評價，或退貨商品</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+														<button type="button" class="btn btn-info" data-dismiss="modal" @@click="takeProduct(item.productId[index])">完成</button>
+													</div>
+												</div>
 											</div>
 										</div>
 									</template>
@@ -108,13 +198,6 @@
 		<div>
 			{{this.totalPrice[0]}}
 			@*收貨按鈕:Status:od3*@
-		</div>
-
-		<div class="input-group">
-			<div class="input-group-prepend">
-				<span class="input-group-text">With textarea</span>
-			</div>
-			<textarea class="form-control" aria-label="With textarea"></textarea>
 		</div>
 
 		<div class="row">
@@ -166,7 +249,8 @@
 			pictures: [],
 			address: "",
 			totalPrice: [],
-			returnreason: []
+			returnreason: [],
+			ratingDescription: []
 		},
 		mounted: function () {
 			this.getUserOrderDetails();
@@ -194,23 +278,44 @@
 			},
 			createRating: function (productId, rating) {
 				var request = {
+					OrderId: this.orderDetails[0].orderId,
 					ProductId: productId,
-					StarCount: rating,
-					OrderId: this.orderDetails[0].orderId
+					StarCount: rating
 				}
 				axios.post(`${baseAddress}/CreateRating`, request).then(response => {
 					alert('完成評價!')
 					this.getUserOrderDetails();
 				})
 			},
-			updateodreturnreason: function (productId) {
+			updateOdReturnreason: function (productId) {
 				var request = {
 					ProductId: productId,
 					OrderId: this.orderDetails[0].orderId,
 					Returnreason: this.returnreason
 				}
-				axios.post(`${baseAddress}/Updateodreturnreason`, request).then(reponse => {
+				axios.post(`${baseAddress}/UpdateOdReturnreason`, request).then(reponse => {
 					alert('成功送出退貨申請')
+					this.getUserOrderDetails();
+				})
+			},
+			updateRatingDescription: function (productId) {
+				var request = {
+					OrderId: this.orderDetails[0].orderId,
+					ProductId: productId,
+					Description: this.ratingDescription
+				}
+				axios.post(`${baseAddress}/UpdateRatingDescription`, request).then(reponse => {
+					alert('成功送出評價內容')
+					this.getUserOrderDetails();
+				})
+			},
+			takeProduct: function (productId){
+				var request={
+					OrderId: this.orderDetails[0].orderId,
+					ProductId: productId,
+				}
+				axios.post(`${baseAddress}/TakeProduct`, request).then(reponse => {
+					alert('成功收到商品')
 					this.getUserOrderDetails();
 				})
 			}

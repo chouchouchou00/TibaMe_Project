@@ -104,9 +104,7 @@ namespace Shocker_Project.Models
                     .HasColumnName("CouponID")
                     .IsFixedLength();
 
-                entity.Property(e => e.Discount)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Discount).HasColumnType("decimal(8, 2)");
 
                 entity.Property(e => e.ExpirationDate).HasColumnType("smalldatetime");
 
@@ -160,11 +158,19 @@ namespace Shocker_Project.Models
                     .HasColumnName("CouponID")
                     .IsFixedLength();
 
+                entity.Property(e => e.Currency)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.Discount).HasColumnType("decimal(8, 2)");
+
                 entity.Property(e => e.ProductName)
                     .IsRequired()
                     .HasMaxLength(50);
 
                 entity.Property(e => e.Status).HasMaxLength(10);
+
+                entity.Property(e => e.UnitPrice).HasColumnType("decimal(8, 2)");
 
                 entity.HasOne(d => d.Coupon)
                     .WithMany(p => p.OrderDetails)
@@ -277,7 +283,7 @@ namespace Shocker_Project.Models
 
                 entity.Property(e => e.Currency)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasMaxLength(10);
 
                 entity.Property(e => e.Description).IsRequired();
 
@@ -294,6 +300,8 @@ namespace Shocker_Project.Models
                     .HasMaxLength(50);
 
                 entity.Property(e => e.Status).HasMaxLength(10);
+
+                entity.Property(e => e.UnitPrice).HasColumnType("decimal(8, 2)");
 
                 entity.HasOne(d => d.ProductCategory)
                     .WithMany(p => p.Products)

@@ -23,7 +23,7 @@ namespace Shocker_Project.Models
         public string Description { get; set; }
         public int UnitsInStock { get; set; }
         public int? Sales { get; set; }
-        public int UnitPrice { get; set; }
+        public decimal UnitPrice { get; set; }
         public string Status { get; set; }
         public string Currency { get; set; }
 

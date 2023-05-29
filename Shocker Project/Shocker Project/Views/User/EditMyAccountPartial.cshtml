@@ -257,7 +257,7 @@
 				var formdata = new FormData();
 				formdata.append('Account', this.account);
 				formdata.append('Picture', this.uploadPic);
-				axios.post(`${baseAddress}/Uploadpicture`, formdata).then(response => {
+				axios.post(`${baseAddress}/UploadPicture`, formdata).then(response => {
 					if (response.data) {
 						alert('上傳成功!')
 					}
