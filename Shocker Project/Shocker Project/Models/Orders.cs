@@ -24,6 +24,7 @@ namespace Shocker_Project.Models
 
         public virtual Addresses Addresses { get; set; }
         public virtual Users BuyerAccountNavigation { get; set; }
+        public virtual Status StatusNavigation { get; set; }
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }
         public virtual ICollection<Ratings> Ratings { get; set; }
     }

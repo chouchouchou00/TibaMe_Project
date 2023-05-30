@@ -21,7 +21,7 @@
 
 <h1 class="text-white">客戶問題</h1>
 <div class="container-fluid py-4" id="app">
-    <div class="row" v-if="EditStatu">
+    <div class="row" v-if="replyIndex">
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0">
@@ -41,7 +41,7 @@
                             </thead>
                             <tbody>
                                 <tr v-for="item in QA">
-                                    <template v-if="!EditStatu">
+                                    
                                         <th>
                                             <div class="d-flex px-2 py-1">
                                                 <div class="d-flex flex-column justify-content-center">
@@ -62,9 +62,7 @@
                                         </td>
                                         <td class="align-middle text-center">
                                             <span class="text-secondary text-xs font-weight-bold">
-
-                                                <a asp-action="Edit" class="btn btn-info btn-sm" asp-controller="CustomerReply" asp-area="admin" asp-route-id="id" v-on:click="Edit(item)">Edit</a>
-
+                                                <a class="btn btn-info btn-sm" v-on:click="edit(item.CaseId)">Edit</a>
 
                                             </span>
                                         </td>
@@ -72,11 +70,50 @@
                                             <span v-if="item.Status=='cc0'" class="badge badge-sm bg-gradient-danger">未回應</span>
                                             <span v-if="item.Status=='cc1'" class="badge badge-sm bg-gradient-success">已回應</span>
                                         </td>
-                                    </template>
-                                   
                                 </tr>
-                                
-
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" v-if="editStatu">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0">
+                    <h3>問題表</h3>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0" id="CustomerReplyDT">
+                            <thead>
+                                <tr class="text-white">
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">客戶資訊 </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">問題描述 </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">回覆欄</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr @*v-for="item in QA"*@>
+                                    <td class="align-middle text-center">
+                                        <p class="text-xs font-weight-bold mb-0">{{this._edit.UserAccount}}</p>
+                                        @*<p class="text-xs text-secondary mb-0">UserEmail</p>*@ 
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <p class="text-xs font-weight-bold mb-0">{{this._edit.Description}}</p>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <textarea v-bind:class="Reply" style="resize:none" placeholder="在此輸入回覆內容" rows="10" cols="40"></textarea>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <span class="text-secondary text-xs font-weight-bold">
+                                            <a class="btn btn-info btn-sm" asp-route-id="id" v-on:click="updateReply()">Update</a>
+                                            <a class="btn btn-info btn-sm" asp-route-id="id" v-on:click="backindex()">back</a>
+                                        </span>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -86,26 +123,7 @@
     </div>
 </div>
 
-<template v-else>
-    <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">客戶問題</th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Reply</th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">操作</th>
-    </tr>
-    <tr>
-        <td>
-            @*要找到 CaseId的DC*@
-            <div v-model="EditDS">這裡回復</div>
-        </td>
-        <td>
-            <textarea v-bind:class="Reply" style="resize:none" placeholder="在此輸入回覆內容" rows="10" cols="70"></textarea>
-        </td>
-        <td>
-            <button v-on:click="ReplyQA(test.id)">回覆</button>
-            <button v-on:click="Edit(item.CaseId)">上一頁</button>
-        </td>
-    </tr>
-</template>
+
 
 @section Scripts{
 
@@ -117,9 +135,12 @@
                     Account: 'Admin1',
                     Reply: '',
                     Descipte: [],
-                    EditStatu: true,
+                    editStatu: false,
+                    replyIndex:true,
                     nowCaseID: '',
                     EditDS: '',
+                    replyData:[],
+                    _edit:[],
                 };
 
             },
@@ -133,36 +154,46 @@
                         .then(response => { _this.QA = response.data })
                 },
 
-                ReplyQA: function () {
+                updateReply: function () {
                     var _this = this;
                     var ccvm = {};
                     ccvm.CaseId = _this.nowCaseId
                     ccvm.AdminAccount = _this.Account;
                     ccvm = _this.Reply;
-                    axios.post(`${window.location.origin}/Admin/CustomerReply/ReplyQA`, ccvm)
+                    
+                    axios.post(`${window.location.origin}/Admin/CustomerReply/ReplyQA/`, ccvm)
                         .then(response => { _this.Descipte = response.data })
+                        //.catch(Error err)
+                        
                 },
                 FilterQA: function (flt) {
                     var _this = this;
-
                     axios.get(`${window.location.origin}/Admin/CustomerReply/FilterQA`)
                         .then(res => { _this.Filter = response.data })
                 },
-                Edit: function (item) {
+                edit: function (CaseId) 
+                {
                     var _this = this;
-                    console.log(item)
-                    _this.EditStatu = false;
-
-
+                    alert(CaseId);
+                    _this.editStatu = true;
+                    _this.replyIndex= false;
+                    //_this._edit=_this.QA[0]; //初始化
+                    _this.QA.forEach(item =>{
+                        if (item.CaseId == CaseId) 
+                        {
+                            _this._edit = item;
+                            alert(item.Description)
+                        };
+                    })
+                },
+                backindex:function(){
+                    var _this = this;
+                    _this.editStatu = false;
+                    _this.replyIndex = true;
                 }
-
-
             },
-
         }
         var app = Vue.createApp(VueApp).mount('#app');
-
-
-
     </script>
+
     }

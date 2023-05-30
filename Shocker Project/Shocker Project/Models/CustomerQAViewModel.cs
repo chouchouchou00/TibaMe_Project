@@ -13,6 +13,7 @@ namespace Shocker_Project.Models
         [Required(ErrorMessage = "請選擇問題類型")]
         public int QuestionCategoryId { get; set; }
         public string? UserAccount { get; set; }
+        
         public string? AdminAccount { get; set; }
         [Required(ErrorMessage = "請在框框中輸入您遇到的問題")]
         
