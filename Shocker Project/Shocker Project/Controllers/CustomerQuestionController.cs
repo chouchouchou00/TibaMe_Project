@@ -40,6 +40,11 @@ namespace Shocker_Project.Controllers
             }
             return View();
         }
+
+        public async Task<IActionResult> QA() 
+        {
+            return View();
+        }
     }
 }
 
