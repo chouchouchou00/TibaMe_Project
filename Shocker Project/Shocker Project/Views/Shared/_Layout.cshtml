@@ -25,6 +25,7 @@
 	<link rel="stylesheet" href="~/css/owl.carousel.min.css" type="text/css">
 	<link rel="stylesheet" href="~/css/slicknav.min.css" type="text/css">
 	<link rel="stylesheet" href="~/css/style.css" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
     @await RenderSectionAsync("Styles", required: false)
 </head>
 
@@ -48,21 +49,22 @@
         </div>
 
 
-        <div class="container">
+       @* <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Shocker","Index","Home",new{area=""},new{@class="navbar-brand"})
+                @Html.ActionLink("Shocker會員專區","Index","Home",new{area=""},new{@class="navbar-brand"})
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("產品列表","Index","Home")</li>
                 <li>@Html.ActionLink("註冊","Register","Home")</li>
-                 <li>@Html.ActionLink("登入","Login","Home")</li>
+                <li>@Html.ActionLink("訂單","OrderList","Member")</li>
+                <li>@Html.ActionLink("登入","Login","Home")</li>
             </ul>
-        </div>
+        </div>*@
 
 
         <div class="humberger__menu__widget">
@@ -85,7 +87,7 @@
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
                 <li class="active"><a href="./index.html">首頁</a></li>
-                <li><a asp-area="Shoppingcart" asp-controller="ShoppingCartProducts" asp-action="Product">開始購物</a></li>
+                <li><a asp-controller="ShoppingCart" asp-action="Product">開始購物</a></li>
                 <li>
                     <a href="#">客服中心</a>
                     <ul class="header__menu__dropdown">
@@ -170,7 +172,7 @@
                     <nav class="header__menu">
                         <ul>
                             <li class="active"><a href="./index.html">首頁</a></li>
-                            <li><a asp-area="Shoppingcart" asp-controller="ShoppingCartProducts" asp-action="Product">開始購物</a></li>
+                            <li><a asp-controller="ShoppingCart" asp-action="Product">開始購物</a></li>
                             <li>
                                 <a href="#">客服中心</a>
                                 <ul class="header__menu__dropdown">
@@ -197,7 +199,7 @@
                     <div class="header__cart">
                         <ul>
                             <li><a href="#"><i class="fa fa-heart" title="願望清單"></i> <span>1</span></a></li>
-                            <li><a asp-area="ShoppingCart" asp-controller="ShoppingCartProducts" asp-action="ShoppingCart"><i class="fa fa-shopping-bag" title="購物車"></i> <span>1</span></a></li>
+                            <li><a asp-controller="ShoppingCart" asp-action="ShoppingCart"><i class="fa fa-shopping-bag" title="購物車"></i> <span>1</span></a></li>
                         </ul>
                         <div class="header__cart__price">item: <span>$100.00</span></div>
                     </div>

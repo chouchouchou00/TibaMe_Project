@@ -28,6 +28,7 @@ namespace Shocker_Project.Models
         public virtual DbSet<Products> Products { get; set; }
         public virtual DbSet<QuestionCategories> QuestionCategories { get; set; }
         public virtual DbSet<Ratings> Ratings { get; set; }
+        public virtual DbSet<Shopping> Shopping { get; set; }
         public virtual DbSet<Status> Status { get; set; }
         public virtual DbSet<Users> Users { get; set; }
 
@@ -103,9 +104,7 @@ namespace Shocker_Project.Models
                     .HasColumnName("CouponID")
                     .IsFixedLength();
 
-                entity.Property(e => e.Discount)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Discount).HasColumnType("decimal(8, 2)");
 
                 entity.Property(e => e.ExpirationDate).HasColumnType("smalldatetime");
 
@@ -159,7 +158,19 @@ namespace Shocker_Project.Models
                     .HasColumnName("CouponID")
                     .IsFixedLength();
 
+                entity.Property(e => e.Currency)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.Discount).HasColumnType("decimal(8, 2)");
+
+                entity.Property(e => e.ProductName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
                 entity.Property(e => e.Status).HasMaxLength(10);
+
+                entity.Property(e => e.UnitPrice).HasColumnType("decimal(8, 2)");
 
                 entity.HasOne(d => d.Coupon)
                     .WithMany(p => p.OrderDetails)
@@ -195,6 +206,8 @@ namespace Shocker_Project.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.ArrivalDate).HasColumnType("smalldatetime");
+
                 entity.Property(e => e.BuyerAccount)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -208,8 +221,6 @@ namespace Shocker_Project.Models
                 entity.Property(e => e.PayMethod)
                     .IsRequired()
                     .HasMaxLength(30);
-
-                entity.Property(e => e.RequiredDate).HasColumnType("smalldatetime");
 
                 entity.Property(e => e.Status).HasMaxLength(10);
 
@@ -272,7 +283,7 @@ namespace Shocker_Project.Models
 
                 entity.Property(e => e.Currency)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasMaxLength(10);
 
                 entity.Property(e => e.Description).IsRequired();
 
@@ -289,6 +300,8 @@ namespace Shocker_Project.Models
                     .HasMaxLength(50);
 
                 entity.Property(e => e.Status).HasMaxLength(10);
+
+                entity.Property(e => e.UnitPrice).HasColumnType("decimal(8, 2)");
 
                 entity.HasOne(d => d.ProductCategory)
                     .WithMany(p => p.Products)
@@ -347,6 +360,27 @@ namespace Shocker_Project.Models
                     .WithMany(p => p.Ratings)
                     .HasForeignKey(d => d.Status)
                     .HasConstraintName("FK_Ratings_Status");
+            });
+
+            modelBuilder.Entity<Shopping>(entity =>
+            {
+                entity.HasKey(e => new { e.BuyerAccount, e.ProductId });
+
+                entity.Property(e => e.BuyerAccount).HasMaxLength(50);
+
+                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+                entity.HasOne(d => d.BuyerAccountNavigation)
+                    .WithMany(p => p.Shopping)
+                    .HasForeignKey(d => d.BuyerAccount)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Shopping_Users");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.Shopping)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Shopping_Products");
             });
 
             modelBuilder.Entity<Status>(entity =>

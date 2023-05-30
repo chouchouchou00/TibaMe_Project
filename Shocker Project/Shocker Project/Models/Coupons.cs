@@ -16,7 +16,7 @@ namespace Shocker_Project.Models
         public DateTime ExpirationDate { get; set; }
         public string HolderAccount { get; set; }
         public int ProductCategoryId { get; set; }
-        public string Discount { get; set; }
+        public decimal Discount { get; set; }
         public string Status { get; set; }
         public string PublisherAccount { get; set; }
 

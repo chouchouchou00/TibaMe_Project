@@ -16,6 +16,7 @@ namespace Shocker_Project.Models
             CouponsPublisherAccountNavigation = new HashSet<Coupons>();
             Orders = new HashSet<Orders>();
             Products = new HashSet<Products>();
+            Shopping = new HashSet<Shopping>();
         }
 
         public string Account { get; set; }
@@ -38,5 +39,6 @@ namespace Shocker_Project.Models
         public virtual ICollection<Coupons> CouponsPublisherAccountNavigation { get; set; }
         public virtual ICollection<Orders> Orders { get; set; }
         public virtual ICollection<Products> Products { get; set; }
+        public virtual ICollection<Shopping> Shopping { get; set; }
     }
 }
