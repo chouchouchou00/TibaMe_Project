@@ -16,5 +16,6 @@ namespace Shocker_Project.Models
 
         public virtual Orders Order { get; set; }
         public virtual Products Product { get; set; }
+        public virtual Status StatusNavigation { get; set; }
     }
 }
