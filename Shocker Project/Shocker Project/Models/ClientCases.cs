@@ -18,6 +18,7 @@ namespace Shocker_Project.Models
 
         public virtual Users AdminAccountNavigation { get; set; }
         public virtual QuestionCategories QuestionCategory { get; set; }
+        public virtual Status StatusNavigation { get; set; }
         public virtual Users UserAccountNavigation { get; set; }
     }
 }

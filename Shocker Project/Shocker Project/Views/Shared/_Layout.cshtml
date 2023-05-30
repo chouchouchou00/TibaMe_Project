@@ -46,6 +46,25 @@
             </ul>
             <div class="header__cart__price">item: <span>$100.00</span></div>
         </div>
+
+
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Shocker","Index","Home",new{area=""},new{@class="navbar-brand"})
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>@Html.ActionLink("產品列表","Index","Home")</li>
+                <li>@Html.ActionLink("註冊","Register","Home")</li>
+                 <li>@Html.ActionLink("登入","Login","Home")</li>
+            </ul>
+        </div>
+
+
         <div class="humberger__menu__widget">
             <div class="header__top__right__language">
                 <img src="img/language.png" alt="">

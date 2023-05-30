@@ -23,6 +23,7 @@ namespace Shocker_Project.Models
         public virtual Users HolderAccountNavigation { get; set; }
         public virtual ProductCategories ProductCategory { get; set; }
         public virtual Users PublisherAccountNavigation { get; set; }
+        public virtual Status StatusNavigation { get; set; }
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }
     }
 }

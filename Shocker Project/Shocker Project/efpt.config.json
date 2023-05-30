@@ -55,6 +55,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[Status]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Users]",
          "ObjectType": 0
       }

@@ -28,6 +28,7 @@ namespace Shocker_Project.Models
         public virtual DbSet<Products> Products { get; set; }
         public virtual DbSet<QuestionCategories> QuestionCategories { get; set; }
         public virtual DbSet<Ratings> Ratings { get; set; }
+        public virtual DbSet<Status> Status { get; set; }
         public virtual DbSet<Users> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -63,9 +64,7 @@ namespace Shocker_Project.Models
 
                 entity.Property(e => e.QuestionCategoryId).HasColumnName("QuestionCategoryID");
 
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(30);
+                entity.Property(e => e.Status).HasMaxLength(10);
 
                 entity.Property(e => e.UserAccount)
                     .IsRequired()
@@ -81,6 +80,11 @@ namespace Shocker_Project.Models
                     .HasForeignKey(d => d.QuestionCategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ClientCases_QuestionCategories1");
+
+                entity.HasOne(d => d.StatusNavigation)
+                    .WithMany(p => p.ClientCases)
+                    .HasForeignKey(d => d.Status)
+                    .HasConstraintName("FK_ClientCases_Status");
 
                 entity.HasOne(d => d.UserAccountNavigation)
                     .WithMany(p => p.ClientCasesUserAccountNavigation)
@@ -115,9 +119,7 @@ namespace Shocker_Project.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(30);
+                entity.Property(e => e.Status).HasMaxLength(10);
 
                 entity.HasOne(d => d.HolderAccountNavigation)
                     .WithMany(p => p.CouponsHolderAccountNavigation)
@@ -136,6 +138,11 @@ namespace Shocker_Project.Models
                     .HasForeignKey(d => d.PublisherAccount)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Coupons_Users2");
+
+                entity.HasOne(d => d.StatusNavigation)
+                    .WithMany(p => p.Coupons)
+                    .HasForeignKey(d => d.Status)
+                    .HasConstraintName("FK_Coupons_Status");
             });
 
             modelBuilder.Entity<OrderDetails>(entity =>
@@ -152,9 +159,7 @@ namespace Shocker_Project.Models
                     .HasColumnName("CouponID")
                     .IsFixedLength();
 
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(10);
+                entity.Property(e => e.Status).HasMaxLength(10);
 
                 entity.HasOne(d => d.Coupon)
                     .WithMany(p => p.OrderDetails)
@@ -172,6 +177,11 @@ namespace Shocker_Project.Models
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetails_Products");
+
+                entity.HasOne(d => d.StatusNavigation)
+                    .WithMany(p => p.OrderDetails)
+                    .HasForeignKey(d => d.Status)
+                    .HasConstraintName("FK_OrderDetails_Status");
             });
 
             modelBuilder.Entity<Orders>(entity =>
@@ -201,15 +211,18 @@ namespace Shocker_Project.Models
 
                 entity.Property(e => e.RequiredDate).HasColumnType("smalldatetime");
 
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(30);
+                entity.Property(e => e.Status).HasMaxLength(10);
 
                 entity.HasOne(d => d.BuyerAccountNavigation)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.BuyerAccount)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Orders_Users2");
+
+                entity.HasOne(d => d.StatusNavigation)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.Status)
+                    .HasConstraintName("FK_Orders_Status");
 
                 entity.HasOne(d => d.Addresses)
                     .WithMany(p => p.Orders)
@@ -275,9 +288,7 @@ namespace Shocker_Project.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Status).HasMaxLength(10);
 
                 entity.HasOne(d => d.ProductCategory)
                     .WithMany(p => p.Products)
@@ -290,6 +301,11 @@ namespace Shocker_Project.Models
                     .HasForeignKey(d => d.SellerAccount)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Products_Users");
+
+                entity.HasOne(d => d.StatusNavigation)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.Status)
+                    .HasConstraintName("FK_Products_Status");
             });
 
             modelBuilder.Entity<QuestionCategories>(entity =>
@@ -313,9 +329,7 @@ namespace Shocker_Project.Models
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(10);
+                entity.Property(e => e.Status).HasMaxLength(10);
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.Ratings)
@@ -328,6 +342,22 @@ namespace Shocker_Project.Models
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Ratings_Products");
+
+                entity.HasOne(d => d.StatusNavigation)
+                    .WithMany(p => p.Ratings)
+                    .HasForeignKey(d => d.Status)
+                    .HasConstraintName("FK_Ratings_Status");
+            });
+
+            modelBuilder.Entity<Status>(entity =>
+            {
+                entity.Property(e => e.StatusId)
+                    .HasMaxLength(10)
+                    .HasColumnName("StatusID");
+
+                entity.Property(e => e.StatusName)
+                    .IsRequired()
+                    .HasMaxLength(10);
             });
 
             modelBuilder.Entity<Users>(entity =>

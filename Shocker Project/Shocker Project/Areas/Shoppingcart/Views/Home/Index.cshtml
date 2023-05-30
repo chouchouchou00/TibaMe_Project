@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Shocker_Project.Models.Pictures>
+@{
+    ViewBag["Title"] = "產品列表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+<div class="row" style="margin-top:20px;">
+    @foreach(var item in Model)
+    {
+        <div class="col-md-4">
+            <div class="thumbnail">
+                <img src="~/images/@item.PictureId" style="width:200px; height:270px;">
+                <div class="caption">
+                    <h4>@item.ProductId </h4>
+                    <p>單價:@item. UnitPrice</p>
+                    <p><a href="@Url.Action("AddCar","ShoppingCart")?ProductId=@item.ProductId" class="btn btn-primary">加入購物車</a></p>
+                </div>
+            </div>
+            </div>
+    }
+</div>
+
