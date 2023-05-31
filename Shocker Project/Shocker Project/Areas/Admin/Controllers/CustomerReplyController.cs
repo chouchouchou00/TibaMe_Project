@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Operations;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 using Shocker_Project.Areas.Admin.Models;
 using Shocker_Project.Models;
 
@@ -31,8 +34,27 @@ namespace Shocker_Project.Areas.Admin.Controllers
         [HttpPost]
         public async Task<JsonResult> GetQA()
         {
-            var clientQA = _context.ClientCases;
-                
+            var clientQA = _context.ClientCases
+                .Select(y=> new 
+                {
+                    CaseId = y.CaseId,
+                    QuestionCategoryId = y.QuestionCategoryId,
+                    UserAccount = y.UserAccount,
+                    AdminAccount = y.AdminAccount,
+                    Description = y.Description,
+                    Status = y.Status,
+                    CloseDate = y.CloseDate,
+                    Reply = y.Reply,
+                    Email = y.UserAccountNavigation.Email,
+                });
+            
+            //var UserEmail = _context.Users.Select(x => new {
+            //    Email = x.Email,
+            //    CaseId = clientQA.Where(y => y.UserAccount == x.Account).Select(y => y.CaseId),
+            //    QuestionCategoryId = clientQA.Where(y => y.UserAccount == x.Account).Select(y => y.QuestionCategoryId),
+
+            //})  ;
+           
             return Json(clientQA);
         }
         [HttpPost]
@@ -65,21 +87,30 @@ namespace Shocker_Project.Areas.Admin.Controllers
                 return Json(new { Message = "格式錯誤" });
             };
         }
-        [HttpPost("Filter")]
+        [HttpPost]
         public async Task<JsonResult> FilterQA([FromBody] ClientCaseFilterViewModels ccf) 
         {
             return Json(_context.ClientCases.Where(c =>
                 c.CaseId == ccf.CaseId ||
                 c.UserAccount.Contains(ccf.UserAccount) ||
                 c.Status.Contains(ccf.Status) ||
-                c.QuestionCategory.CategoryName.Contains(ccf.QuestionCategory.CategoryName)
-                ).Select(c => new ClientCases
+                c.QuestionCategory.CategoryName.Contains(ccf.CategoryName)||
+                c.AdminAccountNavigation.Email.Contains(ccf.Email)||
+                c.StatusNavigation.StatusName.Contains(ccf.StatusName)
+               
+
+                
+                
+                ).Select(c => new
                 {
                     CaseId = c.CaseId,
                     UserAccount = c.UserAccount,
                     Status = c.Status,
-                    QuestionCategory = c.QuestionCategory,
-                }));
+                    QuestionCategoryId = c.QuestionCategoryId,
+                    Email = c.UserAccountNavigation.Email,
+                    StatusName = c.StatusNavigation.StatusName,
+                    CloseDate=c.CloseDate,
+        }));
         }
     }
 }

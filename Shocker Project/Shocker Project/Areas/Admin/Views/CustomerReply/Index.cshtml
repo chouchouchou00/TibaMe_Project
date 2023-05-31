@@ -19,19 +19,24 @@
     </style>
 }
 
-<h1 class="text-white">客戶問題</h1>
+<h1 class="text-black">問題總覽</h1>
 <div class="container-fluid py-4" id="app">
+
     <div class="row" v-if="replyIndex">
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0">
                     <h3>問題表</h3>
+                    <div class="row" style="width:30%; margin-left:auto; margin-right:20px;">
+                        <label id="filterkeyword" class="col-md-4">關鍵字:</label>
+                        <input type="text" v-model="filter" v-on:keyup.enter="QAfilter" class="col-md-8 form-control" placeholder="請輸入關鍵字內容" />
+                    </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
                         <table class="table align-items-center mb-0" id="CustomerReplyDT">
                             <thead>
-                                <tr class="text-white" >
+                                <tr class="text-white">
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">問題類別 </th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">客戶資訊</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">結案時間</th>
@@ -41,35 +46,36 @@
                             </thead>
                             <tbody>
                                 <tr v-for="item in QA">
-                                    
-                                        <th>
-                                            <div class="d-flex px-2 py-1">
-                                                <div class="d-flex flex-column justify-content-center">
-                                                    <p v-if="item.QuestionCategoryId==1" class="text-xs font-weight-bold mb-0">帳戶問題</p>
-                                                    <p v-if="item.QuestionCategoryId==2" class="text-xs font-weight-bold mb-0">付款問題</p>
-                                                    <p v-if="item.QuestionCategoryId==3" class="text-xs font-weight-bold mb-0">退款問題</p>
-                                                    <p v-if="item.QuestionCategoryId==4" class="text-xs font-weight-bold mb-0">更改出貨地址</p>
-                                                    <p v-if="item.QuestionCategoryId==5" class="text-xs font-weight-bold mb-0">其他類別</p>
-                                                </div>
-                                            </div>
-                                        </th>
-                                        <td>
-                                            <p class="text-xs font-weight-bold mb-0">{{item.UserAccount}}</p>
-                                            @*<p class="text-xs text-secondary mb-0">UserEmail</p>*@
-                                        </td>
-                                        <td class="align-middle">
-                                            <p class="text-xs font-weight-bold mb-0">{{item.CloseDate}}</p>
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            <span class="text-secondary text-xs font-weight-bold">
-                                                <a class="btn btn-info btn-sm" v-on:click="edit(item.CaseId)">Edit</a>
 
-                                            </span>
-                                        </td>
-                                        <td class="align-middle text-center text-sm">
-                                            <span v-if="item.Status=='cc0'" class="badge badge-sm bg-gradient-danger">未回應</span>
-                                            <span v-if="item.Status=='cc1'" class="badge badge-sm bg-gradient-success">已回應</span>
-                                        </td>
+                                    <th>
+                                        <div class="d-flex px-2 py-1">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <p class="text-xs font-weight-bold mb-0">{{item.QuestionCategoreyId}}</p>
+                                                <p v-if="item.QuestionCategoryId==1" class="text-xs font-weight-bold mb-0">帳戶問題</p>
+                                                <p v-if="item.QuestionCategoryId==2" class="text-xs font-weight-bold mb-0">付款問題</p>
+                                                <p v-if="item.QuestionCategoryId==3" class="text-xs font-weight-bold mb-0">退款問題</p>
+                                                <p v-if="item.QuestionCategoryId==4" class="text-xs font-weight-bold mb-0">更改出貨地址</p>
+                                                <p v-if="item.QuestionCategoryId==5" class="text-xs font-weight-bold mb-0">其他類別</p>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <td>
+                                        <p class="text-xs font-weight-bold mb-0">{{item.UserAccount}}</p>
+                                        <p class="text-xs font-weight-bold mb-0">{{item.Email}}</p>
+                                        
+                                    </td>
+                                    <td class="align-middle">
+                                        <p class="text-xs font-weight-bold mb-0">{{item.CloseDate}}</p>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <span class="text-secondary text-xs font-weight-bold">
+                                            <a class="btn btn-info btn-sm" v-on:click="edit(item.CaseId)" id="editChange">Edit</a>
+                                        </span>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        <span v-if="item.Status=='cc0'" class="badge badge-sm bg-gradient-danger">未回應</span>
+                                        <span v-if="item.Status=='cc1'" class="badge badge-sm bg-gradient-success">已回應</span>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -83,6 +89,11 @@
             <div class="card mb-4">
                 <div class="card-header pb-0">
                     <h3>問題表</h3>
+                    <div class="row" style="width:30%; margin-left:auto; margin-right:20px;">
+                        <label id="filterkeyword" class="col-md-4">關鍵字:</label>
+                        <input type="text" v-model="QAfilter" v-on:keyup="enter" class="col-md-8 form-control" placeholder="請輸入關鍵字內容" />
+                    </div>
+
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
@@ -99,13 +110,13 @@
                                 <tr @*v-for="item in QA"*@>
                                     <td class="align-middle text-center">
                                         <p class="text-xs font-weight-bold mb-0">{{this._edit.UserAccount}}</p>
-                                        @*<p class="text-xs text-secondary mb-0">UserEmail</p>*@ 
+                                        @*<p class="text-xs text-secondary mb-0">UserEmail</p>*@
                                     </td>
                                     <td class="align-middle text-center">
                                         <p class="text-xs font-weight-bold mb-0">{{this._edit.Description}}</p>
                                     </td>
                                     <td class="align-middle text-center">
-                                        <textarea v-bind:class="Reply" style="resize:none" placeholder="在此輸入回覆內容" rows="10" cols="40"></textarea>
+                                        <textarea v-model="Reply" style="resize:none" placeholder="在此輸入回覆內容" rows="10" cols="40"></textarea>
                                     </td>
                                     <td class="align-middle text-center">
                                         <span class="text-secondary text-xs font-weight-bold">
@@ -136,15 +147,17 @@
                     Reply: '',
                     Descipte: [],
                     editStatu: false,
-                    replyIndex:true,
+                    replyIndex: true,
                     nowCaseID: '',
                     EditDS: '',
-                    replyData:[],
-                    _edit:[],
-                };
-
+                    replyData: [],
+                    _edit: [],
+                    filter: '',
+                    _filterData:[],
+            };
             },
             mounted: function () {
+                _this = this;
                 this.GetQA();
             },
             methods: {
@@ -157,36 +170,39 @@
                 updateReply: function () {
                     var _this = this;
                     var ccvm = {};
-                    ccvm.CaseId = _this.nowCaseId
+                    ccvm.CaseId = _this._edit.CaseId
                     ccvm.AdminAccount = _this.Account;
-                    ccvm = _this.Reply;
-                    
+                    ccvm.Reply = _this.Reply;
+
                     axios.post(`${window.location.origin}/Admin/CustomerReply/ReplyQA/`, ccvm)
-                        .then(response => { _this.Descipte = response.data })
-                        //.catch(Error err)
-                        
+                        .then(response => { alert(response.data.Message) })
+                    //.catch(Error err)
+                    window.location.replace(location.href);  //更新本畫面
+
+
                 },
-                FilterQA: function (flt) {
-                    var _this = this;
-                    axios.get(`${window.location.origin}/Admin/CustomerReply/FilterQA`)
-                        .then(res => { _this.Filter = response.data })
+                QAfilter: function () {
+                    var _this=this;
+                    var input = {};
+                    input.CaseId = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
+                    input.UserAccount = input.CaregoryName = input.Email = input.StatusName = input.Status = _this.filter;
+                    axios.post(`${window.location.origin}/Admin/CustomerReply/FilterQA`,input)
+                        .then(res => { _this.QA = res.data })
                 },
-                edit: function (CaseId) 
-                {
+                edit: function (CaseId) {
                     var _this = this;
                     alert(CaseId);
                     _this.editStatu = true;
-                    _this.replyIndex= false;
-                    //_this._edit=_this.QA[0]; //初始化
-                    _this.QA.forEach(item =>{
-                        if (item.CaseId == CaseId) 
-                        {
+                    _this.replyIndex = false;
+                    _this._edit = _this.QA[0];
+                    _this.QA.forEach(item => {
+                        if (item.CaseId == CaseId) {
                             _this._edit = item;
                             alert(item.Description)
                         };
                     })
                 },
-                backindex:function(){
+                backindex: function () {
                     var _this = this;
                     _this.editStatu = false;
                     _this.replyIndex = true;
