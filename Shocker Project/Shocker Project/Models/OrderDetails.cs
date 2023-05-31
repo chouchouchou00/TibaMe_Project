@@ -13,9 +13,14 @@ namespace Shocker_Project.Models
         public int Quantity { get; set; }
         public string Status { get; set; }
         public string ReturnReason { get; set; }
+        public string ProductName { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal? Discount { get; set; }
+        public string Currency { get; set; }
 
         public virtual Coupons Coupon { get; set; }
         public virtual Orders Order { get; set; }
         public virtual Products Product { get; set; }
+        public virtual Status StatusNavigation { get; set; }
     }
 }

@@ -16,13 +16,14 @@ namespace Shocker_Project.Models
         public DateTime ExpirationDate { get; set; }
         public string HolderAccount { get; set; }
         public int ProductCategoryId { get; set; }
-        public string Discount { get; set; }
+        public decimal Discount { get; set; }
         public string Status { get; set; }
         public string PublisherAccount { get; set; }
 
         public virtual Users HolderAccountNavigation { get; set; }
         public virtual ProductCategories ProductCategory { get; set; }
         public virtual Users PublisherAccountNavigation { get; set; }
+        public virtual Status StatusNavigation { get; set; }
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }
     }
 }
