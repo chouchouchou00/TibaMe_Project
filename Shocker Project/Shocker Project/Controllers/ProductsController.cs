@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shocker_Project.Models;
+using System.Net;
 using System.Security.Principal;
 
 namespace Shocker_Project.Controllers
@@ -22,25 +23,39 @@ namespace Shocker_Project.Controllers
 			return View();
 		}
 		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public JsonResult GetInfo() //(string account)
+		//[ValidateAntiForgeryToken]
+		public JsonResult GetInfo(string id)
 		{
-			var info = from u in _context.Users
-					   where u.Account == loginAccount
-					   select new
-					   {
-						   PicturePath = u.PicturePath,
-						   AboutSeller = u.AboutSeller
-					   };
+			var p = _context.Products.AsNoTracking().Where(p => p.SellerAccount == id);			
+			var od = _context.OrderDetails.AsNoTracking().Where(od => od.Product.SellerAccount == id);			
+			var r = _context.Ratings.AsNoTracking().Where(r => r.Product.SellerAccount == id);
+			var info = _context.Users.AsNoTracking().Where(u => u.Account == id)
+					   .Select(u => new {
+						   AboutSeller = u.AboutSeller,
+						   p0 = p.Count(p => p.Status == "p0"),
+						   p1 = p.Count(p => p.Status == "p1"),
+						   od1 = od.Count(od => od.Status == "od1"),
+						   od2 = od.Count(od => od.Status == "od2"),
+						   od3 = od.Count(od => od.Status == "od3"),
+						   od4 = od.Count(od => od.Status == "od4"),
+						   r0 = r.Count(r => r.Status == "r0"),
+						   r1 = r.Count(r => r.Status == "r1")
+					   });					   			
 			return Json(info);
 		}
 		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public JsonResult UpdateInfo(string info) //(string account)
-		{
-			var sellerinfo = _context.Users.Where(u => u.Account == loginAccount)
-				.Select(u => u.AboutSeller);
-			return Json(sellerinfo);
+		//[ValidateAntiForgeryToken]
+		public async Task<JsonResult> UpdateInfo([FromBody]AboutModel info)
+		{			
+			Users? user = await _context.Users.FindAsync(info.Account);
+			if (user == null || user.Account != loginAccount)
+			{
+				return Json(new { Result = "Error", Message = "記錄不存在" });
+			}
+			user.AboutSeller = info.AboutSeller;
+			_context.Update(user);
+			await _context.SaveChangesAsync();
+			return Json(new { Result = "OK", Message = "修改記錄成功" });
 		}
 
 		[HttpPost]
@@ -73,7 +88,7 @@ namespace Shocker_Project.Controllers
 				//p.SellerAccount == loginAccount && (
 				p.ProductName.Contains(product.ProductName) ||
 				p.Description.Contains(product.Description) ||
-				p.Status.Contains(product.Status) ||
+				p.StatusNavigation.StatusName.Contains(product.Status) ||
 				p.ProductCategory.CategoryName.Contains(product.Description)
 				//)
 				).Select(p => new Products
@@ -112,11 +127,11 @@ namespace Shocker_Project.Controllers
 				p.Currency = product.Currency;
 				_context.Products.Add(p);
 				await _context.SaveChangesAsync();
-				return Json(new { Results = "OK", Record = product });
+				return Json(new { Result = "OK", Record = product });
 			}
 			else
 			{
-				return Json(new { Results = "Error", Message = "新增失敗" });
+				return Json(new { Result = "Error", Message = "新增失敗" });
 			}
 		}
 		[HttpPost]
@@ -130,9 +145,9 @@ namespace Shocker_Project.Controllers
 					Products? p = await _context.Products.FindAsync(product.ProductId);
 					if (p == null || p.SellerAccount != product.SellerAccount)
 					{
-						return Json(new { Results = "Error", Message = "記錄不存在" });
+						return Json(new { Result = "Error", Message = "記錄不存在" });
 					}
-					if (p.Status == "未上架" && product.Status == "已上架")
+					if (p.Status == "p0" && product.Status == "p1")
 					{
 						p.LaunchDate = DateTime.Now;
 					}
@@ -181,7 +196,8 @@ namespace Shocker_Project.Controllers
 			}
 			try
 			{
-				_context.Products.Remove(product);               //--Delete Pictures from Folder
+				product.Status = "p2";
+				_context.Update(product);               //--Delete Pictures from Folder
 				await _context.SaveChangesAsync();
 			}
 			catch (DbUpdateException)
@@ -293,5 +309,29 @@ namespace Shocker_Project.Controllers
 				return Json(new { Results = "Error", Message = "新增失敗" });
 			}
 		}
-	}
+		[HttpPost]
+		public JsonResult GetOrders(string id)
+		{
+			var orders = _context.Orders.Where(o => o.OrderDetails.Any(od => od.Product.SellerAccount == id)).Select(o => new
+			{
+				OrderId = o.OrderId,
+				BuyerAccount = o.BuyerAccount,
+				Address = o.Address,
+				OrderDate = o.OrderDate,
+				ArrivalDate = o.ArrivalDate,
+				BuyerPhone = o.BuyerPhone,
+				PayMethod = o.PayMethod,
+				Status = o.Status
+			});
+			if (orders == null) return Json(new { Result = "None", Message = "沒有訂單記錄" });
+			var orderDetails = _context.OrderDetails.Where(od => od.Product.SellerAccount == loginAccount)
+				.GroupBy(od => od.OrderId, (order, details) => new
+				{
+					OrderId = order,
+					ProductCount = details.Count(),
+					Product = details.ToList()
+				});
+			return Json(new { Orders = orders, OrderDetails = orderDetails });
+		}
+	}	
 }

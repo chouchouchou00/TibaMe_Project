@@ -39,6 +39,7 @@
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
+<div id="app">
 	<div class="min-height-300 bg-primary position-absolute w-100"></div>
 	<aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
 		<div class="sidenav-header">
@@ -53,7 +54,7 @@
 		<div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link " href="#">
+					<a id="nav0" class="nav-link " href="#0" @@click="navbar(0)">
 						<div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
 							<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
 						</div>
@@ -61,8 +62,7 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link active" href="#">
-						@*active*@
+					<a id="nav1" class="nav-link" href="#1" @@click="navbar(1)">
 						<div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
 							<i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
 						</div>
@@ -70,7 +70,7 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link " href="#">
+					<a id="nav2" class="nav-link " href="#2" @@click="navbar(2)">
 						<div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
 							<i class="ni ni-credit-card text-success text-sm opacity-10"></i>
 						</div>
@@ -78,19 +78,11 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link " href="#">
+					<a id="nav3" class="nav-link " href="#3" @@click="navbar(3)">
 						<div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
 							<i class="ni ni-app text-info text-sm opacity-10"></i>
 						</div>
 						<span class="nav-link-text ms-1">買家評價管理</span>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link " href="#">
-						<div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-							<i class="ni ni-collection text-info text-sm opacity-10"></i>
-						</div>
-						<span class="nav-link-text ms-1">登出</span>
 					</a>
 				</li>
 			</ul>
@@ -108,7 +100,7 @@
 		</div>
 		</div>*@
 	</aside>
-	<main id="app" class="main-content position-relative border-radius-lg ">
+	<main class="main-content position-relative border-radius-lg ">
 		<!-- Navbar -->
 		<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="false">
 			<div class="container-fluid py-1 px-3">
@@ -164,6 +156,134 @@
 		</nav>
 		<!-- End Navbar -->
 		<div class="container-fluid py-4">
+			<div v-if="this._info" class="row">
+				<div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+						<div class="card mb-4">
+						<div class="card-body p-3">
+							<div class="row">
+								<div class="col-8">
+									<div class="numbers">
+										<h5 class="font-weight-bolder">商品</h5>
+										<p class="text-sm mb-0 text-uppercase font-weight-bold">未上架</p>
+										<h5 class="font-weight-bolder">{{Info[0].p0}}</h5>
+										<p class="text-sm mb-0 text-uppercase font-weight-bold">已上架</p>
+											<h5 class="font-weight-bolder">{{Info[0].p1}}</h5>
+									</div>
+								</div>
+								<div class="col-4 text-end">
+									<div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+										<i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+					<div class="card">
+						<div class="card-body p-3">
+							<div class="row">
+								<div class="col-8">
+										<h5 class="font-weight-bolder">訂單</h5>
+									<div class="row">
+										<div class="numbers col-6">										
+											<p class="text-sm mb-0 text-uppercase font-weight-bold">未出貨</p>
+											<h5 class="font-weight-bolder">{{Info[0].od1}}</h5>
+											<p class="text-sm mb-0 text-uppercase font-weight-bold">未收貨</p>
+											<h5 class="font-weight-bolder">{{Info[0].od2}}</h5>										
+										</div>
+										<div class="numbers col-6">
+											<p class="text-sm mb-0 text-uppercase font-weight-bold">已收貨</p>
+											<h5 class="font-weight-bolder">{{Info[0].od3}}</h5>
+											<p class="text-sm mb-0 text-uppercase font-weight-bold">退貨</p>
+												<h5 class="font-weight-bolder">{{Info[0].od4}}</h5>
+										</div>
+									</div>
+								</div>
+								<div class="col-4 text-end">
+									<div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
+										<i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+					<div class="card">
+						<div class="card-body p-3">
+							<div class="row">
+								<div class="col-8">
+									<div class="numbers">
+										<h5 class="font-weight-bolder">買家評價</h5>
+										<p class="text-sm mb-0 text-uppercase font-weight-bold">未回應</p>
+											<h5 class="font-weight-bolder">{{Info[0].r0}}</h5>
+										<p class="text-sm mb-0 text-uppercase font-weight-bold">已回應</p>
+											<h5 class="font-weight-bolder">{{Info[0].r1}}</h5>
+									</div>
+								</div>
+								<div class="col-4 text-end">
+									<div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+										<i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				@*<div class="col-xl-3 col-sm-6">
+					<div class="card">
+						<div class="card-body p-3">
+							<div class="row">
+								<div class="col-8">
+									<div class="numbers">
+										<p class="text-sm mb-0 text-uppercase font-weight-bold">優惠券</p>
+										<h5 class="font-weight-bolder">
+											$103,430
+										</h5>
+										<p class="mb-0">
+											<span class="text-success text-sm font-weight-bolder">+5%</span> than last month
+										</p>
+									</div>
+								</div>
+								<div class="col-4 text-end">
+									<div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
+										<i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>*@
+			</div>
+			<div v-if="this._info" class="row">
+				<div class="col-md-12">
+					<div class="card mb-4">
+						<div class="card-header pb-0">
+							<div class="d-flex align-items-center">
+								<p class="col-4 mb-0">編輯賣場資訊</p>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<textarea class="form-control" rows="5" cols="20" v-model="infoText" value=""></textarea>
+									</div>
+									<div class="form-group">
+										<div class="d-flex align-items-center">
+											<div class="col-md-8 col-5"></div>
+											<div class="col-md-4 col-7 d-flex justify-content-between">
+												<button class="btn btn-primary btn-sm ms-auto" @@click="updateInfo(this.infoText)">新增</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div v-if="this._products" class="row">
 				<div class="col-12">
 					<div class="card mb-4">
@@ -181,8 +301,9 @@
 											<th class="text-secondary opacity-7"></th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">編號</th>
 											<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">名稱</th>
-											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">庫存</th>
-											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">銷量</th>
+											<th class="text-end text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">單價</th>
+											<th class="text-end text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">庫存</th>
+											<th class="text-end text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">銷量</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">上架狀態</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">上架時間</th>
 										</tr>
@@ -204,14 +325,22 @@
 													</div>
 												</div>
 											</td>
-											<td class="align-middle text-center">
+											<td class="align-middle text-end">
+												<div class="row">
+													<div class="col-3"><p class="text-xs font-weight-bold mb-0">{{item.Currency}}</p></div>
+													<div class="col-9"><p class="text-xs font-weight-bold mb-0">{{item.UnitPrice}}</p></div>
+												</div>
+											</td>
+											<td class="align-middle text-end">
 												<p class="text-xs font-weight-bold mb-0">{{item.UnitsInStock}}</p>
 											</td>
-											<td class="align-middle text-center">
+											<td class="align-middle text-end">
 												<p class="text-xs font-weight-bold mb-0">{{item.Sales}}</p>
 											</td>
 											<td class="align-middle text-center text-sm">
-												<span class="badge badge-sm bg-gradient-success">{{item.Status}}</span>
+												<span v-if="item.Status=='p0'" class="badge badge-sm bg-gradient-secondary">未上架</span>
+												<span v-if="item.Status=='p1'" class="badge badge-sm bg-gradient-success">已上架</span>
+													<span v-if="item.Status=='p2'" class="badge badge-sm bg-gradient-success">已刪除</span>
 											</td>
 											<td class="align-middle text-center">
 												<span class="text-secondary text-xs font-weight-bold">{{item.LaunchDate}}</span>
@@ -219,6 +348,12 @@
 										</tr>
 									</tbody>
 								</table>
+								@*<paginate :page-count="pageCount"
+										  :clickHandler="changePage"
+										  :prevText="'Prev'"
+										  :nextText="'Next'"
+										  :containerClass="'className'">
+								</paginate>*@
 							</div>
 						</div>
 					</div>
@@ -238,6 +373,8 @@
 											<th class="text-secondary opacity-7"></th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">編號</th>
 											<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">名稱</th>
+											<th class="text-end text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"></th>
+											<th class="text-end text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">單價</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">庫存</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">銷量</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">上架狀態</th>
@@ -261,6 +398,12 @@
 													</div>
 												</div>
 											</td>
+											<td class="align-middle text-end">
+												<p class="text-xs font-weight-bold mb-0">{{details.Currency}}</p>
+											</td>
+											<td class="align-middle text-end">
+												<p class="text-xs font-weight-bold mb-0">{{details.UnitPrice}}</p>
+											</td>
 											<td class="align-middle text-center">
 												<p class="text-xs font-weight-bold mb-0">{{details.UnitsInStock}}</p>
 											</td>
@@ -270,7 +413,8 @@
 											<td class="align-middle text-center text-sm">
 												<div class="form-check form-switch ps-0 ms-auto my-auto">
 													<input v-model="this._checked" class="form-check-input mt-1 ms-auto" type="checkbox" @@change="shelf">
-													<span class="badge badge-sm bg-gradient-success">{{details.Status}}</span>
+													<span v-if="this.details.Status=='p0'" class="badge badge-sm bg-gradient-secondary">未上架</span>
+													<span v-if="this.details.Status=='p1'" class="badge badge-sm bg-gradient-success">已上架</span>
 												</div>
 											</td>
 											<td class="align-middle text-center">
@@ -290,8 +434,10 @@
 						<div class="card-header pb-0">
 							<div class="d-flex align-items-center">
 								<p class="col-4 mb-0">編輯商品資訊</p>
-								<button v-if="this._create" class="btn btn-primary btn-sm ms-auto" @@click="createSave(details)">儲存新增</button>
 								<div class="col-md-4 col-1"></div>
+								<div v-if="this._create" class="col-md-4 col-7 d-flex justify-content-between">
+									<button class="btn btn-primary btn-sm ms-auto" @@click="createSave(details)">儲存新增</button>
+								</div>
 								<div v-if="!this._create" class="col-md-4 col-7 d-flex justify-content-between">
 									<button class="btn btn-primary btn-sm ms-auto" @@click="update(details)">儲存</button>
 									<button class="btn btn-danger btn-sm ms-auto" @@click="deleteProduct(details.ProductId)">刪除商品</button>
@@ -315,6 +461,10 @@
 											<option value="2">文具</option>
 											<option value="3">生鮮食材</option>
 											<option value="4">電玩</option>
+											<option value="5">美妝</option>
+											<option value="6">家電</option>
+											<option value="7">漫畫</option>
+											<option value="8">家具</option>
 										</select>
 									</div>
 								</div>
@@ -432,7 +582,176 @@
 						</div>
 					</div>
 				</div>
-			</div>		
+			</div>
+			<div v-if="this._orders" class="row">
+				<div class="col-12">
+					<div class="card mb-4">
+						<div class="card-header pb-0">
+							<div class="d-flex align-items-center">
+								<h6 class="mb-0">訂單管理</h6>
+							</div>
+						</div>
+						<div class="card-body px-0 pt-0 pb-2">
+							<div class="table-responsive p-0">
+								<table class="table align-items-center mb-0">
+									<thead>
+										<tr>
+											<th class="text-secondary opacity-7"></th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">編號</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">買家</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">商品數量</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">總價</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">付款方式</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">狀態</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">訂購時間</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">到貨時間</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(item,index) in Orders">
+											<td class="align-middle text-center">
+												<a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" @@click="editOrders(item.OrderId)">
+													<i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>查看明細
+												</a>
+											</td>
+											<td class="align-middle text-center">
+												<span class="text-secondary text-xs font-weight-bold">{{item.OrderId}}</span>
+											</td>
+											<td>
+												<div class="d-flex px-2 py-1">
+													<div class="d-flex flex-column justify-content-center">
+														<h6 class="mb-0 text-sm">{{item.BuyerAccount}}</h6>
+													</div>
+												</div>
+											</td>
+											<td class="align-middle text-center">
+												<p class="text-xs font-weight-bold mb-0">{{this.OrderDetails[index].ProductCount}}</p>
+											</td>
+											<td class="align-middle text-end">
+												<div class="row">
+													<div class="col-3"><p class="text-xs font-weight-bold mb-0">NTD</p></div>
+													<div class="col-9"><p class="text-xs font-weight-bold mb-0">{{this.getOrders()}}{{this.OrderSum[index].NTD}}</p></div>
+												</div>
+												<div class="row">
+													<div class="col-3"><p class="text-xs font-weight-bold mb-0">USD</p></div>
+													<div class="col-9"><p class="text-xs font-weight-bold mb-0">{{this.OrderSum[index].USD}}</p></div>
+												</div>
+											</td>
+											<td class="align-middle text-center">
+												<p class="text-xs font-weight-bold mb-0">{{item.PayMethod}}</p>
+											</td>
+											<td class="align-middle text-center text-sm">
+												<span v-if="item.Status=='o1'" class="badge badge-sm bg-gradient-danger">未出貨</span>
+												<span v-if="item.Status=='o2'" class="badge badge-sm bg-gradient-secondary">未完全收貨</span>
+												<span v-if="item.Status=='o3'" class="badge badge-sm bg-gradient-success">已收貨</span>
+												<span v-if="item.Status=='o4'" class="badge badge-sm bg-gradient-warning">含退貨</span>
+												<span v-if="item.Status=='o5'" class="badge badge-sm bg-gradient-dark">已取消</span>
+											</td>
+											<td class="align-middle text-center">
+												<p class="text-xs font-weight-bold mb-0">{{item.OrderDate}}</p>
+											</td>
+											<td class="align-middle text-center">
+												<span class="text-secondary text-xs font-weight-bold">{{item.ArrivalDate}}</span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								@*<paginate :page-count="pageCount"
+								:clickHandler="changePage"
+								:prevText="'Prev'"
+								:nextText="'Next'"
+								:containerClass="'className'">
+								</paginate>*@
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div v-if="this._orderDetails" class="row">
+				<div class="col-12">
+					<div class="card mb-4">
+						<div class="card-header pb-0">
+							<h6>訂單明細</h6>
+						</div>
+						<div class="card-body px-0 pt-0 pb-2">
+							<div class="table-responsive p-0">
+								<table class="table align-items-center mb-0">
+									<thead>
+										<tr>
+											<th class="text-secondary opacity-7"></th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">商品編號</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">名稱</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">單價</th>
+												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">數量</th>
+												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">優惠券</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">小計</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">狀態</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="item in orderDetail">
+											<td class="align-middle text-center">
+												<a href="javascript:;" class="text-secondary font-weight-bold text-xs" @@click="cancelOrderDetails">
+													<i class="fas fa-arrow-circle-up text-dark me-2" aria-hidden="true"></i>取消
+												</a>
+												<a href="javascript:;" class="text-secondary font-weight-bold text-xs" @@click="replyBuyers">
+													<i class="fas fa-arrow-circle-up text-dark me-2" aria-hidden="true"></i>回應
+												</a>
+											</td>
+											<td class="align-middle text-center">
+												<span class="text-secondary text-xs font-weight-bold">{{item.ProductId}}</span>
+											</td>
+											<td class="align-middle text-center">
+												<div class="d-flex px-2 py-1">
+													<div class="d-flex flex-column justify-content-center">
+														<h6 class="mb-0 text-sm">{{item.ProductName}}</h6>
+													</div>
+												</div>
+											</td>
+											<td class="align-middle text-end">
+												<div class="row">
+													<div class="col-3"><p class="text-xs font-weight-bold mb-0">{{item.Currency}}</p></div>
+													<div class="col-9"><p class="text-xs font-weight-bold mb-0">{{item.UnitPrice}}</p></div>
+												</div>
+											</td>
+											<td class="align-middle text-center">
+													<p class="text-xs font-weight-bold mb-0">{{item.Quantity}}</p>
+											</td>
+											<td class="align-middle text-center">
+												<div class="row">
+													<div class="col-3"><p class="text-xs font-weight-bold mb-0">{{item.CouponId==null ? '' :'×&nbsp;' + item.Discount}}</p></div>
+													<div class="col-9"><p class="text-xs font-weight-bold mb-0">{{item.CouponId==null ? '未使用' : item.CouponId}}</p></div>
+												</div>
+											</td>
+											<td class="align-middle text-end">
+												<div class="row">
+													<div class="col-3"><p class="text-xs font-weight-bold mb-0">{{item.Currency}}</p></div>
+													<div class="col-9">
+														<p class="text-xs font-weight-bold mb-0">
+															{{(item.Discount != null) ? (item.UnitPrice * item.Quantity * item.Discount) : (item.UnitPrice * item.Quantity)}}
+														</p>
+													</div>
+												</div>
+											</td>
+											<td class="align-middle text-center text-sm">
+												<div class="form-check form-switch ps-0 ms-auto my-auto">
+													<span v-if="item.Status=='od1'" class="badge badge-sm bg-gradient-danger">未出貨</span>
+													<span v-if="item.Status=='od2'" class="badge badge-sm bg-gradient-secondary">未收貨</span>
+													<span v-if="item.Status=='od3'" class="badge badge-sm bg-gradient-success">已收貨</span>
+													<span v-if="item.Status=='od4'" class="badge badge-sm bg-gradient-warning">退貨</span>
+													<span v-if="item.Status=='od5'" class="badge badge-sm bg-gradient-dark">已取消</span>
+													<span v-if="item.Status=='od6'" class="badge badge-sm bg-gradient-light">已評價</span>
+												</div>
+											</td>											
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
 			@*Footer*@
 			<footer class="footer pt-3">
 				<div class="container-fluid py-5">
@@ -468,6 +787,7 @@
 			</footer>
 		</div>
 	</main>
+</div>
 	<div class="fixed-plugin">
 		<a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
 			<i class="fa fa-cog py-2"> </i>
@@ -554,14 +874,20 @@
 			Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
 		}
 	</script>
+	<script src="~/js/jquery-3.3.1.min.js"></script>
 	<script src="~/lib/vue/vue.global.prod.js"></script>
 	<script src="~/lib/axios/axios.min.js"></script>
+	@*<script src="https://unpkg.com/vuejs-paginate@0.9.0"></script>*@
 	<script>
 		var baseAddress = `${window.location.protocol}//${window.location.host}`;
+		//Vue.component('paginate', VuejsPaginate)
 		var vueApp = {
 			data() {
 				return {
 					loginAccount: 'User2',
+					_info: false,
+					Info: [],
+					infoText: '',
 					_products: false,
 					Products: [],
 					_details: false,
@@ -569,6 +895,12 @@
 					_create: false,
 					_pictures: false,
 					Pictures: [],
+					_orders: false,
+					Orders: [],
+					_orderDetails: false,
+					OrderDetails: [],
+					orderDetail: [],
+					OrderSum: [],
 					_checked: false,
 					plus: 'INC',
 					increase: 0,
@@ -580,75 +912,63 @@
 			},
 			mounted: function () {
 				let _this = this;
-				_this.getProducts();
+				_this.navbar(2);
 			},
 			methods: {
-				stock: function () {
+				navbar: function(n) {
 					let _this = this;
-					if (_this.plus == 'INC') {
-						_this.details.UnitsInStock += parseInt(_this.increase);
-					}
-					else _this.details.UnitsInStock -= parseInt(_this.increase);
-				},
-				shelf: function () {
-					let _this = this;
-					_this.details.Status = (_this._checked) ? '已上架' : '未上架';
-				},
-				uploadFile: function () {
-					var _this = this;
-					var formData = new FormData();
-					formData.append('Picture', _this.picture);
-					formData.append('ProductId', _this.details.ProductId);
-					formData.append('Description', _this.pictureText);
-					axios.post(`${baseAddress}/Products/UploadPicture`, formData)
-						.then(function (response) {
-							if (response.data) { alert('ok'); }
-						});
-				},
-				selectedFile: function (e) {
-					var _this = this;
-					_this.picture = e.target.files[0];
-					_this.preview = URL.createObjectURL(_this.picture);
-				},
-				getPictures: function (productId) {
-					let _this = this;
-					_this._pictures = !_this._pictures;
-					if (_this._pictures) {
-						axios.post(`${baseAddress}/Products/GetPictures/${productId}`).then(
-							response => {
-								_this.Pictures = response.data;
-								_this.Pictures.forEach(item => {
-									item.Path =`${window.location.protocol}//${window.location.host}/productpictures/${item.PictureId}-${item.Path}`;
-								});
-							}
-						);
+					_this._info = _this._products = _this._details = _this._create = _this._pictures = _this.orders = _this.orderDetails = false;
+					$('#nav0').removeClass('active');
+					$('#nav1').removeClass('active');
+					$('#nav2').removeClass('active');
+					$('#nav3').removeClass('active');
+					switch (n) {
+						case 0:
+							$('#nav0').addClass('active');
+							_this.getInfo();
+							break;
+						case 1:
+							$('#nav1').addClass('active');
+							_this.getProducts();
+							break;
+						case 2:
+							$('#nav2').addClass('active');
+							_this.getOrders();
+							break;
+						case 3:
+							$('#nav3').addClass('active');
+							_this.getRatings();
+							break;
+						default:
+							$('#nav0').addClass('active');
+							_this.getInfo();
+							break;
 					}
 				},
-				updatePicture: function (item) {
+				//changePage: function(currentPage) {
+				//},
+				getInfo: function() {
 					let _this = this;
+					_this._info = true;
+					axios.post(`${baseAddress}/Products/GetInfo/${_this.loginAccount}`).then(
+						response => {
+							_this.Info = response.data;
+							_this.infoText = _this.Info[0].AboutSeller;
+						}
+					);
+				},
+				updateInfo: function(info) {
+					let _this = this;
+					_this._info = true;
 					var request = {};
-					_this.stock();
-					request.PictureId = item.PictureId;
-					request.ProductId = item.ProductId;
-					request.Path = item.Path;
-					request.Description = item.Description;
-					var ret = confirm('確定要儲存嗎？');
-					if (ret == true) {
-						axios.post(`${baseAddress}/Products/UpdatePicture/`, request).then(response => {
-							alert(response.data);
-						});
-					}
-					_this._pictures = false;
-				},
-				deletePicture: function (pictureId) {
-					let _this = this;
-					var ret = confirm('確定要刪除嗎？');
-					if (ret == true) {
-						axios.post(`${baseAddress}/Products/DeletePicture/${pictureId}`).then(response => {
-							alert(response.data);
-						});
-					}
-					_this._pictures = false;
+					request.Account = _this.loginAccount;
+					request.AboutSeller = info;
+					axios.post(`${baseAddress}/Products/UpdateInfo/`, request).then(
+						response => {
+							_this.getInfo();
+							alert(response.data.Message)
+						}
+					);
 				},
 				getProducts: function () {
 					let _this = this;
@@ -682,7 +1002,7 @@
 						if (item.ProductId == productId) {
 							_this.details = item;
 						}
-						_this._checked = (_this.details.Status == '已上架') ? true : false;
+						_this._checked = (_this.details.Status == 'p1') ? true : false;
 					});
 					_this._products = false;
 					_this._details = true;
@@ -704,7 +1024,7 @@
 					var ret = confirm('確定要儲存嗎？');
 					if (ret == true) {
 						axios.post(`${baseAddress}/Products/Update/`, request).then(response => {
-							alert(response.data);
+							alert(response.data.Message);
 							_this.cancel();
 						});
 					}
@@ -731,13 +1051,12 @@
 					var ret = confirm('確定要刪除嗎？');
 					if (ret == true) {
 						axios.post(`${baseAddress}/Products/Delete/${productId}`).then(response => {
-							alert(response.data);
+							alert(response.data.Message);
 							_this.cancel();
 						});
 					}
 				},
 				create: function () {
-					alert('create');
 					var _this = this;
 					_this._products = false;
 					_this._details = true;
@@ -775,10 +1094,130 @@
 					var ret = confirm('確定要新增嗎？');
 					if (ret == true) {
 						axios.post(`${baseAddress}/Products/Create/`, request).then(response => {
-							alert(response.data);
+							alert(response.data.Message);
 							_this.cancel();
 						});
 					}
+				},
+				stock: function () {
+					let _this = this;
+					if (_this.plus == 'INC') {
+						_this.details.UnitsInStock += parseInt(_this.increase);
+					}
+					else _this.details.UnitsInStock -= parseInt(_this.increase);
+				},
+				shelf: function () {
+					let _this = this;
+					_this.details.Status = (_this._checked) ? 'p1' : 'p0';
+				},
+				uploadFile: function () {
+					var _this = this;
+					var formData = new FormData();
+					formData.append('Picture', _this.picture);
+					formData.append('ProductId', _this.details.ProductId);
+					formData.append('Description', _this.pictureText);
+					axios.post(`${baseAddress}/Products/UploadPicture`, formData).then(response => {
+						alert(response.data.Message);
+					});
+				},
+				selectedFile: function (e) {
+					var _this = this;
+					_this.picture = e.target.files[0];
+					_this.preview = URL.createObjectURL(_this.picture);
+				},
+				getPictures: function (productId) {
+					let _this = this;
+					_this._pictures = !_this._pictures;
+					if (_this._pictures) {
+						axios.post(`${baseAddress}/Products/GetPictures/${productId}`).then(
+							response => {
+								_this.Pictures = response.data;
+								_this.Pictures.forEach(item => {
+									item.Path = `${window.location.origin}/productpictures/${item.PictureId}-${item.Path}`;
+								});
+							}
+						);
+					}
+				},
+				updatePicture: function (item) {
+					let _this = this;
+					var request = {};
+					_this.stock();
+					request.PictureId = item.PictureId;
+					request.ProductId = item.ProductId;
+					request.Path = item.Path;
+					request.Description = item.Description;
+					var ret = confirm('確定要儲存嗎？');
+					if (ret == true) {
+						axios.post(`${baseAddress}/Products/UpdatePicture/`, request).then(response => {
+							alert(response.data.Message);
+						});
+					}
+					_this._pictures = false;
+				},
+				deletePicture: function (pictureId) {
+					let _this = this;
+					var ret = confirm('確定要刪除嗎？');
+					if (ret == true) {
+						axios.post(`${baseAddress}/Products/DeletePicture/${pictureId}`).then(response => {
+							alert(response.data.Message);
+						});
+					}
+					_this._pictures = false;
+				},
+				getOrders: function() {
+					let _this = this;
+					_this._orders = true;
+					axios.post(`${baseAddress}/Products/GetOrders/${_this.loginAccount}/`).then(response => {
+						_this.Orders = response.data.Orders;
+						_this.OrderDetails = response.data.OrderDetails;						
+					});
+					_this.OrderDetails.forEach(o => {
+						var Total = {};
+						Total.NTD = 0;
+						Total.USD = 0;
+						o.Product.forEach(p => {
+							if (p.Currency == 'NTD') {
+								Total.NTD += ((p.Discount != null) ? (p.UnitPrice * p.Quantity * p.Discount) : (p.UnitPrice * p.Quantity));
+							}
+							if (p.Currency == 'USD') {
+								Total.USD += ((p.Discount != null) ? (p.UnitPrice * p.Quantity * p.Discount) : (p.UnitPrice * p.Quantity));
+							}
+						});
+						_this.OrderSum.push(Total);
+					});
+				},
+				editOrders: function(orderId) {
+					let _this = this;
+					_this.orderDetail = _this.OrderDetails[0].Product;
+					_this.OrderDetails.forEach(item => {
+						if(item.OrderId == orderId){
+							_this.orderDetail = item.Product;
+						}
+					});
+					_this._orderDetails = true;
+				},
+				updateOrders: function() {
+					let _this = this;
+					axios.post(`${baseAddress}/Products/UpdateOrders`).then(response => {
+						alert(response.data);
+					});
+				},
+				cancelOrderDetails: function() {
+					let _this = this;
+					_this._orderDetails = false;
+				},
+				getRatings: function() {
+					let _this = this;
+					axios.post(`${baseAddress}/Products/GetRatings`).then(response => {
+						alert(response.data);
+					});
+				},
+				replyBuyers: function() {
+					let _this = this;
+					axios.post(`${baseAddress}/Products/ReplyBuyers`).then(response => {
+						alert(response.data);
+					});
 				}
 			}
 		};

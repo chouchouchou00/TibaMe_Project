@@ -1,0 +1,139 @@
+﻿@model IEnumerable<Shocker_Project.Models.Shopping>
+
+
+@{
+    ViewData["Title"] = "購物車清單";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>購物車清單</h2>
+
+
+<div id="app" class="container">
+    <button @@click="update(null)">Update</button>
+    <button @@click="edit(1)">Edit</button>
+    <button @@click="cancel(null)">Cancel</button>
+    <div class="form-group">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>產品名稱</th>
+                    <th>單價</th>
+                    <th>數量</th>
+                    <th>總計</th>
+                    <th>編輯</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in Shopping">
+                    <template v-if="item.edit==true"></template>
+                    <td><input v-model="item.buyerAccount"/></td>
+                    <td><input v-model="item.quantity" /></td>
+                    <td><input v-model="item.buyerAccount" /></td>
+                    <td>{{item.productId}}</td>
+                    <td>
+                        <button class="btn btn-warning" @@click="cancel" >刪除</button>
+                        <button class="btn btn-primary" @@click="update(item)">新增數量</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+<script src="~/lib/axios/axios.min.js"></script>
+
+<script>
+    var baseAddress = "https://localhost:7033/";
+    let app = new Vue({
+        el: '#app',
+        data: {
+            Orders: [],
+            totalPrice: []
+        },
+        methods: {
+            createSave: function (item) {
+                let _this = this;
+                var request = {};
+                //_this.stock();
+                request.BuyerAccount = this.BuyerAccount;
+                request.ProductId = item.ProductId;
+                request.Quantity = item.Quanity;
+ 
+                var ret = confirm('確定要新增嗎？');
+                if (ret == true) {
+                    axios.post(`${baseAddress}/ShoppingCart/AddCar/`, request).then(response => {
+                        alert(response.data);
+                        _this.cancel();
+                    });
+                }
+            })
+</script>
+
+<div id="app" class="container">
+<form action="@Url.Action("ShoppingCart")" method="post">
+    <div class="form-horizontal">
+        <h4>填寫訂單收件人資料</h4>
+        <hr />
+        <div class="form-group">
+            <span class="control-label col-md-2">帳號名稱</span>
+            <div class="col-md-10">
+                <input v-model="BuyerAccount" type="text" id="BuyerAccount" name="BuyerAccount" required="required" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <span class="control-label col-md-2">付款方式</span>
+            <div class="col-md-10">
+                <input type="text" id="PayMethod" name="PayMethod" required="required" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <span class="control-label col-md-2">收件人地址</span>
+            <div class="col-md-10">
+                <input type="text" id="Address" name="Address" required="required" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <span class="control-label col-md-2">收件人電話</span>
+            <div class="col-md-10">
+                <input type="text" id="BuyerPhone" name="BuyerPhone" required="required" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10"></div>
+            <input type="submit" value="確認訂購" class="btn btn-default" />
+        </div>
+        <button v-if="this._create" class="btn btn-primary btn-sm ms-auto" @@click="createSave(details)">儲存新增</button>
+    </div>
+</form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+<script src="~/lib/axios/axios.min.js"></script>
+
+<script>
+    var baseAddress = "https://localhost:7033/";
+    let app = new Vue ({
+        el:'#app',
+        data:{
+            Orders:[],
+            totalPrice:[]
+        },
+        methods: {
+            createSave: function (item) {
+                let _this = this;
+                var request = {};
+                //_this.stock();
+                request.BuyerAccount = this.BuyerAccount;
+                request.Address = item.Address;
+                request.BuyerPhone = item.BuyerPhone;
+                request.PayMethod = item.PayMethod;
+                var ret = confirm('確定要新增嗎？');
+                if (ret == true) {
+                    axios.post(`${baseAddress}/ShoppingCart/Create/`, request).then(response => {
+                        alert(response.data);
+                        _this.cancel();
+                    });
+                }
+        })
+        </script>
