@@ -1,0 +1,55 @@
+﻿@section Styles
+{
+
+}
+<div id="app" class="container">
+	<div class="row">
+		<div class="col-12">
+			<h2 class="text-center">優惠卷一覽</h2>
+		</div>
+	</div>
+	<div class="container" v-for="item in Coupons">
+		<div class="card">
+			<h5 class="card-header">編號:{{item.couponId}}</h5>
+			<template v-if="item.statusName=='已使用'">
+				<span class="badge bg-danger">{{item.statusName}}</span>
+			</template>
+			<template v-else>
+				<span class="badge bg-success">{{item.statusName}}</span>
+			</template>
+			
+			<div class="card-body">
+				<h5 class="card-title">折數:{{item.discount}}</h5>
+				<p class="card-text">適用種類:{{item.productCategoryName}}</p>
+				<p class="card-text">發布帳號:{{item.publisherAccount}}</p>
+				<p class="card-text">適用期限:{{item.expirationDate}}</p>
+				<template v-if="item.statusName=='已使用'">
+					<a button type="button" class="btn btn-info" :href="'/User/UserOrderDetails?id='+item.orderId">查看使用的訂單</a>
+				</template>			
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
+<script src="~/axios/axios.min.js"></script>
+<script>
+	var baseAddress = "https://localhost:7033/User";
+	var Vue = new Vue({
+		el: '#app',
+		data: {
+			Coupons: [],
+		},
+		mounted: function () {
+			this.getCoupons();
+		},
+		methods: {
+			getCoupons: function () {
+				axios.get(`${baseAddress}/GetCoupons`).then(response => {
+					alert(JSON.stringify(response.data));
+					this.Coupons = response.data;
+				})
+			}
+		}
+	});
+</script>
