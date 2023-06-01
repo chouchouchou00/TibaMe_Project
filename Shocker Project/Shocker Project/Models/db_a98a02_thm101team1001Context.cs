@@ -390,10 +390,9 @@ namespace Shocker_Project.Models
 
             modelBuilder.Entity<Users>(entity =>
             {
-                entity.HasKey(e => e.Account)
-                    .HasName("PK_Users_1");
-
-                entity.Property(e => e.Account).HasMaxLength(50);
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .HasColumnName("ID");
 
                 entity.Property(e => e.AccountType)
                     .IsRequired()
@@ -407,7 +406,7 @@ namespace Shocker_Project.Models
 
                 entity.Property(e => e.Gender).HasMaxLength(10);
 
-                entity.Property(e => e.Name).HasMaxLength(50);
+                entity.Property(e => e.NickName).HasMaxLength(50);
 
                 entity.Property(e => e.Password)
                     .IsRequired()
