@@ -68,7 +68,7 @@
                                             <span v-if="item.Status=='c0'" class="badge badge-sm bg-gradient-danger">未使用</span>
                                             <span v-if="item.Status=='c1'" class="badge badge-sm bg-gradient-success">已使用</span>
                                         </td>
-                                        
+
                                     </tr>
                                 </tbody>
                             </table>
@@ -84,28 +84,30 @@
                     <div class="card-header pb-0">
                         <div class="d-flex align-items-center">
                             <h2 class="mb-0">折價券</h2>
-                            <button class="btn btn-primary btn-sm ms-auto" v-on:click="createCoupon()">Settings</button>
+                            <button class="btn btn-primary btn-sm ms-auto" v-on:click="createCoupon">Settings</button>
                         </div>
                     </div>
                     <div class="card-body">
                         <p class="text-uppercase text-sm">Info</p>
                         <div class="row">
                             <div class="col-md-6">
-                                @*//Status*@
+                               @*折價券張數*@
                                 <div class="form-group">
-                                    <label for="example-text-input" class="form-control-label">Status</label>
-                                    <select v-model="_Status" class="form-select" @*aria-label="Default select example"*@>
+                                    <label for="example-text-input" class="form-control-label">張數</label>
+                                    <input v-model="cAmount" class="form-control" type="text" value="Jesse" onfocus="focused(this)" onfocusout="defocused(this)">
+                                    @*//Status選擇*@
+@*                                    <label for="example-text-input" class="form-control-label">Status</label>
+                                    <select v-model="cStatus" class="form-select" >
                                         <option value="c0">未使用</option>
                                         <option value="c1">已使用</option>
-                                    </select>
-
+                                    </select>*@
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 @*//CategoryId*@
                                 <div class="form-group">
                                     <label for="example-text-input" class="form-control-label">商品類別</label>
-                                    <select v-model="_ProductCategoryId" class="form-select" aria-label="Default select example">
+                                    <select v-model="cProductCategoryId" class="form-select" aria-label="Default select example">
                                         <option selected>請選擇類別</option>
                                         <option value="1">衣服</option>
                                         <option value="2">文具</option>
@@ -123,14 +125,14 @@
                                 @*//Discount*@
                                 <div class="form-group">
                                     <label for="example-text-input" class="form-control-label">Discount</label>
-                                    <input v-model="_Disount" class="form-control" type="text" value="Jesse" onfocus="focused(this)" onfocusout="defocused(this)">
+                                    <input v-model="cDiscount" class="form-control" type="text" value="Jesse" onfocus="focused(this)" onfocusout="defocused(this)">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 @*//到期日*@
                                 <div class="form-group">
                                     <label for="example-text-input" class="form-control-label">到期日</label>
-                                    <input v-model="_ExpirationDate" class="form-control" type="date" onfocus="focused(this)" onfocusout="defocused(this)">
+                                    <input v-model="cExpirationDate" class="form-control" type="date" onfocus="focused(this)" onfocusout="defocused(this)">
                                 </div>
                             </div>
                         </div>
@@ -141,7 +143,7 @@
                                 @*//收件帳號*@
                                 <div class="form-group">
                                     <label for="example-text-input" class="form-control-label">Account</label>
-                                    <input v-model="_HolderAccount" class="form-control" type="text" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09" onfocus="focused(this)" onfocusout="defocused(this)">
+                                    <input v-model="cHolderAccount" class="form-control" type="text" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09" onfocus="focused(this)" onfocusout="defocused(this)">
                                 </div>
                             </div>
                             @*                        <div class="col-md-4">
@@ -176,68 +178,71 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                </div>
             </div>
-
         </div>
     </div>
 </div>
-    @section Scripts {
-        <script>
-            var VueApp = {
-                data() {
-                    return {
-                        displayCp: [],
-                        _ExpirationDate: '',
-                        _HolderAccount: '',
-                        _ProductCategoryId: '',
-                        _Discount: '',
-                        _Statuss: '',
-                        _PublisherAccount: '',
-                        tableControl: true,
-                        couponControl: false,
-                        filter: '',
-                    };
+@section Scripts {
+    <script>
+        var VueApp = {
+            data() {
+                return {
+                    displayCp: [],
+                    cExpirationDate: '',
+                    cHolderAccount: '',
+                    cProductCategoryId: '',
+                    cDiscount: '',
+                    cAmount:'',
+                    //cStatus: '',
+                    cPublisherAccount: 'Admin1',  /*身分驗證*/
+                    tableControl: true,
+                    couponControl: false,
+                    filter: '',
+                };
+            },
+            mounted: function () {
+                _this = this;
+                this.displayCoupon();
+            },
+            methods: {
+                displayCoupon: function () {
+                    var _this = this;
+                    axios.post(`${window.location.origin}/Admin/Coupon/DisaplayCoupon`)
+                        .then(res => { _this.displayCp = res.data })
                 },
-                mounted: function () {
-                    _this=this;
-                    this.displayCoupon();
+                createCoupon: function () { //要做張數迴圈
+                    var _this = this;
+                    input = {};
+                    input.Amount =_this.cAmount;
+                    input.ExpirationDate = _this.cExpirationDate;
+                    input.HolderAccount = _this.cHolderAccount;
+                    input.ProductCategoryId = _this.cProductCategoryId;
+                    input.Discount = _this.cDiscount;
+                    input.PublisherAccount = _this.cPublisherAccount;
+                    axios.post(`${window.location.origin}/Admin/Coupon/CreateCoupon`, input)
+                        .then(res => { alert(res.data.Message)
+                            alert("折價券建立成功");
+                        }).catch(error => {
+                            console.log(error.res.data)})
+                   
+                    //window.location.replace(location.href);
                 },
-                methods: {
-                    displayCoupon: function () {
-                        var _this = this;
-                        axios.post(`${window.location.origin}/Admin/Coupon/DisaplayCoupon`)
-                            .then(res => { _this.displayCp = res.data })
-                    },
-                    createCoupon: function () {
-                        var _this = this;
-                        input.ExpirationDate = _this._ExpirationDate;
-                        input.HolderAccount = _this._HolderAccount;
-                        input.ProductCategoryId = _this._ProductCategoryId;
-                        input.Discount = _this._Discount;
-                        input.Status = _this._Statuss;
-                        input.PublisherAccount = _this._PublisherAccount;
-                        axios.post(`${window.location.origin}/Admin/Coupon/CreateCoupon`, input)
-                            .then(res => { _this.displayCp = res.data });
-                        alert("OK");
-                    },
-                    couponSerch: function () {
-                        var _this =this;
-                        input={};
+                couponSerch: function () {
+                    var _this = this;
+                    input = {};
                     input.Discount = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
-                    input.HolderAccount = input.StatusName = input.CategoryName =_this.filter;
-                    axios.post(`${window.location.origin}/Admin/Coupon/FilterCoupon`,input)
-                            .then(res=>{_this.displayCp =res.data})
-                    },
-                    viewChange: function () {
-                        var _this = this;
-                        _this.tableControl=false;
-                        _this.couponControl= true;
-                    }
+                    input.HolderAccount = input.StatusName = input.CategoryName = _this.filter;
+                    axios.post(`${window.location.origin}/Admin/Coupon/FilterCoupon`, input)
+                        .then(res => { _this.displayCp = res.data })
                 },
-            }
-            var app = Vue.createApp(VueApp).mount("#app");
+                viewChange: function () {
+                    var _this = this;
+                    _this.tableControl = false;
+                    _this.couponControl = true;
+                }
+            },
+        }
+        var app = Vue.createApp(VueApp).mount("#app");
 
-        </script>
+    </script>
     }

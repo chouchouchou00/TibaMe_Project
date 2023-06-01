@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shocker_Project.Areas.Admin.Models;
 using Shocker_Project.Models;
@@ -34,27 +35,40 @@ namespace Shocker_Project.Areas.Admin.Controllers
             return Json(DC);
         }
         [HttpPost]
-        public async Task<JsonResult> CreateCoupon([FromBody] CouponsViewModels cvm)
+        public async Task<IActionResult> CreateCoupon([FromBody] CreateCouponsViewModel cvm)
         {
             if (ModelState.IsValid)
             {
-                //cvm.PublisherAccount = "Admin1";
-                Coupons coupons = new Coupons()
+                for (var i = 1; i < cvm.Amount; i++)
                 {
-                    ExpirationDate = cvm.ExpirationDate,
-                    HolderAccount = cvm.HolderAccount,
-                    ProductCategoryId = cvm.ProductCategoryId,
-                    Discount = cvm.Discount,
-                    Status = cvm.Status,
-                    PublisherAccount = cvm.PublisherAccount,
-                    
-                };
+                    //cvm.PublisherAccount = "Admin1";
+                    Coupons coupons = new Coupons()
+                    {
+                        //CouponId = 0,
+                        ExpirationDate = cvm.ExpirationDate,
+                        HolderAccount = cvm.HolderAccount,
+                        ProductCategoryId = cvm.ProductCategoryId,
+                        Discount = cvm.Discount,
+                        Status = cvm.Status,
+                        PublisherAccount = cvm.PublisherAccount,
 
-                _context.Coupons.Add(coupons);
-                _context.SaveChanges();
+                    };
+                    try
+                    {
+                        _context.Coupons.Add(coupons);
+                        await _context.SaveChangesAsync();
+                    }
 
+                    catch (Exception)
+                    {
+                        return BadRequest("錯誤");
+                    }
+                }
+                return Json(new { Message = "成功傳入資料庫" });
             }
-            return Json(new { Message = "建置完畢" });
+
+            else { return Json(new { Message = "未傳至後端" }); }
+            
         }
         [HttpPost]
         public JsonResult FilterCoupon([FromBody]CouponsViewModels cvm) 
