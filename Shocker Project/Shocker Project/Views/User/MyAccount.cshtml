@@ -49,7 +49,7 @@
                         <ul class="nav flex-column">
 							<h3>我的帳號</h3>
 							<li class="nav-item">
-                                <a class="nav-link active" asp-controller="User" asp-route-tab="a" aria-current="page">個人檔案</a>
+                                <a class="nav-link active" asp-controller="User" asp-route-tab="a" aria-current="page">個人檔案</a>@*點選下方用戶資訊編輯菜單選項時，傳入tab=abcde的參數至該Controller*@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="User" asp-route-tab="b">我的付款方式</a>
@@ -70,7 +70,7 @@
             <div class="col-lg-8 col-md-7">
                 <div class="row">
                     @{
-                        switch (ViewBag.Tab)
+                        switch (ViewBag.Tab)//後端丟來之ViewBag=abcde時，於指定位置呈現不同的PartialView
                         {
                             case "a":
                                 <partial name="EditMyAccountPartial" />

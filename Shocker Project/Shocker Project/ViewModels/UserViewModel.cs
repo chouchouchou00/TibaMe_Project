@@ -5,14 +5,14 @@ namespace Shocker_Project.ViewModels//
     public class UserViewModel: IValidatableObject
     {
 		[Display(Name = "帳號名稱")]//Readonly
-		public string Account { get; set; }
+		public string Id { get; set; }
 		[Required(ErrorMessage = "密碼為必填欄位")]
 		[Display(Name = "密碼")]
 		public string Password { get; set; }
 		[Required(ErrorMessage = "帳號為必填欄位")]
 		[StringLength(maximumLength: 30, MinimumLength = 3, ErrorMessage = "名字需介於3個字到30個字之間")]
 		[Display(Name = "我的名字")]
-		public string Name { get; set; }
+		public string NickName { get; set; }
 		[Display(Name = "性別")]
 		public string Gender { get; set; }
 		[Display(Name = "我的生日")]//Readonly
@@ -29,7 +29,7 @@ namespace Shocker_Project.ViewModels//
 
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-			if (string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Name))
+			if (string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(NickName))
 			{
 				yield return new ValidationResult("密碼跟名字為必填欄位"/*,new string[] {}*/);
 			}

@@ -26,7 +26,7 @@ namespace Shocker_Project.Controllers
 		public JsonResult GetInfo() //(string account)
 		{
 			var info = from u in _context.Users
-					   where u.Account == loginAccount //== account
+					   where u.Id == loginAccount //== account
 					   select new
 					   {
 						   PicturePath = u.PicturePath,
@@ -38,7 +38,7 @@ namespace Shocker_Project.Controllers
 		[ValidateAntiForgeryToken]
 		public JsonResult UpdateInfo(string info) //(string account)
 		{
-			var sellerinfo = _context.Users.Where(u => u.Account == loginAccount)
+			var sellerinfo = _context.Users.Where(u => u.Id == loginAccount)
 				.Select(u => u.AboutSeller);
 			return Json(sellerinfo);
 		}

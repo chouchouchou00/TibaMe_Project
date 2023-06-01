@@ -4,23 +4,23 @@
 }
 
 <div id="app" class="container">
-	@*未編輯的頁面*@
+	@*上傳頭像的區塊*@
 	<div class="mb-3 row">
 		<label for="staticPicture" class="col-sm-2 col-form-label">頭像</label>
 		<div class="col-sm-10">
 			<img style="width:250px;height:250px" :src="picture" />
-			<input type="file" @@change="selectpicture" />
-			<button type="button" class="btn btn-outline-success" @@click="uploadpicture">上傳</button>
+			<input type="file" @@change="selectPicture" />
+			<button type="button" class="btn btn-outline-success" @@click="uploadPicture">上傳</button>
 		</div>
 	</div>
 
 	<hr style="height: 3px;border-color: chartreuse;background-color: chartreuse" />
-
+	@*未編輯的頁面*@
 	<template v-if="Edit==false">
 		<div class="mb-3 row">
 			<label for="staticAccount" class="col-sm-2 col-form-label">帳號</label>
 			<div class="col-sm-10">
-				<input type="text" readonly class="form-control-plaintext" id="staticAccount" v-model="account">
+				<input type="text" readonly class="form-control-plaintext" id="staticAccount" v-model="id">
 			</div>
 		</div>
 
@@ -34,7 +34,7 @@
 		<div class="mb-3 row">
 			<label for="inputName" class="col-sm-2 col-form-label">名字</label>
 			<div class="col-sm-10">
-				<input type="text" readonly class="form-control-plaintext" id="inputName" v-model="name">
+				<input type="text" readonly class="form-control-plaintext" id="inputName" v-model="nickName">
 			</div>
 		</div>
 
@@ -80,7 +80,7 @@
 			</div>
 		</div>
 		<div class="col-sm-3">
-			<button type="button" class="btn btn-outline-info" @@click="editUsers">編輯</button>
+			<button type="button" class="btn btn-outline-info" @@click="editUsers">編輯</button>@*編輯按鈕，按下切換至有取消鍵與完成鍵的編輯頁面*@
 		</div>
 	</template>
 	@*編輯中的頁面*@
@@ -88,40 +88,40 @@
 		<div class="mb-3 row">
 			<label for="staticAccount" class="col-sm-2 col-form-label">帳號</label>
 			<div class="col-sm-6">
-				<input type="text" readonly class="form-control-plaintext" id="staticAccount" v-model="account">
+				<input type="text" readonly class="form-control-plaintext" id="staticAccount" v-model="id">
 			</div>
 		</div>
 
 		<div class="mb-3 row">
-			<label for="inputPassword" class="col-sm-2 col-form-label">密碼</label>
+			<label for="inputPassword" class="col-sm-2 col-form-label">密碼</label>@*可供User輸入*@
 			<div class="col-sm-10">
 				<input type="text" class="form-control" id="inputPassword" v-model="password">
 			</div>
 		</div>
 
 		<div class="mb-3 row">
-			<label for="inputName" class="col-sm-2 col-form-label">名字</label>
+			<label for="inputName" class="col-sm-2 col-form-label">名字</label>@*可供User輸入*@
 			<div class="col-sm-10">
-				<input type="text" class="form-control" id="inputName" v-model="name">
+				<input type="text" class="form-control" id="inputName" v-model="nickName">
 			</div>
 		</div>
 
 		<div class="mb-3 row">
-			<label for="inputGender" class="col-sm-2 col-form-label">性別</label>
+			<label for="inputGender" class="col-sm-2 col-form-label">性別</label>@*可供User輸入*@
 			<div class="col-sm-10">
 				<input type="text" class="form-control" id="inputGender" v-model="gender">
 			</div>
 		</div>
 
 		<div class="mb-3 row">
-			<label for="inputBirthDate" class="col-sm-2 col-form-label">生日</label>
+			<label for="inputBirthDate" class="col-sm-2 col-form-label">生日</label>@*可供User輸入*@
 			<div class="col-sm-10">
 				<input type="text" class="form-control" id="inputBirthDate" v-model="birthDate">
 			</div>
 		</div>
 
 		<div class="mb-3 row">
-			<label for="inputEmail" class="col-sm-2 col-form-label">郵件</label>
+			<label for="inputEmail" class="col-sm-2 col-form-label">郵件</label>@*可供User輸入*@
 			<div class="col-sm-10">
 				<input type="text" class="form-control" id="inputEmail" v-model="email">
 			</div>
@@ -149,10 +149,10 @@
 		</div>
 		<div class="row">
 			<div class="col-sm-3">
-				<button type="button" class="btn btn-outline-success" @@click="updateUsers">完成</button>
+				<button type="button" class="btn btn-outline-success" @@click="updateUsers">完成</button>@*按完成以完成編輯*@
 			</div>
 			<div class="col-sm-3">
-				<button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#cancelModal">取消</button>
+				<button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#cancelModal">取消</button>@*按取消彈出提示訊息，再按確定才會取消所有變更內容，按返回則回復*@
 				<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 					<div class="modal-dialog">
 						<div class="modal-content">
@@ -183,9 +183,9 @@
 		el: '#app',
 		data: {
 			Users: [],
-			account: "",
+			id: "",
 			password: "",
-			name: "",
+			nickName: "",
 			gender: "",
 			birthDate: "",
 			email: "",
@@ -198,32 +198,32 @@
 			Edit: false
 		},
 		mounted: function () {
-			this.getUsers();
+			this.getUsers();//一開始載入即執行getUsers()以拿到資料
 		},
 		methods: {
-			getUsers: function (account) {
+			getUsers: function (id) {//帶入後端傳來的User資料，並將picture於當前伺服器上的路由組成正確
 				//alert("getUsers")
 				axios.get(`${baseAddress}/GetAccount`).then(response => {
 					//alert(JSON.stringify(response.data));
 					this.Users = response.data;
-					this.account = this.Users[0].account;
+					this.id = this.Users[0].id;
 					this.password = this.Users[0].password;
-					this.name = this.Users[0].name;
+					this.nickName = this.Users[0].nickName;
 					this.gender = this.Users[0].gender;
 					this.birthDate = this.Users[0].birthDate;
 					this.email = this.Users[0].email;
 					this.phone = this.Users[0].phone;
 					this.role = this.Users[0].role;
 					this.registerDate = this.Users[0].registerDate;
-					this.address = window.location.protocol + '//' + window.location.host + '/';
-					this.picture = this.address + this.Users[0].picture
+					this.address = window.location.protocol + '//' + window.location.host + '/';//address=網站的路由前半段
+					this.picture = this.address + this.Users[0].picture//網站的路由前半段+資料庫PicturePath欄位的後半段，組合成完整的路由以在當前伺服器載入圖片
 				});
 			},
-			updateUsers: function () {
+			updateUsers: function () {//更改User指定欄位之資料
 				var request = {
-					Account: this.Users[0].account,
+					Id: this.Users[0].id,
 					Password: this.password,
-					Name: this.name,
+					nickName: this.nickName,
 					Gender: this.gender,
 					BirthDate: this.birthDate,
 					Email: this.email,
@@ -232,34 +232,34 @@
 					RegisterDate: this.Users[0].registerDate
 				};
 				axios.post(`${baseAddress}/UpdateAccount`, request).then(response => {
-					alert('更新成功!')
+					alert('更新成功!')//跳更新成功的訊息
 					this.getUsers();
 					this.Edit = false;
 				});
 			},
-			editUsers: function () {
+			editUsers: function () {//開始編輯User的欄位
 				this.Edit = true;
 			},
-			cancel: function () {
+			cancel: function () {//取消編輯User的欄位，並更新當前User的資料
 				this.Edit = false;
 				this.getUsers();
 			},
-			selectpicture: function (evemt) {
+			selectPicture: function (evemt) {//點選要上傳的的圖片
 				var _this = this;
-				_this.uploadPic = event.target.files[0];
+				_this.uploadPic = event.target.files[0];//(1)從local裝置中點選要上傳的檔案存至uploadPic
 				var reader = new FileReader();
 				reader.onload = function (e) {
-					_this.picture = e.target.result;
+					_this.picture = e.target.result;//(3)將轉成URL的目標(uploadPic)放入picture，便可達成預覽欲上傳之圖片的效果
 				}
-				reader.readAsDataURL(_this.uploadPic);
+				reader.readAsDataURL(_this.uploadPic);//(2)將uploadPic(剛點選放入的圖片)轉成URL
 			},
-			uploadpicture: function () {
-				var formdata = new FormData();
-				formdata.append('Account', this.account);
-				formdata.append('Picture', this.uploadPic);
+			uploadPicture: function () {//上傳圖片
+				var formdata = new FormData();//用FormData傳
+				formdata.append('Account', this.id);
+				formdata.append('Picture', this.uploadPic);//方才未轉成URL的uploadPic
 				axios.post(`${baseAddress}/UploadPicture`, formdata).then(response => {
 					if (response.data) {
-						alert('上傳成功!')
+						alert('上傳成功!')//跳上傳成功的訊息
 					}
 				});
 			}

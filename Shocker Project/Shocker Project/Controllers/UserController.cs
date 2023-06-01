@@ -14,7 +14,7 @@ namespace Shocker_Project.Controllers
 	[Route("{controller}/{action}/{id?}")]
 	public class UserController : Controller
 	{
-		private string loginAccount = "Admin1";//暫時寫死，等登入的參數
+		private string loginAccount = "User8";//暫時寫死，等登入的參數
 		private readonly db_a98a02_thm101team1001Context _context;
 		private readonly IWebHostEnvironment _environment;
 
@@ -24,21 +24,21 @@ namespace Shocker_Project.Controllers
 			_environment = environment;
 		}
 		[HttpGet]
-		public async Task<IActionResult> MyAccount(string tab)
+		public async Task<IActionResult> MyAccount(string tab)//點選用戶資訊編輯的菜單選項時，帶一個tab的參數，依據參數abcde呈現不同的Partial View
 		{
 			ViewBag.Tab = tab;
 			return View();
 		}
 		///User/GetAccount
 		[HttpGet]
-		public JsonResult GetAccount()//要接登入驗證那裡傳回的Users.Account
+		public JsonResult GetAccount()//要接登入驗證那裡傳回的Users.Account參數，找出User表裡Account欄位符合登入帳號的該筆資料，將資料物件包成JSON傳到前端，先暫時寫死，等登入的參數
 		{
-			var getaccount = from u in _context.Users.AsNoTracking().Where(a => a.Account == loginAccount)//暫時寫死，等登入的參數
+			var getaccount = from u in _context.Users.AsNoTracking().Where(a => a.Id == loginAccount)
 							 select new
 							 {
-								 account = u.Account,
+								 id = u.Id,
 								 password = u.Password,
-								 name = u.Name,
+								 nickName = u.NickName,
 								 gender = u.Gender,
 								 birthDate = u.BirthDate,
 								 email = u.Email,
@@ -50,16 +50,16 @@ namespace Shocker_Project.Controllers
 			return Json(getaccount);
 		}
 		[HttpPost]
-		public async Task<JsonResult> UpdateAccount([FromBody] UserViewModel uvm)
+		public async Task<JsonResult> UpdateAccount([FromBody] UserViewModel uvm)//更新User資訊
 		{
 			if (ModelState.IsValid)
 			{
 				try
 				{
-					Users u = await _context.Users.FindAsync(uvm.Account);
-					u.Account = uvm.Account;
+					Users u = await _context.Users.FindAsync(uvm.Id);
+					u.Id = uvm.Id;
 					u.Password = uvm.Password;
-					u.Name = uvm.Name;
+					u.NickName = uvm.NickName;
 					u.Gender = uvm.Gender;
 					u.BirthDate = uvm.BirthDate;
 					u.Email = uvm.Email;
@@ -69,9 +69,9 @@ namespace Shocker_Project.Controllers
 					_context.Update(u);
 					await _context.SaveChangesAsync();
 				}
-				catch (DbUpdateConcurrencyException)
+				catch (DbUpdateConcurrencyException)//捕捉資料更新時該筆資料不存在的例外
 				{
-					if (!UsersExists(uvm.Account))
+					if (!UsersExists(uvm.Id))
 					{
 						return Json(new { Result = "Error", Message = "此帳號不存在!" });
 					}
@@ -88,27 +88,27 @@ namespace Shocker_Project.Controllers
 			}
 		}
 		[HttpPost]
-		public async Task<JsonResult> UploadPicture(PictureViewModel pvm)
+		public async Task<JsonResult> UploadPicture(PictureViewModel pvm)//更改User照片
 		{
 			if (ModelState.IsValid)
 			{
 				try
 				{
-					Users u = await _context.Users.FindAsync(pvm.Account);
-					var root = $@"{_environment.WebRootPath}\img\userphoto";
-					var time = DateTime.Now.Ticks;
-					var unid = Guid.NewGuid();
-					var path = $@"{root}\{unid}-{time}-{pvm.Picture.FileName}";
-					using (var st = System.IO.File.Create(path))
+					Users u = await _context.Users.FindAsync(pvm.Id);
+					var root = $@"{_environment.WebRootPath}\img\userphoto";//網站根目錄的路由
+					var time = DateTime.Now.Ticks;//當下的時間
+					var unid = Guid.NewGuid();//創生一獨一無二的Id
+					var path = $@"{root}\{unid}-{time}-{pvm.Picture.FileName}";//路徑全名:路由/檔案名
+					using (var st = System.IO.File.Create(path))//創造路徑
 					{
-						pvm.Picture.CopyTo(st);
+						pvm.Picture.CopyTo(st);//將前端傳來的檔案複製至該路徑上
 					}
-					u.PicturePath = $@"img\userphoto\{unid}-{time}-{pvm.Picture.FileName}";
+					u.PicturePath = $@"img\userphoto\{unid}-{time}-{pvm.Picture.FileName}";//擷取後半段存入資料庫的PicturePath欄位
 					await _context.SaveChangesAsync();
 				}
-				catch (DbUpdateConcurrencyException)
+				catch (DbUpdateConcurrencyException)//捕捉資料更新時該筆資料不存在的例外
 				{
-					if (!UsersExists(pvm.Account))
+					if (!UsersExists(pvm.Id))
 					{
 						return Json(new { Result = "Error", Message = "此帳號不存在!" });
 					}
@@ -126,17 +126,13 @@ namespace Shocker_Project.Controllers
 		}
 		///User/GetOrders
 		[HttpGet]
-		public JsonResult GetOrders()
+		public JsonResult GetOrders()//抓取登入的Account的所有的Orders的以下欄位資訊，暫時寫死，等登入傳入的參數
 		{
-			var getorders = from o in _context.Orders.AsNoTracking().Include(o => o.OrderDetails).ThenInclude(od => od.Product).ThenInclude(p => p.ProductCategory).Where(a => a.BuyerAccount == loginAccount)//暫時寫死，等登入的參數
+			var getorders = from o in _context.Orders.AsNoTracking().Include(o => o.OrderDetails).ThenInclude(od => od.Product).ThenInclude(p => p.ProductCategory).Where(a => a.BuyerAccount == loginAccount)
 							select new
 							{
 								buyerAccount = o.BuyerAccount,
 								orderId = o.OrderId,
-								address = o.Address,//沒用到
-								orderDate = o.OrderDate,//沒用到
-								arrivalDate = o.ArrivalDate,//沒用到
-								buyerPhone = o.BuyerPhone,//沒用到
 								payMethod = o.PayMethod,
 								quantity = o.OrderDetails.Select(od => od.Quantity).ToList(),
 								productName = o.OrderDetails.Select(od => od.ProductName).ToList(),
@@ -145,28 +141,23 @@ namespace Shocker_Project.Controllers
 							};
 			return Json(getorders);
 		}
-		//useless:
-		//								productId
-		//								productCategoryId
-		//								sellerAccount
-		//								categoryName
 		[HttpPost]
-		public async Task<JsonResult> CancelOrders([FromBody] CancelOrdersViewModel covm)
+		public async Task<JsonResult> CancelOrders([FromBody] CancelOrdersViewModel covm)//更改Order狀態為已取消
 		{
 			if (ModelState.IsValid)
 			{
 				try
 				{
 					Orders o = await _context.Orders.Include(o => o.OrderDetails).Where(o => o.OrderId == covm.OrderId).FirstOrDefaultAsync();
-					o.Status = "o5";
-					foreach (var od in o.OrderDetails)
+					o.Status = "o5";//o5=已取消
+					foreach (var od in o.OrderDetails)//尋覽每一個此筆Order裡的OrderDetail，並將他們的狀態一併改為已取消
 					{
-						od.Status = "od5";
+						od.Status = "od5";//od5=已取消
 					}
 					_context.Update(o);
 					await _context.SaveChangesAsync();
 				}
-				catch (DbUpdateConcurrencyException)
+				catch (DbUpdateConcurrencyException)//捕捉資料更新時該筆資料不存在的例外
 				{
 					if (!OrdersExists(covm.OrderId))
 					{
@@ -186,13 +177,14 @@ namespace Shocker_Project.Controllers
 		}		
 		public IActionResult UserOrderDetails(int id)//全丟抓參數
 		{
+			ViewBag.OrderId = id;
 			return View();
 		}
 		///User/GetUserOrderDetails
 		[HttpGet]
-		public JsonResult GetUserOrderDetails()
-		{
-			var getorderdetails = from o in _context.Orders.AsNoTracking().Include(o => o.OrderDetails).ThenInclude(od => od.Product).ThenInclude(p => p.Pictures).Where(a => a.OrderId == 19)
+		public JsonResult GetUserOrderDetails()//抓取上頁點選之指定OrderId的全部OrderDetail的指定欄位的資料
+		{			
+			var getorderdetails = from o in _context.Orders.AsNoTracking().Include(o => o.OrderDetails).ThenInclude(od => od.Product).ThenInclude(p => p.Pictures)/*.Where(a => a.OrderId == 19)*/
 								  select new
 								  {
 									  buyerAccount = o.BuyerAccount,
@@ -207,11 +199,12 @@ namespace Shocker_Project.Controllers
 									  sellerAccount = o.OrderDetails.Select(od => od.Product.SellerAccount).ToList(),
 									  productName = o.OrderDetails.Select(od => od.ProductName).ToList(),
 									  unitPrice = o.OrderDetails.Select(od => od.UnitPrice).ToList(),
+									  discount = o.OrderDetails.Select(od => od.Discount).ToList(),
 									  categoryName = o.OrderDetails.Select(od => od.Product.ProductCategory.CategoryName).ToList(),
 									  path = o.OrderDetails.Select(od => od.Product.Pictures.Select(p => p.Path)).ToList(),
 									  statusName = o.OrderDetails.Select(od => od.StatusNavigation.StatusName),
 									  description = o.Ratings.Select(r => r.Description).ToList(),
-									  starCount = o.Ratings.Select(od => od.StarCount).ToList(),
+									  starCount = o.Ratings.Select(od => od.StarCount).ToList(),									 
 								  };
 			return Json(getorderdetails);
 		}
@@ -227,7 +220,7 @@ namespace Shocker_Project.Controllers
 					_context.Update(od);
 					await _context.SaveChangesAsync();
 				}
-				catch (DbUpdateConcurrencyException)
+				catch (DbUpdateConcurrencyException)//捕捉資料更新時該筆資料不存在的例外
 				{
 					if (!OrderDetailsExists(tpvm.OrderId, tpvm.ProductId))
 					{
@@ -284,7 +277,7 @@ namespace Shocker_Project.Controllers
 					_context.Update(o);
 					await _context.SaveChangesAsync();
 				}
-				catch (DbUpdateConcurrencyException)
+				catch (DbUpdateConcurrencyException)//捕捉資料更新時該筆資料不存在的例外
 				{
 					if (!OrderDetailsExists(rrvm.OrderId, rrvm.ProductId))
 					{
@@ -314,7 +307,7 @@ namespace Shocker_Project.Controllers
 					_context.Update(r);
 					await _context.SaveChangesAsync();
 				}
-				catch (DbUpdateConcurrencyException)
+				catch (DbUpdateConcurrencyException)//捕捉資料更新時該筆資料不存在的例外
 				{
 					if (!RatingsExists(rdvm.OrderId, rdvm.ProductId))
 					{
@@ -332,20 +325,40 @@ namespace Shocker_Project.Controllers
 				return Json(new { Result = "Error", Message = "上傳訂單明細失敗!" });
 			}
 		}
+		///User/GetCoupons
+		[HttpGet]
+		public JsonResult GetCoupons()
+		{
+			var getcoupons = from c in _context.Coupons.Where(c => c.HolderAccount == loginAccount)
+							 select new
+							 {
+								 holderAccount = c.HolderAccount,
+								 couponId=c.CouponId,
+								 expirationDate=c.ExpirationDate,
+								 productCategoryName=c.ProductCategory.CategoryName,
+								 discount=c.Discount,								 
+								 publisherAccount=c.PublisherAccount,
+								 statusName=c.StatusNavigation.StatusName,
+								 orderId=c.OrderDetails.Select(o=>o.OrderId).ToList(),
+							 };
+			return Json(getcoupons);
+		}
+		///User/GetQuestions
+		[HttpGet]
+		public JsonResult GetQuestions()
+		{
+			var getquestions = _context.ClientCases.Where(c => c.UserAccount == loginAccount).Select(
+				c => new
+				{
+					caseId = c.CaseId,
+					description = c.Description,
+					statusName = c.StatusNavigation.StatusName,
+					reply = c.Reply,
+					categoryName = c.QuestionCategory.CategoryName,
+				});
+			return Json(getquestions);
+		}
 
-
-
-		///Get/Coupons
-		//[HttpGet]
-		//public JsonResult GetCoupons()
-		//{
-		//	var getcoupons = from c in _context.Coupons.Where(c => c.HolderAccount == loginAccount)
-		//					 select new
-		//					 {
-		//						 holderAccount = c.HolderAccount,
-		//						 exp
-		//					 };
-		//}
 		private bool OrdersExists(int hasorderId)
 		{
 			return _context.Orders.Any(o => o.OrderId == hasorderId);
@@ -356,7 +369,7 @@ namespace Shocker_Project.Controllers
 		}
 		private bool UsersExists(string hasaccount)
 		{
-			return _context.Users.Any(u => u.Account == hasaccount);
+			return _context.Users.Any(u => u.Id == hasaccount);
 		}
 		private bool RatingsExists(int hasorderId, int hasproductId)
 		{
