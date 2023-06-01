@@ -115,10 +115,6 @@
 				</nav>
 				<div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
 					<div class="ms-md-auto pe-md-3 d-flex align-items-center">
-						<div class="input-group">
-							<span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-							<input v-model="filter" type="text" class="form-control" placeholder="#商品關鍵字" @@keyup.enter="filterProducts">
-						</div>
 					</div>
 					<ul class="navbar-nav  justify-content-end">
 						@*必須先登入填入用戶帳號*@
@@ -162,12 +158,12 @@
 						<div class="card-body p-3">
 							<div class="row">
 								<div class="col-8">
-									<div class="numbers">
-										<h5 class="font-weight-bolder">商品</h5>
+									<h5 class="font-weight-bolder">商品</h5>
+									<div v-for="item in Info" class="numbers">
 										<p class="text-sm mb-0 text-uppercase font-weight-bold">未上架</p>
-										<h5 class="font-weight-bolder">{{Info[0].p0}}</h5>
+										<h5 class="font-weight-bolder">{{item.p0}}</h5>
 										<p class="text-sm mb-0 text-uppercase font-weight-bold">已上架</p>
-											<h5 class="font-weight-bolder">{{Info[0].p1}}</h5>
+										<h5 class="font-weight-bolder">{{item.p1}}</h5>
 									</div>
 								</div>
 								<div class="col-4 text-end">
@@ -184,19 +180,19 @@
 						<div class="card-body p-3">
 							<div class="row">
 								<div class="col-8">
-										<h5 class="font-weight-bolder">訂單</h5>
+										<h5 class="font-weight-bolder">訂單商品</h5>
 									<div class="row">
-										<div class="numbers col-6">										
+										<div v-for="item in Info" class="numbers col-6">										
 											<p class="text-sm mb-0 text-uppercase font-weight-bold">未出貨</p>
-											<h5 class="font-weight-bolder">{{Info[0].od1}}</h5>
+											<h5 class="font-weight-bolder">{{item.od1}}</h5>
 											<p class="text-sm mb-0 text-uppercase font-weight-bold">未收貨</p>
-											<h5 class="font-weight-bolder">{{Info[0].od2}}</h5>										
-										</div>
-										<div class="numbers col-6">
+											<h5 class="font-weight-bolder">{{item.od2}}</h5>
+											</div>
+											<div v-for="item in Info" class="numbers col-6">
 											<p class="text-sm mb-0 text-uppercase font-weight-bold">已收貨</p>
-											<h5 class="font-weight-bolder">{{Info[0].od3}}</h5>
+											<h5 class="font-weight-bolder">{{item.od3}}</h5>
 											<p class="text-sm mb-0 text-uppercase font-weight-bold">退貨</p>
-												<h5 class="font-weight-bolder">{{Info[0].od4}}</h5>
+											<h5 class="font-weight-bolder">{{item.od4}}</h5>
 										</div>
 									</div>
 								</div>
@@ -214,12 +210,12 @@
 						<div class="card-body p-3">
 							<div class="row">
 								<div class="col-8">
-									<div class="numbers">
-										<h5 class="font-weight-bolder">買家評價</h5>
+									<h5 class="font-weight-bolder">買家評價</h5>
+									<div v-for="item in Info" class="numbers">
 										<p class="text-sm mb-0 text-uppercase font-weight-bold">未回應</p>
-											<h5 class="font-weight-bolder">{{Info[0].r0}}</h5>
+										<h5 class="font-weight-bolder">{{item.r0}}</h5>
 										<p class="text-sm mb-0 text-uppercase font-weight-bold">已回應</p>
-											<h5 class="font-weight-bolder">{{Info[0].r1}}</h5>
+										<h5 class="font-weight-bolder">{{item.r1}}</h5>
 									</div>
 								</div>
 								<div class="col-4 text-end">
@@ -236,7 +232,7 @@
 						<div class="card-body p-3">
 							<div class="row">
 								<div class="col-8">
-									<div class="numbers">
+									<div v-for="item in Info" class="numbers">
 										<p class="text-sm mb-0 text-uppercase font-weight-bold">優惠券</p>
 										<h5 class="font-weight-bolder">
 											$103,430
@@ -290,6 +286,14 @@
 						<div class="card-header pb-0">
 							<div class="d-flex align-items-center">
 								<h6 class="mb-0">商品管理</h6>
+								<div class="ms-md-auto pe-md-3 d-flex align-items-center">
+									<div class="input-group">
+										<input v-model="filter" type="text" class="form-control" placeholder="#商品關鍵字" @@keyup.enter="filterProducts">
+										<button class="input-group-text text-body" @@click="filterProducts">
+											<i class="fas fa-search" aria-hidden="true">&nbsp;搜尋</i>
+										</button>
+									</div>
+								</div>
 								<button class="btn btn-primary btn-sm ms-auto" @@click="create">新增商品</button>
 							</div>
 						</div>
@@ -473,7 +477,7 @@
 										<label for="example-text-input" class="form-control-label">貨幣</label>
 										<select v-model="details.Currency" class="form-control text-center">
 											<option value="NTD">NTD</option>
-											<option value="USD">USD</option>
+											<option value="USD" disabled>USD</option>
 										</select>
 									</div>
 								</div>
@@ -502,7 +506,6 @@
 										</div>
 									</div>
 								</div>
-
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="example-text-input" class="form-control-label">說明</label>
@@ -610,7 +613,7 @@
 									<tbody>
 										<tr v-for="(item,index) in Orders">
 											<td class="align-middle text-center">
-												<a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" @@click="editOrders(item.OrderId)">
+												<a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" @@click="editOrders(item.OrderId, index)">
 													<i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>查看明細
 												</a>
 											</td>
@@ -629,12 +632,10 @@
 											</td>
 											<td class="align-middle text-end">
 												<div class="row">
-													<div class="col-3"><p class="text-xs font-weight-bold mb-0">NTD</p></div>
-													<div class="col-9"><p class="text-xs font-weight-bold mb-0">{{this.getOrders()}}{{this.OrderSum[index].NTD}}</p></div>
+													<p class="text-xs font-weight-bold mb-0">{{this.OrderSum[index].NTD}}&nbsp;&nbsp;NTD</p>
 												</div>
 												<div class="row">
-													<div class="col-3"><p class="text-xs font-weight-bold mb-0">USD</p></div>
-													<div class="col-9"><p class="text-xs font-weight-bold mb-0">{{this.OrderSum[index].USD}}</p></div>
+													<p class="text-xs font-weight-bold mb-0">{{this.OrderSum[index].USD}}&nbsp;&nbsp;USD</p>
 												</div>
 											</td>
 											<td class="align-middle text-center">
@@ -671,7 +672,97 @@
 				<div class="col-12">
 					<div class="card mb-4">
 						<div class="card-header pb-0">
-							<h6>訂單明細</h6>
+							<div class="d-flex align-items-center">
+								<h6 class="mb-0">訂單管理</h6>
+							</div>
+						</div>
+						<div class="card-body px-0 pt-0 pb-2">
+							<div class="table-responsive p-0">
+								<table class="table align-items-center mb-0">
+									<thead>
+										<tr>
+											<th class="text-secondary opacity-7"></th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">編號</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">買家</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">商品數量</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">總價</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">付款方式</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">狀態</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">訂購時間</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">到貨時間</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td class="align-middle text-center">
+												<a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" @@click="cancelOrderDetails">
+													<i class="fas fas fa-arrow-circle-up text-dark me-2" aria-hidden="true"></i>取消
+												</a>
+											</td>
+											<td class="align-middle text-center">
+												<span class="text-secondary text-xs font-weight-bold">{{this.OrderInfo[0].OrderId}}</span>
+											</td>
+											<td>
+												<div class="d-flex px-2 py-1">
+													<div class="d-flex flex-column justify-content-center">
+															<h6 class="mb-0 text-sm">{{this.OrderInfo[0].BuyerAccount}}</h6>
+													</div>
+												</div>
+											</td>
+											<td class="align-middle text-center">
+												<p class="text-xs font-weight-bold mb-0">{{this.OrderInfo[1].ProductCount}}</p>
+											</td>
+											<td class="align-middle text-end">
+												<div class="row">
+														<p class="text-xs font-weight-bold mb-0">{{this.OrderInfo[2].NTD}}&nbsp;&nbsp;NTD</p>
+												</div>
+												<div class="row">
+														<p class="text-xs font-weight-bold mb-0">{{this.OrderInfo[2].USD}}&nbsp;&nbsp;USD</p>
+												</div>
+											</td>
+											<td class="align-middle text-center">
+												<p class="text-xs font-weight-bold mb-0">{{this.OrderInfo[0].PayMethod}}</p>
+											</td>
+											<td class="align-middle text-center text-sm">
+												<span v-if="this.OrderInfo[0].Status=='o1'" class="badge badge-sm bg-gradient-danger">未出貨</span>
+												<span v-if="this.OrderInfo[0].Status=='o2'" class="badge badge-sm bg-gradient-secondary">未完全收貨</span>
+												<span v-if="this.OrderInfo[0].Status=='o3'" class="badge badge-sm bg-gradient-success">已收貨</span>
+												<span v-if="this.OrderInfo[0].Status=='o4'" class="badge badge-sm bg-gradient-warning">含退貨</span>
+												<span v-if="this.OrderInfo[0].Status=='o5'" class="badge badge-sm bg-gradient-dark">已取消</span>
+											</td>
+											<td class="align-middle text-center">
+												<p class="text-xs font-weight-bold mb-0">{{this.OrderInfo[0].OrderDate}}</p>
+											</td>
+											<td class="align-middle text-center">
+												<span class="text-secondary text-xs font-weight-bold">{{this.OrderInfo[0].ArrivalDate}}</span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div v-if="this._orderDetails" class="row">
+				<div class="col-12">
+					<div class="card mb-4">
+						<div class="card-header pb-0">
+							<div class="d-flex align-items-center">
+								<h6 class="mb-0">訂單明細</h6>
+								<button class="btn btn-primary btn-sm ms-auto" @@click="updateOrders(this.OrderInfo[0].OrderId)">更新出貨狀態</button>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<p class="col-md-6 text-sm">訂單編號：{{this.OrderInfo[0].OrderId}}</p>
+								<p class="col-md-6 text-sm">買家帳號：{{this.OrderInfo[0].BuyerAccount}}</p>
+								<p class="col-md-6 text-sm">送貨地址：{{this.OrderInfo[0].Address}}</p>
+								<p class="col-md-6 text-sm">買家聯絡電話：{{this.OrderInfo[0].BuyerPhone}}</p>
+								<p class="col-md-6 text-sm">訂單日期：{{this.OrderInfo[0].OrderDate}}</p>
+								<p class="col-md-6 text-sm">到貨日期：{{this.OrderInfo[0].ArrivalDate}}</p>								
+								<p class="col-md-6 text-sm">付款方式：{{this.OrderInfo[0].PayMethod}}</p>
+							</div>
 						</div>
 						<div class="card-body px-0 pt-0 pb-2">
 							<div class="table-responsive p-0">
@@ -682,20 +773,20 @@
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">商品編號</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">名稱</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">單價</th>
-												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">數量</th>
-												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">優惠券</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">數量</th>
+											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">優惠券</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">小計</th>
 											<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">狀態</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr v-for="item in orderDetail">
+										<tr v-for="(item,index) in OrderInfo[1].Product">
 											<td class="align-middle text-center">
-												<a href="javascript:;" class="text-secondary font-weight-bold text-xs" @@click="cancelOrderDetails">
-													<i class="fas fa-arrow-circle-up text-dark me-2" aria-hidden="true"></i>取消
+												<a href="javascript:;" class="text-secondary font-weight-bold text-xs" @@click="getProduct(item.ProductId)">
+													<i class="fas fa-arrow-circle-up text-dark me-2" aria-hidden="true"></i>商品資訊
 												</a>
-												<a href="javascript:;" class="text-secondary font-weight-bold text-xs" @@click="replyBuyers">
-													<i class="fas fa-arrow-circle-up text-dark me-2" aria-hidden="true"></i>回應
+												<a v-if="item.Status=='od6'" href="javascript:;" class="text-secondary font-weight-bold text-xs" @@click="replyBuyers">
+													<i class="fas fa-arrow-circle-up text-dark me-2" aria-hidden="true"></i>回應買家評價
 												</a>
 											</td>
 											<td class="align-middle text-center">
@@ -710,8 +801,7 @@
 											</td>
 											<td class="align-middle text-end">
 												<div class="row">
-													<div class="col-3"><p class="text-xs font-weight-bold mb-0">{{item.Currency}}</p></div>
-													<div class="col-9"><p class="text-xs font-weight-bold mb-0">{{item.UnitPrice}}</p></div>
+														<p class="text-xs font-weight-bold mb-0">{{item.UnitPrice}}&nbsp;&nbsp;{{item.Currency}}</p>
 												</div>
 											</td>
 											<td class="align-middle text-center">
@@ -725,18 +815,21 @@
 											</td>
 											<td class="align-middle text-end">
 												<div class="row">
-													<div class="col-3"><p class="text-xs font-weight-bold mb-0">{{item.Currency}}</p></div>
-													<div class="col-9">
-														<p class="text-xs font-weight-bold mb-0">
-															{{(item.Discount != null) ? (item.UnitPrice * item.Quantity * item.Discount) : (item.UnitPrice * item.Quantity)}}
-														</p>
-													</div>
+													<p class="text-xs font-weight-bold mb-0">
+														{{(item.Discount != null) ? (item.UnitPrice * item.Quantity * item.Discount) : (item.UnitPrice * item.Quantity)}}
+														&nbsp;&nbsp;{{item.Currency}}
+													</p>
 												</div>
 											</td>
 											<td class="align-middle text-center text-sm">
 												<div class="form-check form-switch ps-0 ms-auto my-auto">
-													<span v-if="item.Status=='od1'" class="badge badge-sm bg-gradient-danger">未出貨</span>
-													<span v-if="item.Status=='od2'" class="badge badge-sm bg-gradient-secondary">未收貨</span>
+													<div class="form-check form-switch ps-0 ms-auto my-auto">
+														<div v-if="item.Status=='od1'">
+															<input v-model="this.Checked[index]" class="form-check-input mt-1 ms-auto" type="checkbox">														
+														</div>
+													</div>
+													<span v-if="this.Checked[index]==false" class="badge badge-sm bg-gradient-danger">未出貨</span>
+													<span v-if="this.Checked[index]==true" class="badge badge-sm bg-gradient-secondary">未收貨</span>
 													<span v-if="item.Status=='od3'" class="badge badge-sm bg-gradient-success">已收貨</span>
 													<span v-if="item.Status=='od4'" class="badge badge-sm bg-gradient-warning">退貨</span>
 													<span v-if="item.Status=='od5'" class="badge badge-sm bg-gradient-dark">已取消</span>
@@ -751,7 +844,219 @@
 					</div>
 				</div>
 			</div>
-			
+			<div v-if="this._productDetails" class="row">
+				<div class="col-12">
+					<div class="card mb-4">
+						<div class="card-header pb-0">
+							<div class="d-flex align-items-center">
+								<h6 class="mb-0">商品資訊</h6>
+								<button class="btn btn-primary btn-sm ms-auto" @@click="getOrders">回訂單管理</button>
+							</div>
+						</div>
+						<div v-for="item in details" class="card-body">
+							<p class="text-uppercase text-sm">商品編號：{{item.ProductId}}</p>
+							<div class="row">
+								<p class="col-md-6 text-sm">名稱：{{item.ProductName}}</p>
+								<p class="col-md-6 text-sm">賣家帳號：{{item.SellerAccount}}</p>
+								<p class="col-md-6 text-sm">類別：{{item.ProductCategory}}</p>
+								<p class="col-md-6 text-sm">上架日期：{{item.LaunchDate}}</p>
+								<p class="col-md-6 text-sm">庫存：{{item.UnitsInStock}}</p>
+								<p class="col-md-6 text-sm">銷量：{{item.Sales}}</p>
+								<p class="col-md-6 text-sm">單價：{{item.UnitPrice}}&nbsp;&nbsp;{{item.Currency}}</p>
+								<p class="col-md-6 text-sm">狀態：
+									<span v-if="item.Status=='p0'" class="badge badge-sm bg-gradient-secondary">未上架</span>
+									<span v-if="item.Status=='p1'" class="badge badge-sm bg-gradient-success">已上架</span>
+								</p>
+								<p class="col-md-12 text-sm">說明：{{item.Description}}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div v-if="this._ratings" class="row">
+					<div class="col-12">
+						<div class="card mb-4">
+							<div class="card-header pb-0">
+								<div class="d-flex align-items-center">
+									<h6 class="mb-0">買家評價管理</h6>
+									<div class="ms-md-auto pe-md-3 d-flex align-items-center">
+										@*<div class="input-group">
+											<input v-model="filter" type="text" class="form-control" placeholder="#商品關鍵字" @@keyup.enter="filterProducts">
+											<button class="input-group-text text-body" @@click="filterProducts">
+												<i class="fas fa-search" aria-hidden="true">&nbsp;搜尋</i>
+											</button>
+										</div>*@
+									</div>									
+								</div>
+							</div>
+							<div class="card-body px-0 pt-0 pb-2">
+								<div class="table-responsive p-0">
+									<table class="table align-items-center mb-0">
+										<thead>
+											<tr>
+												<th class="text-secondary opacity-7"></th>
+												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">訂單編號</th>
+												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">商品名稱</th>
+												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">買家帳號</th>
+												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">評價星數</th>
+												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">訂購日期</th>
+												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">到貨日期</th>
+												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">狀態</th>
+											</tr>
+										</thead>
+										<tbody v-for="(r,rx) in Ratings">
+											<tr v-for="(p,px) in Ratings[rx].Product">
+												<td class="align-middle text-center">
+													<a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" @@click="editReply(rx,px)">
+														<i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>查看評價內容
+													</a>
+												</td>
+												<td class="align-middle text-center">
+													<span class="text-secondary text-xs font-weight-bold">{{p.OrderId}}</span>
+												</td>
+												<td>
+													<div class="d-flex px-2 py-1">
+														<div class="d-flex flex-column justify-content-center">
+															<h6 class="mb-0 text-sm">{{this.OrderDetails[rx].Product[px].ProductName}}</h6>
+														</div>
+													</div>
+												</td>												
+												<td class="align-middle text-center">
+													<span class="text-secondary text-xs font-weight-bold">{{this.Orders[rx].BuyerAccount}}</span>
+												</td>
+												<td class="align-middle text-center">
+													<span class="text-secondary text-xs font-weight-bold">{{p.StarCount}}</span>
+												</td>
+												<td class="align-middle text-center">
+													<p class="text-xs font-weight-bold mb-0">{{this.Orders[rx].OrderDate}}</p>
+												</td>
+												<td class="align-middle text-center">
+													<p class="text-xs font-weight-bold mb-0">{{this.Orders[rx].ArrivalDate}}</p>
+												</td>
+												<td class="align-middle text-center text-sm">
+													<span v-if="p.Status=='r0'" class="badge badge-sm bg-gradient-secondary">未回應</span>
+													<span v-if="p.Status=='r1'" class="badge badge-sm bg-gradient-success">已回應</span>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									@*<paginate :page-count="pageCount"
+									:clickHandler="changePage"
+									:prevText="'Prev'"
+									:nextText="'Next'"
+									:containerClass="'className'">
+									</paginate>*@
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			<div v-if="this._ratingDetails" class="row">
+					<div class="col-12">
+						<div class="card mb-4">
+							<div class="card-header pb-0">
+								<h6>買家評價管理</h6>
+							</div>
+							<div class="card-body px-0 pt-0 pb-2">
+								<div class="table-responsive p-0">
+									<table class="table align-items-center mb-0">
+										<thead>
+											<tr>
+												<th class="text-secondary opacity-7"></th>
+												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">訂單編號</th>
+												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">商品名稱</th>
+												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">買家帳號</th>
+												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">評價星數</th>
+												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">訂購日期</th>
+												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">到貨日期</th>
+												<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">狀態</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td class="align-middle text-center">
+													<a href="javascript:;" class="text-secondary font-weight-bold text-xs" @@click="cancelRatingDetails">
+														<i class="fas fa-arrow-circle-up text-dark me-2" aria-hidden="true"></i>取消
+													</a>
+												</td>
+												<td class="align-middle text-center">
+													<span class="text-secondary text-xs font-weight-bold">{{this.RatingDetails[1].OrderId}}</span>
+												</td>
+												<td>
+													<div class="d-flex px-2 py-1">
+														<div class="d-flex flex-column justify-content-center">
+															<h6 class="mb-0 text-sm">{{this.RatingDetails[2].ProductName}}</h6>
+														</div>
+													</div>
+												</td>
+												<td class="align-middle text-center">
+													<span class="text-secondary text-xs font-weight-bold">{{this.RatingDetails[1].BuyerAccount}}</span>
+												</td>
+												<td class="align-middle text-center">
+													<span class="text-secondary text-xs font-weight-bold">{{this.RatingDetails[0].StarCount}}</span>
+												</td>
+												<td class="align-middle text-center">
+													<p class="text-xs font-weight-bold mb-0">{{this.RatingDetails[1].OrderDate}}</p>
+												</td>
+												<td class="align-middle text-center">
+													<p class="text-xs font-weight-bold mb-0">{{this.RatingDetails[1].ArrivalDate}}</p>
+												</td>
+												<td class="align-middle text-center text-sm">
+													<span v-if="this.RatingDetails[0].Status=='r0'" class="badge badge-sm bg-gradient-secondary">未回應</span>
+													<span v-if="this.RatingDetails[0].Status=='r1'" class="badge badge-sm bg-gradient-success">已回應</span>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			<div v-if="this._ratingDetails" class="row">
+				<div class="col-md-12">
+					<div class="card mb-4">
+						<div class="card-header pb-0">
+							<div class="d-flex align-items-center">
+								<p class="col-4 mb-0">買家評價內容</p>
+								<div class="col-8"></div>
+							</div>
+						</div>
+						<div class="card-body">
+							<p class="text-uppercase text-sm">商品編號：{{this.RatingDetails[0].ProductId}}</p>
+							<div class="row">
+								<p class="col-md-6 text-sm">單價：{{this.RatingDetails[2].UnitPrice}}</p>
+								<p class="col-md-6 text-sm">數量：{{this.RatingDetails[2].Quantity}}</p>
+								<p class="col-md-6 text-sm">折扣：{{this.RatingDetails[2].Discount}}</p>
+								<p class="col-md-6 text-sm">小計：
+									{{this.RatingDetails[2].UnitPrice * this.RatingDetails[2].Quantity * this.RatingDetails[2].Discount}}
+								</p>
+								<p class="col-md-12 text-sm">評價內容：{{this.RatingDetails[0].Description}}</p>
+							</div>
+							<hr class="horizontal dark">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label class="form-control-label">回應</label>
+									<div v-if="RatingDetails[0].Status=='r1'">
+										<p class="col-md-12 text-sm">{{this.RatingDetails[0].Reply}}</p>
+									</div>
+									<div v-if="RatingDetails[0].Status=='r0'">
+										<textarea v-model="reply" class="form-control" rows="5" cols="20" placeholder="回應內容"></textarea>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="d-flex align-items-center">											
+										<div class="col-md-8 col-5"></div>
+										<div v-if="RatingDetails[0].Status=='r0'" class="col-md-4 col-7 d-flex justify-content-between">
+											<button class="btn btn-primary btn-sm ms-auto" @@click="replyBuyers">儲存評價回應</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
 			@*Footer*@
 			<footer class="footer pt-3">
 				<div class="container-fluid py-5">
@@ -899,8 +1204,15 @@
 					Orders: [],
 					_orderDetails: false,
 					OrderDetails: [],
-					orderDetail: [],
+					OrderInfo: [],
 					OrderSum: [],
+					_productDetails: false,
+					Checked: [],
+					_ratings: false,
+					Ratings: [],
+					_ratingDetails: false,
+					RatingsDetails: [],
+					reply: '',
 					_checked: false,
 					plus: 'INC',
 					increase: 0,
@@ -912,12 +1224,18 @@
 			},
 			mounted: function () {
 				let _this = this;
-				_this.navbar(2);
+				_this.navbar(0);
 			},
 			methods: {
+				closePanels: function() {
+					let _this = this;
+					_this._info = _this._products = _this._details = _this._create = _this._pictures = false;
+					_this._orders = _this._orderDetails = _this._productDetails = false;
+					_this._ratings = _this._ratingDetails = false;
+				},
 				navbar: function(n) {
 					let _this = this;
-					_this._info = _this._products = _this._details = _this._create = _this._pictures = _this.orders = _this.orderDetails = false;
+					_this.closePanels();
 					$('#nav0').removeClass('active');
 					$('#nav1').removeClass('active');
 					$('#nav2').removeClass('active');
@@ -947,52 +1265,45 @@
 				},
 				//changePage: function(currentPage) {
 				//},
-				getInfo: function() {
+				getInfo: async function() {
 					let _this = this;
 					_this._info = true;
-					axios.post(`${baseAddress}/Products/GetInfo/${_this.loginAccount}`).then(
-						response => {
-							_this.Info = response.data;
-							_this.infoText = _this.Info[0].AboutSeller;
-						}
-					);
+					await axios.post(`${baseAddress}/Products/GetInfo/${_this.loginAccount}`).then(response => {
+						_this.Info = response.data;
+						_this.infoText = _this.Info[0].AboutSeller;
+					});
 				},
 				updateInfo: function(info) {
 					let _this = this;
 					_this._info = true;
 					var request = {};
-					request.Account = _this.loginAccount;
+					request.Id = _this.loginAccount;
 					request.AboutSeller = info;
-					axios.post(`${baseAddress}/Products/UpdateInfo/`, request).then(
-						response => {
-							_this.getInfo();
-							alert(response.data.Message)
-						}
-					);
+					axios.post(`${baseAddress}/Products/UpdateInfo/`, request).then(response => {
+						alert(response.data.Message);
+						_this.getInfo();
+					});
 				},
-				getProducts: function () {
+				getProducts: async function () {
 					let _this = this;
-					_this._details = false;
+					_this.closePanels();
 					_this._products = true;
-					axios.post(`${baseAddress}/Products/GetProducts/`).then(
-						response => {
-							_this.Products = response.data;
-						}
-					);
+					await axios.post(`${baseAddress}/Products/GetProducts/`).then(response => {
+						_this.Products = response.data;
+					});
 					_this.details = _this.Products[0];
 				},
 				filterProducts: function () {
-					let _this = this;
-					_this._details = false;
-					_this._products = true;
+					let _this = this; 
+					_this.closePanels();
+					_this. _products = true;
 					var request = {};
 					request.SellerAccount = _this.loginAccount;
 					request.ProductId = request.ProductCategoryId = request.UnitsInStock = request.UnitPrice = isNaN(parseInt(_this.filter)) ? -1 : parseInt(_this.filter);
 					request.ProductName = request.Description = request.Status = request.Currency = _this.filter;
 					axios.post(`${baseAddress}/Products/Filter`, request).then(response => {
 						_this.Products = response.data;
-					}
-					);
+					});
 					_this.details = _this.Products[0];
 				},
 				edit: function (productId) {
@@ -1004,9 +1315,8 @@
 						}
 						_this._checked = (_this.details.Status == 'p1') ? true : false;
 					});
-					_this._products = false;
+					_this.closePanels();
 					_this._details = true;
-					_this._pictures = false;
 				},
 				update: function (item) {
 					let _this = this;
@@ -1031,9 +1341,7 @@
 				},
 				cancel: function () {
 					let _this = this;
-					_this._create = false;
-					_this._pictures = false;
-					_this._details = false;
+					_this.closePanels();
 					_this._products = true;
 					_this.Products.forEach(item => {
 						if (item.ProductId == _this.details.ProductId) {
@@ -1043,8 +1351,9 @@
 					_this.increase = 0;
 					_this.picture = '';
 					_this.preview = '';
-					_this.pictureText = '';
-					_this.getProducts();
+					_this.pictureText = '';					
+					//if(_this.filter == '') _this.getProducts();
+					//if (_this.filter != '') _this.filterProducts();
 				},
 				deleteProduct: function (productId) {
 					let _this = this;
@@ -1058,7 +1367,7 @@
 				},
 				create: function () {
 					var _this = this;
-					_this._products = false;
+					_this.closePanels();
 					_this._details = true;
 					_this._create = true;
 					_this.details = _this.Products[0];
@@ -1129,14 +1438,12 @@
 					let _this = this;
 					_this._pictures = !_this._pictures;
 					if (_this._pictures) {
-						axios.post(`${baseAddress}/Products/GetPictures/${productId}`).then(
-							response => {
-								_this.Pictures = response.data;
-								_this.Pictures.forEach(item => {
-									item.Path = `${window.location.origin}/productpictures/${item.PictureId}-${item.Path}`;
-								});
-							}
-						);
+						axios.post(`${baseAddress}/Products/GetPictures/${productId}`).then(response => {
+							_this.Pictures = response.data;
+							_this.Pictures.forEach(item => {
+								item.Path = `${window.location.origin}/productpictures/${item.PictureId}-${item.Path}`;
+							});
+						});
 					}
 				},
 				updatePicture: function (item) {
@@ -1165,59 +1472,142 @@
 					}
 					_this._pictures = false;
 				},
-				getOrders: function() {
+				getOrders: async function() {
 					let _this = this;
+					_this.closePanels();
 					_this._orders = true;
-					axios.post(`${baseAddress}/Products/GetOrders/${_this.loginAccount}/`).then(response => {
+					await axios.post(`${baseAddress}/Products/GetOrders/${_this.loginAccount}/`).then(response => {
 						_this.Orders = response.data.Orders;
-						_this.OrderDetails = response.data.OrderDetails;						
-					});
-					_this.OrderDetails.forEach(o => {
-						var Total = {};
-						Total.NTD = 0;
-						Total.USD = 0;
-						o.Product.forEach(p => {
-							if (p.Currency == 'NTD') {
-								Total.NTD += ((p.Discount != null) ? (p.UnitPrice * p.Quantity * p.Discount) : (p.UnitPrice * p.Quantity));
-							}
-							if (p.Currency == 'USD') {
-								Total.USD += ((p.Discount != null) ? (p.UnitPrice * p.Quantity * p.Discount) : (p.UnitPrice * p.Quantity));
-							}
+						_this.OrderDetails = response.data.OrderDetails;
+						_this.OrderDetails.forEach(o => {
+							var Total = {};
+							Total.NTD = 0;
+							Total.USD = 0;
+							o.Product.forEach(p => {
+								if (p.Currency == 'NTD') {
+									Total.NTD += ((p.Discount != null) ? (p.UnitPrice * p.Quantity * p.Discount) : (p.UnitPrice * p.Quantity));
+								}
+								if (p.Currency == 'USD') {
+									Total.USD += ((p.Discount != null) ? (p.UnitPrice * p.Quantity * p.Discount) : (p.UnitPrice * p.Quantity));
+								}
+							});
+							_this.OrderSum.push(Total);
 						});
-						_this.OrderSum.push(Total);
-					});
+					});					
 				},
-				editOrders: function(orderId) {
+				editOrders: function(orderId, index) {
 					let _this = this;
-					_this.orderDetail = _this.OrderDetails[0].Product;
-					_this.OrderDetails.forEach(item => {
-						if(item.OrderId == orderId){
-							_this.orderDetail = item.Product;
+					_this.OrderInfo = [];
+					_this.Checked = [];
+					_this.Orders.forEach(item => {
+						if(item.OrderId == orderId) {
+							_this.OrderInfo.push(item);
 						}
 					});
+					_this.OrderDetails.forEach(item => {
+						if(item.OrderId == orderId){
+							_this.OrderInfo.push(item);
+							_this.OrderInfo[1].Product.forEach(p => {
+								if (p.Status == 'od1') _this.Checked.push(false);
+								if (p.Status == 'od2') _this.Checked.push(true);
+								if ((p.Status != 'od1') && (p.Status != 'od2')) _this.Checked.push(null);
+							});
+						}
+					});
+					_this.OrderInfo.push(_this.OrderSum[index]);
+					_this.closePanels();
 					_this._orderDetails = true;
 				},
-				updateOrders: function() {
+				updateOrders: function(orderId) {
 					let _this = this;
-					axios.post(`${baseAddress}/Products/UpdateOrders`).then(response => {
-						alert(response.data);
-					});
+					var ret = confirm('確定更新出貨狀態嗎？');
+					if (ret == true) {
+						var request = {};
+						request.OrderId = orderId;
+						request.ProductId = [];
+						if(_this.Checked.length != 0){
+							for(var i = 0; i < _this.Checked.length; i++) {
+								if ((_this.Checked[i] == true) && (_this.OrderInfo[1].Product[i].Status == 'od1')){
+									request.ProductId.push(_this.OrderInfo[1].Product[i].ProductId);
+								}
+							}
+							if(request.ProductId.length != 0){
+								axios.post(`${baseAddress}/Products/UpdateOrderStatus`, request).then(response => {
+									alert(response.data.Message);
+								});
+							}
+							else alert('請先更新商品狀態');
+						}
+						else alert('訂單中沒有商品');
+						_this.getOrders();
+					}
 				},
 				cancelOrderDetails: function() {
 					let _this = this;
-					_this._orderDetails = false;
+					_this.closePanels();
+					_this._orders = true; 
 				},
-				getRatings: function() {
+				getProduct: function(productId) {
 					let _this = this;
-					axios.post(`${baseAddress}/Products/GetRatings`).then(response => {
-						alert(response.data);
+					_this.closePanels();
+					axios.get(`${baseAddress}/Products/GetProduct/${productId}`).then(response => {
+						_this.details = response.data;
 					});
+					_this._productDetails = true;
+				},
+				getRatings: async function() {
+					let _this = this;
+					_this.closePanels();
+					_this._ratings = true;
+					await axios.post(`${baseAddress}/Products/GetRatings`).then(response => {
+						_this.Ratings = response.data.Ratings;
+						_this.Orders = response.data.Orders;
+						_this.OrderDetails = response.data.OrderDetails;
+						_this.OrderDetails.forEach(o => {
+							var Total = {};
+							Total.NTD = 0;
+							Total.USD = 0;
+							o.Product.forEach(p => {
+								if (p.Currency == 'NTD') {
+									Total.NTD += ((p.Discount != null) ? (p.UnitPrice * p.Quantity * p.Discount) : (p.UnitPrice * p.Quantity));
+								}
+								if (p.Currency == 'USD') {
+									Total.USD += ((p.Discount != null) ? (p.UnitPrice * p.Quantity * p.Discount) : (p.UnitPrice * p.Quantity));
+								}
+							});
+							_this.OrderSum.push(Total);
+						});
+					});
+				},
+				editReply: function(rx,px) {
+					let _this = this;
+					_this.RatingDetails = [];
+					_this.RatingDetails.push(_this.Ratings[rx].Product[px]);
+					_this.RatingDetails.push(_this.Orders[rx]);
+					_this.RatingDetails.push(_this.OrderDetails[rx].Product[px])
+					_this.closePanels();
+					_this._ratingDetails = true;
+				},
+				cancelRatingDetails: function() {
+					let _this = this;
+					_this.closePanels();
+					_this._ratings = true;
 				},
 				replyBuyers: function() {
 					let _this = this;
-					axios.post(`${baseAddress}/Products/ReplyBuyers`).then(response => {
-						alert(response.data);
-					});
+					if (_this.RatingDetails[0].Status == r0){
+						if(_this.reply != ''){
+							var request = {};
+							request.ProductId = _this.RatingDetails[0].ProductId;
+							request.OrderId = _this.RatingDetails[0].OrderId;
+							request.Reply = _this.reply;
+							axios.post(`${baseAddress}/Products/ReplyBuyer`, request).then(response => {
+								alert(response.data.Message);
+							});
+						}
+						else alert('無回應內容');
+					}
+					else alert('已回應買家評價');					
 				}
 			}
 		};

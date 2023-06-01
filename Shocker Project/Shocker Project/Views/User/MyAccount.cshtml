@@ -1,0 +1,97 @@
+﻿@model Shocker_Project.ViewModels.UserViewModel
+
+<!-- Hero Section Begin -->
+<section class="hero hero-normal">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="hero__categories">
+                    <div class="hero__categories__all">
+                        <i class="fa fa-bars"></i>
+                        <span>商品分類</span>
+                    </div>
+                    <ul>
+                        <li><a href="#">衣著</a></li>
+                        <li><a href="#">鞋子</a></li>
+                        <li><a href="#">運動</a></li>
+                        <li><a href="#">美妝</a></li>
+                        <li><a href="#">電玩</a></li>
+                        <li><a href="#">書籍</a></li>
+                        <li><a href="#">家具</a></li>
+                        <li><a href="#">美食</a></li>
+                        <li><a href="#">3C</a></li>
+                        <li><a href="#">寵物</a></li>
+                        <li><a href="#">娛樂</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="hero__search">               
+                    <div class="hero__search__phone">                       
+                        <h1>廣告</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Hero Section End -->
+<!-- Breadcrumb Section Begin -->
+<img src="~/img/breadcrumb.jpg" />
+<!-- Breadcrumb Section End -->
+<!-- Blog Section Begin -->
+<section class="blog spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-5">
+                <div class="blog__sidebar">                 
+                    <div class="blog__sidebar__item">
+                        <ul class="nav flex-column">
+							<h3>我的帳號</h3>
+							<li class="nav-item">
+                                <a class="nav-link active" asp-controller="User" asp-route-tab="a" aria-current="page">個人檔案</a>@*點選下方用戶資訊編輯菜單選項時，傳入tab=abcde的參數至該Controller*@
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="User" asp-route-tab="b">我的付款方式</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="User" asp-route-tab="c">購買清單</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="User" asp-route-tab="d">我的優惠碼</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="User" asp-route-tab="e">客服發問紀錄</a>
+                            </li>
+                        </ul>                                                                   
+                    </div>                 
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-7">
+                <div class="row">
+                    @{
+                        switch (ViewBag.Tab)//後端丟來之ViewBag=abcde時，於指定位置呈現不同的PartialView
+                        {
+                            case "a":
+                                <partial name="EditMyAccountPartial" />
+                                break;
+                            case "b":
+                                <partial name="MyPaymentPartial" />
+                                break;
+                            case "c":
+                                <partial name="OrderlistsPartial" />
+                                break;
+                            case "d":
+                                <partial name="MyPromocodePartial" />
+                                break;
+                            case "e":
+                                <partial name="QuestionRecordPartial" />
+                                break;
+                        }
+                    }                               
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Blog Section End -->
