@@ -1,16 +1,12 @@
-﻿
-<title>購物車</title>
+﻿<title>購物車</title>
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 <!-- bootstrap.css -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css">
 <!-- style.css -->
 @*<link rel="stylesheet" href="./css/style.css">*@
-<link href="~/css/chuyi/style.min.css" rel="stylesheet" />
-@*</head>*@
+<link href="~/css/chuyi/style.css" rel="stylesheet" />
 
-@*<body>*@
-<!-- navbar -->
 <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
     <a class="navbar-brand" href="/">
 
@@ -41,6 +37,7 @@
 </div>
 <!-- header end -->
 <!-- productSection -->
+<div id="app">
 <section id="productSection" class="py-5">
     <div class="container">
         <h1 class="text-center mb-5">產品列表</h1>
@@ -53,19 +50,26 @@
                     <th >單價</th>
                     <th >數量</th>
                     <th >總計</th>
+  
                 </tr>
             </thead>
             <tbody id="cartTableBody">
                 <tr v-for="item in Products">
-                    <td>{{PicturePath}}@*<input type="text" v-model="num" />*@</td>
-                    <td>{{ProductName}}@*<button v-on:click="getProducts">abc</button>*@</td>
-                    <td>{{item.UnitPrice}}</td>
-                    <td></td>
+                        @*    <td>{{item.ProductName}}</td>
+                            <td>{{item.UnitPrice}}</td>*@
+         <td>{{item.ProductName}}</td>
+                            <td>{{item.UnitPrice}}</td>
+                            <td>{{item.Quantity}}</td>
+                            <td>{{item.UnitPrice*item.Quantity}}</td>
+                        </tr>
+          @*          <td>{{item.PicturePath}}</td>*@
+                    <button id="add" class="btn btn-primary">加入購物車</button>
                 </tr>
             </tbody>
             <tfoot id="cartTableFoot"></tfoot>
         </table>
 </section>
+</div>
 <!-- productSection end -->
 @*<!-- footer -->
 <footer class="py-3">
@@ -80,6 +84,7 @@
 </footer>
 <!-- footer end -->*@
 <!-- modal -->
+
 <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModal" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -94,14 +99,21 @@
             <div class="modal-body">
                 <table class="table table-border">
                     <thead>
-                        <tr>
+                        <tr v-if="true">
                             <th>產品名稱</th>
                             <th class="text-right">單價</th>
                             <th class="text-right">數量</th>
                             <th class="text-right">總計</th>
                         </tr>
                     </thead>
-                    <tbody id="cartTableBody"></tbody>
+                    <tbody id="cartTableBody">
+                        <tr v-for="item in Products">
+                            <td>{{item.ProductName}}</td>
+                            <td>{{item.UnitPrice}}</td>
+                            <td>{{item.Quantity}}</td>
+                            <td>{{item.UnitPrice*item.Quantity}}</td>
+                        </tr>
+                    </tbody>
                     <tfoot id="cartTableFoot"></tfoot>
                 </table>
             </div>
@@ -112,30 +124,43 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">
                     <i class="fas fa-times"></i> 關閉
                 </button>
-
-                <i class="fas fa-credit-card" type="btn btn-primary">
+                <a class="btn btn-success" href="@Url.Action("Create")">結帳</a>
+@*                <i class="fas fa-credit-card" type="btn btn-primary">
                     < a asp-controller="ShoppingCart"asp-action="ShoppingCart" >
-                結帳</i>
-    
+                    結帳
+                </i>*@
+
             </div>
         </div>
     </div>
 </div>
 
+<script src="~/js/chuyi/cart.js"></script>
+<script src="~/lib/axios/axios.min.js"></script>
+<script src="~/lib/vue/vue.global.prod.js"></script>
+<script>
+    var baseAddress = `${window.location.origin}`
+    var vueApp={
+        data(){
+            return {
+                Products:[],
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<!-- popper.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-<!-- bootstrap.js -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-
-
-<script src="~/js/chuyi/cart.min.js"></script>
-
-
-
+            }
+        },
+        mounted: function(){
+            let _this=this;
+            _this.getProducts();
+        },
+        methods:{
+            getProducts:async function(){
+                let _this=this;
+                await axios.post(`${baseAddress}/ShoppingCart/GetProduct`).then(
+                    response =>{
+                        _this.Products = response.data;
+                    }
+                )
+            }
+        }
+    };
+    var app =Vue.createApp(vueApp).mount('#app');
+</script>

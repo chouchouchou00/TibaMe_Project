@@ -12,7 +12,7 @@ namespace Shocker_Project.Models
             OrderDetails = new HashSet<OrderDetails>();
         }
 
-        public string CouponId { get; set; }
+        public int CouponId { get; set; }
         public DateTime ExpirationDate { get; set; }
         public string HolderAccount { get; set; }
         public int ProductCategoryId { get; set; }

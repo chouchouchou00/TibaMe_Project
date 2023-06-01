@@ -99,10 +99,7 @@ namespace Shocker_Project.Models
                 entity.HasKey(e => e.CouponId)
                     .HasName("PK_Coupons_1");
 
-                entity.Property(e => e.CouponId)
-                    .HasMaxLength(10)
-                    .HasColumnName("CouponID")
-                    .IsFixedLength();
+                entity.Property(e => e.CouponId).HasColumnName("CouponID");
 
                 entity.Property(e => e.Discount).HasColumnType("decimal(8, 2)");
 
@@ -153,10 +150,7 @@ namespace Shocker_Project.Models
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
-                entity.Property(e => e.CouponId)
-                    .HasMaxLength(10)
-                    .HasColumnName("CouponID")
-                    .IsFixedLength();
+                entity.Property(e => e.CouponId).HasColumnName("CouponID");
 
                 entity.Property(e => e.Currency)
                     .IsRequired()

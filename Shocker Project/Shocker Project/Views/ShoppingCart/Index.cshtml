@@ -1,89 +1,23 @@
-﻿@model IEnumerable<Shocker_Project.Models.Products>
+﻿@model IEnumerable<Shocker_Project.Models.PrViewModel>
+
 
 @{
-    ViewData["Title"] = "Index";
+    ViewBag.Title = "產品列表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.LaunchDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UnitsInStock)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sales)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UnitPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Currency)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductCategory)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SellerAccountNavigation)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.LaunchDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UnitsInStock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sales)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UnitPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Currency)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductCategory.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SellerAccountNavigation.Account)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="row" style="margin-top:20px;">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4">
+            <div class="thumbnail">
+                <img src="~/img/cart/cart-1.jpg/@item.PictureId" />
+                <div class="caption">
+                    <h4>@item.ProductName</h4>
+                    <p>單價:@item.UnitPrice</p>
+                    <p><a href="@Url.Action("AddCar","ShoppingCart")?ProductId=@item.ProductId" class="btn btn-primary">加入購物車</a></p>
+                </div>
+            </div>
+        </div>
+    }
+      
+</div>

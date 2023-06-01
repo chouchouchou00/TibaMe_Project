@@ -1,18 +1,12 @@
-﻿@model IEnumerable<Shocker_Project.Models.Shopping>
-
-
-@{
-    ViewData["Title"] = "購物車清單";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+﻿
 
 <h2>購物車清單</h2>
 
 
 <div id="app" class="container">
-    <button @@click="update(null)">Update</button>
+@*    <button @@click="update(null)">Update</button>
     <button @@click="edit(1)">Edit</button>
-    <button @@click="cancel(null)">Cancel</button>
+    <button @@click="cancel(null)">Cancel</button>*@
     <div class="form-group">
         <table class="table table-striped table-hover">
             <thead>
@@ -21,16 +15,15 @@
                     <th>單價</th>
                     <th>數量</th>
                     <th>總計</th>
-                    <th>編輯</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in Shopping">
-                    <template v-if="item.edit==true"></template>
-                    <td><input v-model="item.buyerAccount"/></td>
-                    <td><input v-model="item.quantity" /></td>
-                    <td><input v-model="item.buyerAccount" /></td>
-                    <td>{{item.productId}}</td>
+                <tr v-for="item in Shoppings">
+@*                    <template v-if="item.edit==true"></template>*@
+                    <td>{{item.ProductName}}</td>
+                    <td>{{item.UnitPrice}}</td>
+                    <td>{{item.Quantity}}</td>
+                    <td>{{item.UnitPrice*item.Quantity}}</td>
                     <td>
                         <button class="btn btn-warning" @@click="cancel" >刪除</button>
                         <button class="btn btn-primary" @@click="update(item)">新增數量</button>
@@ -41,63 +34,63 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+<script src="~/lib/vue/vue.global.prod.js"></script>
 <script src="~/lib/axios/axios.min.js"></script>
 
 <script>
-    var baseAddress = "https://localhost:7033/";
-    let app = new Vue({
-        el: '#app',
-        data: {
-            Orders: [],
-            totalPrice: []
+    var baseAddress = `${window.location.origin}`;
+    var vueApp = {
+        data() {
+            return {
+                Shoppings: [],
+                total: []
+            }
+        },
+        mounted: function () {
+            let _this = this;
+            _this.getShoppings();
         },
         methods: {
-            createSave: function (item) {
+            getShoppings: async function () {
                 let _this = this;
-                var request = {};
                 //_this.stock();
-                request.BuyerAccount = this.BuyerAccount;
-                request.ProductId = item.ProductId;
-                request.Quantity = item.Quanity;
- 
-                var ret = confirm('確定要新增嗎？');
-                if (ret == true) {
-                    axios.post(`${baseAddress}/ShoppingCart/AddCar/`, request).then(response => {
-                        alert(response.data);
-                        _this.cancel();
-                    });
-                }
-            })
+                   await axios.post(`${baseAddress}/ShoppingCart/GetShopping`).then(response =>     {
+                        _this.Shoppings=response.data;
+                    }
+                   )
+            }
+        }
+    };
+    var app = Vue.createApp(vueApp).mount('#app');
 </script>
 
-<div id="app" class="container">
-<form action="@Url.Action("ShoppingCart")" method="post">
+<div id="ordercreate" class="container">
+<form action="@Url.Action("Create")" method="post">
     <div class="form-horizontal">
         <h4>填寫訂單收件人資料</h4>
         <hr />
         <div class="form-group">
             <span class="control-label col-md-2">帳號名稱</span>
             <div class="col-md-10">
-                <input v-model="BuyerAccount" type="text" id="BuyerAccount" name="BuyerAccount" required="required" class="form-control" />
+            <input v-model="item.BuyerAccount" type="text" id="BuyerAccount" name="BuyerAccount" required="required" class="form-control" />
             </div>
         </div>
         <div class="form-group">
             <span class="control-label col-md-2">付款方式</span>
             <div class="col-md-10">
-                <input type="text" id="PayMethod" name="PayMethod" required="required" class="form-control" />
+            <input v-model="item.PayMethod" type="text" id="PayMethod" name="PayMethod" required="required" class="form-control" />
             </div>
         </div>
         <div class="form-group">
             <span class="control-label col-md-2">收件人地址</span>
             <div class="col-md-10">
-                <input type="text" id="Address" name="Address" required="required" class="form-control" />
+            <input v-model="item.Address" type="text" id="Address" name="Address" required="required" class="form-control" />
             </div>
         </div>
         <div class="form-group">
             <span class="control-label col-md-2">收件人電話</span>
             <div class="col-md-10">
-                <input type="text" id="BuyerPhone" name="BuyerPhone" required="required" class="form-control" />
+            <input v-model="item.BuyerPhone" type="text" id="BuyerPhone" name="BuyerPhone" required="required" class="form-control" />
             </div>
         </div>
         <div class="form-group">
@@ -108,19 +101,23 @@
     </div>
 </form>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
 <script src="~/lib/axios/axios.min.js"></script>
+<script src="~/lib/vue/vue.global.prod.js"></script>
 
 <script>
-    var baseAddress = "https://localhost:7033/";
-    let app = new Vue ({
-        el:'#app',
-        data:{
-            Orders:[],
-            totalPrice:[]
+    var baseAddress = `${window.location.origin}`
+    var vueApp = {
+        data() {
+            return {
+                Orders: [],
+            }
+        },
+        mounted: function () {
+            let _this = this;
+            _this.createSave();
         },
         methods: {
-            createSave: function (item) {
+            createSave:async function (item) {
                 let _this = this;
                 var request = {};
                 //_this.stock();
@@ -130,10 +127,11 @@
                 request.PayMethod = item.PayMethod;
                 var ret = confirm('確定要新增嗎？');
                 if (ret == true) {
-                    axios.post(`${baseAddress}/ShoppingCart/Create/`, request).then(response => {
+                   await axios.post(`${baseAddress}/ShoppingCart/Create/`, request).then(response => {
                         alert(response.data);
                         _this.cancel();
                     });
                 }
-        })
+        };
+            var ordercreate = Vue.createApp(vueApp).mount('#ordercreate');
         </script>
