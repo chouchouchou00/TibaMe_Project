@@ -14,21 +14,29 @@
     <Compile Remove="Areas\Seller\**" />
     <Compile Remove="Areas\Shoppingcart\**" />
     <Compile Remove="Areas\User\**" />
+    <Compile Remove="Views\QuestionCategories\**" />
     <Content Remove="Areas\Customerservice\**" />
     <Content Remove="Areas\Login\**" />
     <Content Remove="Areas\Seller\**" />
     <Content Remove="Areas\Shoppingcart\**" />
     <Content Remove="Areas\User\**" />
+    <Content Remove="Views\QuestionCategories\**" />
     <EmbeddedResource Remove="Areas\Customerservice\**" />
     <EmbeddedResource Remove="Areas\Login\**" />
     <EmbeddedResource Remove="Areas\Seller\**" />
     <EmbeddedResource Remove="Areas\Shoppingcart\**" />
     <EmbeddedResource Remove="Areas\User\**" />
+    <EmbeddedResource Remove="Views\QuestionCategories\**" />
     <None Remove="Areas\Customerservice\**" />
     <None Remove="Areas\Login\**" />
     <None Remove="Areas\Seller\**" />
     <None Remove="Areas\Shoppingcart\**" />
     <None Remove="Areas\User\**" />
+    <None Remove="Views\QuestionCategories\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\QuestionCategoriesController.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,10 +53,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Controllers\" />
     <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Areas\Admin\Views\" />
     <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\productpictures\" />
   </ItemGroup>

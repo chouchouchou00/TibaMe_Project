@@ -5,8 +5,10 @@
         
        <form asp-controller="CustomerQuestion" asp-action="Index" method="post">
 
-        <label for="QAclass">問題類別</label>
-            <select asp-for="QuestionCategoryId">
+         <div class="form-group">
+           <span asp-validation-for="QuestionCategoryId" class="text-danger"></span>
+        
+        <select class="form-select"  asp-for="QuestionCategoryId">
                 <option selected >請選擇您的問題種類</option>
                 <option value="1">帳號問題</option>
                 <option value="2">付款問題</option>
@@ -15,10 +17,14 @@
                 <option value="5">其他類別</option>
             </select>
 
-                <label for="CustomerTA">請詳細敘述問題:</label>
-            
-            <textarea asp-for="Description" cols="30" rows="10" placeholder="請在此輸入問題並送出"></textarea>
+        </div>
+        <div class="form-group">
+            <textarea asp-for="Description" cols="30" rows="10" placeholder="請在此輸入問題並送出" class="form-control" style="resize:none"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
             <button type="submit" name="submit">送出</button>
+        </div>
         </form>
+
    
 </body>
+

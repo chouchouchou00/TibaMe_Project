@@ -1,0 +1,248 @@
+﻿@{
+    ViewData["Title"] = "折價券";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid py-4" id="app">
+    <h1 class="text-black">折價券</h1>
+    <div class="container-fluid py-4">
+        @*table*@
+        <div class="row" v-if="tableControl">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header pb-0">
+                        <h3>Coupons</h3>
+                        <div class="row" style="width:40%; margin-left:auto; margin-right:20px;">
+                            <span class="text-secondary text-xs font-weight-bold">
+                                <a class="btn btn-info btn-sm" v-on:click="viewChange" id="createCoupon">CreateCoupns</a>
+                            </span>
+                            <label id="filterkeyword" class="col-md-4">關鍵字:</label>
+                            <input type="text" v-model="filter" v-on:keyup="couponSerch" class="col-md-8 form-control" placeholder="請輸入關鍵字內容" />
+                        </div>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table align-items-center mb-0">
+                                <thead>
+                                    @*標題*@
+                                    <tr class="text-white text-center">
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">持有者</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">發行人</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">類別</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">折扣</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">結束時間</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">狀態</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="item in displayCp">
+                                        @*持有者資訊*@
+                                        <td class="text-center">
+                                            <p class="text-xs font-weight-bold mb-0">{{item.HolderAccount}}</p>
+                                        </td>
+                                        @*發行人*@
+                                        <td class="text-center">
+                                            <p class="text-xs font-weight-bold mb-0">{{item.PublisherAccount}}</p>
+                                        </td>
+                                        @*類別*@
+                                        <td class="text-center">
+                                            <p class="text-xs font-weight-bold mb-0">{{item.CaregotyName}}</p>
+                                            <p v-if="item.ProductCategoryId==1" class="text-xs font-weight-bold mb-0 ">衣服</p>
+                                            <p v-if="item.ProductCategoryId==2" class="text-xs font-weight-bold mb-0">文具</p>
+                                            <p v-if="item.ProductCategoryId==3" class="text-xs font-weight-bold mb-0">生鮮食材</p>
+                                            <p v-if="item.ProductCategoryId==4" class="text-xs font-weight-bold mb-0">電玩</p>
+                                            <p v-if="item.ProductCategoryId==5" class="text-xs font-weight-bold mb-0">美妝</p>
+                                            <p v-if="item.ProductCategoryId==6" class="text-xs font-weight-bold mb-0">家電</p>
+                                            <p v-if="item.ProductCategoryId==7" class="text-xs font-weight-bold mb-0">漫畫</p>
+                                            <p v-if="item.ProductCategoryId==8" class="text-xs font-weight-bold mb-0">家具</p>
+                                        </td>
+                                        @*折扣*@
+                                        <td class="text-center">
+                                            <p class="text-xs font-weight-bold mb-0">{{item.Discount}}</p>
+                                        </td>
+                                        @*結束時間*@
+                                        <td class="text-center">
+                                            <p class="text-xs font-weight-bold mb-0">{{item.ExpirationDate}}</p>
+                                        </td>
+                                        @*狀態*@
+                                        <td class="align-middle text-center text-sm">
+                                            <span v-if="item.Status=='c0'" class="badge badge-sm bg-gradient-danger">未使用</span>
+                                            <span v-if="item.Status=='c1'" class="badge badge-sm bg-gradient-success">已使用</span>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*CreateCoupon*@
+        <div class="row" v-if="couponControl">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header pb-0">
+                        <div class="d-flex align-items-center">
+                            <h2 class="mb-0">折價券</h2>
+                            <button class="btn btn-primary btn-sm ms-auto" v-on:click="createCoupon">Settings</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-uppercase text-sm">Info</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                               @*折價券張數*@
+                                <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">張數</label>
+                                    <input v-model="cAmount" class="form-control" type="text" value="Jesse" onfocus="focused(this)" onfocusout="defocused(this)">
+                                    @*//Status選擇*@
+@*                                    <label for="example-text-input" class="form-control-label">Status</label>
+                                    <select v-model="cStatus" class="form-select" >
+                                        <option value="c0">未使用</option>
+                                        <option value="c1">已使用</option>
+                                    </select>*@
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                @*//CategoryId*@
+                                <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">商品類別</label>
+                                    <select v-model="cProductCategoryId" class="form-select" aria-label="Default select example">
+                                        <option selected>請選擇類別</option>
+                                        <option value="1">衣服</option>
+                                        <option value="2">文具</option>
+                                        <option value="3">生鮮食材</option>
+                                        <option value="4">電玩</option>
+                                        <option value="5">美妝</option>
+                                        <option value="6">家電</option>
+                                        <option value="7">漫畫</option>
+                                        <option value="8">家具</option>
+                                    </select>
+                                    @*<input class="form-control" type="email" value="jesse@example.com" onfocus="focused(this)" onfocusout="defocused(this)">*@
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                @*//Discount*@
+                                <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">Discount</label>
+                                    <input v-model="cDiscount" class="form-control" type="text" value="Jesse" onfocus="focused(this)" onfocusout="defocused(this)">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                @*//到期日*@
+                                <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">到期日</label>
+                                    <input v-model="cExpirationDate" class="form-control" type="date" onfocus="focused(this)" onfocusout="defocused(this)">
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="horizontal dark">
+                        <p class="text-uppercase text-sm">收件者</p>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @*//收件帳號*@
+                                <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">Account</label>
+                                    <input v-model="cHolderAccount" class="form-control" type="text" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09" onfocus="focused(this)" onfocusout="defocused(this)">
+                                </div>
+                            </div>
+                            @*                        <div class="col-md-4">
+                            <div class="form-group">
+                            <label for="example-text-input" class="form-control-label">City</label>
+                            <input class="form-control" type="text" value="New York" onfocus="focused(this)" onfocusout="defocused(this)">
+                            </div>
+                            </div>
+                            <div class="col-md-4">
+                            <div class="form-group">
+                            <label for="example-text-input" class="form-control-label">Country</label>
+                            <input class="form-control" type="text" value="United States" onfocus="focused(this)" onfocusout="defocused(this)">
+                            </div>
+                            </div>
+                            <div class="col-md-4">
+                            <div class="form-group">
+                            <label for="example-text-input" class="form-control-label">Postal code</label>
+                            <input class="form-control" type="text" value="437300" onfocus="focused(this)" onfocusout="defocused(this)">
+                            </div>
+                            </div>
+                            </div>
+                            <hr class="horizontal dark">
+                            <p class="text-uppercase text-sm">About me</p>
+                            <div class="row">
+                            <div class="col-md-12">
+                            <div class="form-group">
+                            <label for="example-text-input" class="form-control-label">About me</label>
+                            <input class="form-control" type="text" value="A beautiful Dashboard for Bootstrap 5. It is Free and Open Source." onfocus="focused(this)" onfocusout="defocused(this)">
+                            </div>
+                            </div>
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        var VueApp = {
+            data() {
+                return {
+                    displayCp: [],
+                    cExpirationDate: '',
+                    cHolderAccount: '',
+                    cProductCategoryId: '',
+                    cDiscount: '',
+                    cAmount:'',
+                    //cStatus: '',
+                    cPublisherAccount: 'Admin1',  /*身分驗證*/
+                    tableControl: true,
+                    couponControl: false,
+                    filter: '',
+                };
+            },
+            mounted: function () {
+                _this = this;
+                this.displayCoupon();
+            },
+            methods: {
+                displayCoupon: function () {
+                    var _this = this;
+                    axios.post(`${window.location.origin}/Admin/Coupon/DisaplayCoupon`)
+                        .then(res => { _this.displayCp = res.data })
+                },
+                createCoupon: function () { //要做張數迴圈
+                    var _this = this;
+                    input = {};
+                    input.Amount =_this.cAmount;
+                    input.ExpirationDate = _this.cExpirationDate;
+                    input.HolderAccount = _this.cHolderAccount;
+                    input.ProductCategoryId = _this.cProductCategoryId;
+                    input.Discount = _this.cDiscount;
+                    input.PublisherAccount = _this.cPublisherAccount;
+                    axios.post(`${window.location.origin}/Admin/Coupon/CreateCoupon`, input)
+                        .then(res => { alert(res.data.Message)
+                            alert("折價券建立成功");
+                        }).catch(error => {
+                            console.log(error.res.data)})
+                   
+                    //window.location.replace(location.href);
+                },
+                couponSerch: function () {
+                    var _this = this;
+                    input = {};
+                    input.Discount = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
+                    input.HolderAccount = input.StatusName = input.CategoryName = _this.filter;
+                    axios.post(`${window.location.origin}/Admin/Coupon/FilterCoupon`, input)
+                        .then(res => { _this.displayCp = res.data })
+                },
+                viewChange: function () {
+                    var _this = this;
+                    _this.tableControl = false;
+                    _this.couponControl = true;
+                }
+            },
+        }
+        var app = Vue.createApp(VueApp).mount("#app");
+
+    </script>
+    }

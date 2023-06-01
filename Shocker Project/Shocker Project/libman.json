@@ -1,5 +1,14 @@
 {
   "version": "1.0",
   "defaultProvider": "cdnjs",
+<<<<<<< HEAD
+  "libraries": [
+    {
+      "library": "datatables@1.10.21",
+      "destination": "wwwroot/lib/datatables/"
+    }
+  ]
+=======
   "libraries": []
+>>>>>>> d39a7275196b338b21bd069d1d5aa8bb418d3b90
 }
