@@ -59,7 +59,7 @@
                 @Html.DisplayFor(modelItem => item.Addresses.Address)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BuyerAccountNavigation.Account)
+                @Html.DisplayFor(modelItem => item.BuyerAccountNavigation.Id)
             </td>
           <td>
                     <a href="@Url.Action("OrderDetails")?OrderId=@item.OrderId" class="btn btn-info">訂單明細</a>
