@@ -46,6 +46,25 @@
         <h1 class="text-center mb-5">產品列表</h1>
         <div id="productRow" class="row"></div>
     </div>
+        <table class="table table-border">
+            <thead>
+                <tr v-if="Products[0].ProductId==2">
+                    <th>產品名稱</th>
+                    <th >單價</th>
+                    <th >數量</th>
+                    <th >總計</th>
+                </tr>
+            </thead>
+            <tbody id="cartTableBody">
+                <tr v-for="item in Products">
+                    <td>{{PicturePath}}@*<input type="text" v-model="num" />*@</td>
+                    <td>{{ProductName}}@*<button v-on:click="getProducts">abc</button>*@</td>
+                    <td>{{item.UnitPrice}}</td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tfoot id="cartTableFoot"></tfoot>
+        </table>
 </section>
 <!-- productSection end -->
 @*<!-- footer -->
