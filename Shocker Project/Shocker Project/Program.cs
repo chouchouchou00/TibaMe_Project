@@ -21,6 +21,12 @@ namespace Shocker_Project
 				options.UseSqlServer(db_a98a02_thm101team1001ConnectionString));
 			builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+			//var builder = WebApplication.CreateBuilder(args);
+
+			//builder.Services.AddControllersWithViews();
+			//builder.Services.AddHttpContextAccessor();
+			//builder.Services.AddTransient<IUserRepository, UserRepository>();
+
 			builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 			builder.Services.AddControllersWithViews().AddJsonOptions(options => 

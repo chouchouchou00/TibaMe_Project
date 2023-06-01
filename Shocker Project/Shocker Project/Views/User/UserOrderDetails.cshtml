@@ -1,0 +1,357 @@
+﻿@section Styles
+	{
+	<style>
+		.orderdetail_column {
+			table-layout: fixed;
+			width: 100%;
+		}
+
+		.shoping__cart__table th.product_column {
+			width: 25%
+		}
+
+		.shoping__cart__table th.productname_column {
+			width: 10%
+		}
+
+		.shoping__cart__table th.categoryname_column {
+			width: 5%
+		}
+
+		.shoping__cart__table th.selleraccount_column {
+			width: 10%
+		}
+
+		.shoping__cart__table th.unitprice_column {
+			width: 5%
+		}
+
+		.shoping__cart__table th.quantity_column {
+			width: 5%
+		}
+
+		.shoping__cart__table th.discount_column {
+			width: 5%
+		}
+
+		.shoping__cart__table th.starcount_column {
+			width: 5%
+		}
+
+		.shoping__cart__table th.description_column {
+			width: 15%
+		}
+
+		.shoping__cart__table th.statusname_column {
+			width: 15%
+		}
+
+		.totalsumprice{
+			color:red;
+		}
+	</style>
+}
+
+<!-- Breadcrumb Section Begin -->
+<div class="container">
+	<div class="row">
+		<div class="col-lg-12 text-center">
+			<div class="breadcrumb__text">
+				<h2>Shopping Cart</h2>
+				<div class="breadcrumb__option">
+					<a href="./index.html">Home</a>
+					<span>Shopping Cart</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Breadcrumb Section End -->
+<!-- Shoping Cart Section Begin -->
+<section class="shoping-cart spad">
+	<div id="app" class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="shoping__cart__table orderdetail_column" v-for="item in orderDetails">
+					<table>
+						<thead>
+							<tr>
+								<th class="shoping__product product_column">商品</th>
+								<th class="productname_column">商品名稱</th>
+								<th class="categoryname_column">商品種類</th>
+								<th class="selleraccount_column">賣家</th>
+								<th class="unitprice_column">價錢</th>
+								<th class="quantity_column">數量</th>
+								<th class="discount_column">折扣</th>
+								<th class="starcount_column">評價</th>
+								<th class="description_column">評價內容</th>
+								<th class="statusname_column">收貨狀態</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="(productName, index) in item.productId">
+								<td class="shoping__cart__item">
+									<img style="width:250px;height:250px" :src="item.path[index][0]" alt="">
+								</td>
+								<td class="shoping__cart__price">
+									{{item.productName[index]}}
+								</td>
+								<td class="shoping__cart__price">
+									{{item.categoryName[index]}}
+								</td>
+								<td class="shoping__cart__price">
+									{{item.sellerAccount[index]}}
+								</td>
+								<td class="shoping__cart__quantity">
+									{{item.unitPrice[index]}}
+								</td>
+								<td class="shoping__cart__total">
+									{{item.quantity[index]}}
+								</td>
+								<td class="shoping__cart__price">
+									{{item.discount[index]}}
+									<template v-if="item.discount[index]!=null">
+										<span class="badge bg-success">有使用優惠</span>
+									</template>
+									<template v-else>
+										<span class="badge bg-danger">未使用優惠</span>
+									</template>
+								</td>
+								<td class="shoping__cart__price">
+									{{item.starCount[index]}}
+									<template v-if="item.starCount[index]==null">
+										<span class="badge bg-danger">暫無評價</span>
+									</template>
+								</td>
+								<td class="shoping__cart__price">
+									{{item.description[index]}}
+									<template v-if="item.starCount[index]==null">
+										<span class="badge bg-danger">暫無評價內容</span>
+									</template>
+								</td>
+								<td class="shoping__cart__price">
+									{{item.statusName[index]}}
+									<div>
+										<template v-if="item.statusName[index]=='已收貨'">
+											<button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#returnModal">退貨</button>
+											<div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+												<div class="modal-dialog">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h5 class="modal-title" id="exampleModalLabel">退貨原因</h5>
+															<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+														</div>
+														<div class="form-group">
+															<label for="exampleFormControlTextarea1">您為甚麼想要退貨?</label>
+															<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" v-model="returnReason"></textarea>
+														</div>
+														<div class="modal-footer">
+															<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+															<button type="button" class="btn btn-danger" data-dismiss="modal" @@click="updateOdReturnReason(item.productId[index])">確定</button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="dropdown">
+												<button class="btn btn-outline-warning dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+													評價
+												</button>
+												<div class="dropdown-menu">
+													<a class="dropdown-item" @@click="createRating(item.productId[index],1)">1</a>
+													<a class="dropdown-item" @@click="createRating(item.productId[index],2)">2</a>
+													<a class="dropdown-item" @@click="createRating(item.productId[index],3)">3</a>
+													<a class="dropdown-item" @@click="createRating(item.productId[index],4)">4</a>
+													<a class="dropdown-item" @@click="createRating(item.productId[index],5)">5</a>
+												</div>
+											</div>
+										</template>
+									</div>
+									<template v-if="item.statusName[index]=='已評價'">
+										<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#returnModal">新增評價內容</button>
+										<div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="exampleModalLabel">評價內容</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+															<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+													<div class="form-group">
+														<label for="exampleFormControlTextarea1">給此商品一點回饋?</label>
+														<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" v-model="ratingDescription"></textarea>
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+														<button type="button" class="btn btn-danger" data-dismiss="modal" @@click="updateRatingDescription(item.productId[index])">送出</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</template>
+									<template v-if="item.statusName[index]=='未收貨'">
+										<button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#takeproductModal">完成收貨</button>
+										<div class="modal fade" id="takeproductModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="exampleModalLabel">確定完成收貨</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+															<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+													<div class="modal-body">收到商品了嗎?如果已經收到，請按「完成」便可給予商品評價，或退貨商品</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+														<button type="button" class="btn btn-info" data-dismiss="modal" @@click="takeProduct(item.productId[index])">完成</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</template>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" v-for="item in orderDetails">
+			<div class="card text-center col-12">
+				<div class="card-header">
+					<h5 class="card-title">地址:{{item.address}}</h5>
+				</div>
+				<div class="card-body">					
+					<p class="card-text">出貨日期:{{item.arrivalDate}}</p>
+					<p class="card-text">到貨日期:{{item.buyerPhone}}</p>				
+				</div>
+				<div class="card-footer text-muted">
+					<p class="card-text">手機:{{item.buyerPhone}}</p>
+					<p class="card-text">付款方式:{{item.payMethod}}</p>
+				</div>
+			</div>
+			
+			<div class="col-lg-6">
+				<div class="shoping__checkout">
+					<h5 class="text-center">結算</h5>
+					<ul v-for="(productName, index) in item.productId">
+						<li>{{item.productName[index]}} <span>{{totalPrice[index]}}</span></li>
+					</ul>
+					<ul class="text-left">Total: <span class="text-right totalsumprice">{{totalSumPrice}}</span></ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- Shoping Cart Section End -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
+<script src="~/axios/axios.min.js"></script>
+<script src="~/js/jquery-3.3.1.min.js"></script>
+<script src="~/js/star-rating.min.js"></script>
+<script src="~/js/popper.min.js"></script>
+<script>
+	var baseAddress = "https://localhost:7033/User";
+	var Vue = new Vue({
+		el: '#app',
+		data: {
+			allOrderDetails: [],
+			orderDetails: [],
+			pictures: [],
+			address: "",
+			totalPrice: [],
+			totalSumPrice:"",
+			returnReason: [],
+			ratingDescription: []
+		},
+		mounted: function () {
+			this.getUserOrderDetails();
+		},
+		methods: {
+			getUserOrderDetails: function () {
+				alert('getUserOrderDetails')
+				axios.get(`${baseAddress}/GetUserOrderDetails`).then(response => {
+					alert(JSON.stringify(response.data));
+					this.allOrderDetails = response.data;
+					for (var h = 0; h < this.allOrderDetails.length; h++) {
+						if (this.allOrderDetails[h].orderId == @ViewBag.OrderId) {
+							alert(this.allOrderDetails[h].orderId)
+							this.orderDetails.push(this.allOrderDetails[h])
+						}
+					}
+					var value = 0;
+					var sumValue=0;
+					for (var i = 0; i < this.orderDetails[0].quantity.length; i++) {
+						value = 0;
+						if (this.orderDetails[0].discount[i] !=null) {
+							avalue = this.orderDetails[0].quantity[i] * this.orderDetails[0].unitPrice[i] * this.orderDetails[0].discount[i];
+							value+=Math.ceil(avalue);
+						}
+						else {
+							value += this.orderDetails[0].quantity[i] * this.orderDetails[0].unitPrice[i];
+						}
+						sumValue+=value;
+						this.totalPrice.push(value)
+					}
+					this.totalSumPrice=sumValue
+
+					this.address = window.location.protocol + '//' + window.location.host + '/';
+					for (var j = 0; j < this.orderDetails[0].path.length; j++) {
+						for (var k = 0; k < this.orderDetails[0].path[j].length; k++) {
+							this.orderDetails[0].path[j][k] = this.address + this.orderDetails[0].path[j][k]
+						}
+					}
+				});
+			},
+			createRating: function (productId, rating) {
+				var request = {
+					OrderId: this.orderDetails[0].orderId,
+					ProductId: productId,
+					StarCount: rating
+				}
+				axios.post(`${baseAddress}/CreateRating`, request).then(response => {
+					alert('完成評價!')
+					this.orderDetails.pop();
+					this.getUserOrderDetails();
+				})
+			},
+			updateOdReturnReason: function (productId) {
+				var request = {
+					ProductId: productId,
+					OrderId: this.orderDetails[0].orderId,
+					Returnreason: this.returnReason
+				}
+				axios.post(`${baseAddress}/UpdateOdReturnReason`, request).then(reponse => {
+					alert('成功送出退貨申請')
+					this.orderDetails.pop();
+					this.getUserOrderDetails();
+				})
+			},
+			updateRatingDescription: function (productId) {
+				var request = {
+					OrderId: this.orderDetails[0].orderId,
+					ProductId: productId,
+					Description: this.ratingDescription
+				}
+				axios.post(`${baseAddress}/UpdateRatingDescription`, request).then(reponse => {
+					alert('成功送出評價內容')
+					this.orderDetails.pop();
+					this.getUserOrderDetails();
+				})
+			},
+			takeProduct: function (productId) {
+				var request = {
+					OrderId: this.orderDetails[0].orderId,
+					ProductId: productId,
+				}
+				axios.post(`${baseAddress}/TakeProduct`, request).then(reponse => {
+					alert('成功收到商品')
+					this.orderDetails.pop();
+					this.getUserOrderDetails();
+				})
+			}
+		}
+	});
+</script>			
