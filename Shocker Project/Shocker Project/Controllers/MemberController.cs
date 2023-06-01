@@ -34,7 +34,7 @@ namespace Shocker_Project.Controllers
         public IActionResult SignIn(string Account, string Password)
         {
             var member = _context.Users
-                .Where(m => m.Account == Account && m.Password == Password)
+                .Where(m => m.Id == Account && m.Password == Password)
                 .FirstOrDefault();
 
             if (member == null)
