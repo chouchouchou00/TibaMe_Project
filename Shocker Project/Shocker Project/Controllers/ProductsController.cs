@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Shocker_Project.Models;
 using System.Net;
@@ -29,7 +30,7 @@ namespace Shocker_Project.Controllers
 			var p = _context.Products.AsNoTracking().Where(p => p.SellerAccount == id);			
 			var od = _context.OrderDetails.AsNoTracking().Where(od => od.Product.SellerAccount == id);			
 			var r = _context.Ratings.AsNoTracking().Where(r => r.Product.SellerAccount == id);
-			var info = _context.Users.AsNoTracking().Where(u => u.Account == id)
+			var info = _context.Users.AsNoTracking().Where(u => u.Id == id)
 					   .Select(u => new {
 						   AboutSeller = u.AboutSeller,
 						   p0 = p.Count(p => p.Status == "p0"),
@@ -46,16 +47,23 @@ namespace Shocker_Project.Controllers
 		[HttpPost]
 		//[ValidateAntiForgeryToken]
 		public async Task<JsonResult> UpdateInfo([FromBody]AboutModel info)
-		{			
-			Users? user = await _context.Users.FindAsync(info.Account);
-			if (user == null || user.Account != loginAccount)
+		{
+			if (ModelState.IsValid)
 			{
-				return Json(new { Result = "Error", Message = "記錄不存在" });
+				Users? user = await _context.Users.FindAsync(info.Id);
+				if (user == null || user.Id != loginAccount)
+				{
+					return Json(new { Result = "Error", Message = "記錄不存在" });
+				}
+				user.AboutSeller = info.AboutSeller;
+				_context.Update(user);
+				await _context.SaveChangesAsync();
+				return Json(new { Result = "OK", Message = "修改記錄成功" });
 			}
-			user.AboutSeller = info.AboutSeller;
-			_context.Update(user);
-			await _context.SaveChangesAsync();
-			return Json(new { Result = "OK", Message = "修改記錄成功" });
+			else
+			{
+				return Json(new { Result = "Error", Message = "修改記錄失敗" });
+			}
 		}
 
 		[HttpPost]
@@ -80,12 +88,33 @@ namespace Shocker_Project.Controllers
 						  };
 			return Json(product);
 		}
+		[HttpGet]
+		public JsonResult GetProduct(int id)
+		{
+			var product = _context.Products.Where(p => p.ProductId == id)
+			.Select(p => new
+			{
+				ProductId = p.ProductId,
+				SellerAccount = p.SellerAccount,
+				LaunchDate = p.LaunchDate,
+				ProductName = p.ProductName,
+				ProductCategory = p.ProductCategory.CategoryName,
+				Description = p.Description,
+				UnitsInStock = p.UnitsInStock,
+				Sales = p.Sales,
+				UnitPrice = p.UnitPrice,
+				Status = p.Status,
+				Currency = p.Currency
+			});			
+			return Json(product);
+		}
 		[HttpPost]
 		//[ValidateAntiForgeryToken]
 		public JsonResult Filter([FromBody] ProductsViewModel product)
 		{
 			var query = _context.Products.Where(p =>
 				//p.SellerAccount == loginAccount && (
+				p.ProductId == product.ProductId ||
 				p.ProductName.Contains(product.ProductName) ||
 				p.Description.Contains(product.Description) ||
 				p.StatusNavigation.StatusName.Contains(product.Status) ||
@@ -140,49 +169,30 @@ namespace Shocker_Project.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				try
+				Products? p = await _context.Products.FindAsync(product.ProductId);
+				if (p == null || p.SellerAccount != product.SellerAccount)
 				{
-					Products? p = await _context.Products.FindAsync(product.ProductId);
-					if (p == null || p.SellerAccount != product.SellerAccount)
-					{
-						return Json(new { Result = "Error", Message = "記錄不存在" });
-					}
-					if (p.Status == "p0" && product.Status == "p1")
-					{
-						p.LaunchDate = DateTime.Now;
-					}
-					p.ProductName = product.ProductName;
-					p.ProductCategoryId = product.ProductCategoryId;
-					p.Description = product.Description;
-					p.UnitsInStock = product.UnitsInStock;
-					p.UnitPrice = product.UnitPrice;
-					p.Status = product.Status;
-					p.Currency = product.Currency;
-					_context.Update(p);
-					await _context.SaveChangesAsync();
+					return Json(new { Result = "Error", Message = "記錄不存在" });
 				}
-				catch (DbUpdateConcurrencyException)
+				if (p.Status == "p0" && product.Status == "p1")
 				{
-					if (!ProductExists(product.ProductId))
-					{
-						return Json(new { Result = "Error", Message = "記錄不存在" });
-					}
-					else
-					{
-						throw;
-					}
+					p.LaunchDate = DateTime.Now;
 				}
+				p.ProductName = product.ProductName;
+				p.ProductCategoryId = product.ProductCategoryId;
+				p.Description = product.Description;
+				p.UnitsInStock = product.UnitsInStock;
+				p.UnitPrice = product.UnitPrice;
+				p.Status = product.Status;
+				p.Currency = product.Currency;
+				_context.Update(p);
+				await _context.SaveChangesAsync();
 				return Json((new { Result = "OK", Message = "修改記錄成功" }));
 			}
 			else
 			{
 				return Json(new { Result = "Error", Message = "修改記錄失敗" });
 			}
-		}
-
-		private bool ProductExists(int id)
-		{
-			return (_context.Products?.Any(p => p.ProductId == id)).GetValueOrDefault();
 		}
 
 		[HttpPost]
@@ -332,6 +342,92 @@ namespace Shocker_Project.Controllers
 					Product = details.ToList()
 				});
 			return Json(new { Orders = orders, OrderDetails = orderDetails });
+		}
+		[HttpPost]
+		public async Task<JsonResult> UpdateOrderStatus([FromBody]OrderStatusModel order)
+		{
+			if (ModelState.IsValid)
+			{
+				for (int i = 0; i < order.ProductId.Count; i++)
+				{
+					OrderDetails? orderDetails = await _context.OrderDetails.FindAsync(order.OrderId, order.ProductId[i]);			
+					if (orderDetails == null) return Json(new { Result = "Error", Message = $"訂單中沒有商品編號{order.ProductId[i]}" });
+					orderDetails.Status = (orderDetails.Status == "od1") ? "od2" : orderDetails.Status;
+					_context.Update(orderDetails);
+					await _context.SaveChangesAsync();
+				}
+				Orders? o = await _context.Orders.FindAsync(order.OrderId);
+				if (o == null) return Json(new { Result = "Error", Message = $"查無訂單編號{order.OrderId}" });
+				if (o.Status == "o1")
+				{
+					o.Status = "o2";
+					_context.Update(o);
+					await _context.SaveChangesAsync();
+				}
+				return Json(new { Result = "OK", Message = "更新狀態成功" });
+			}
+			else
+			{
+				return Json(new { Result = "Error", Message = "更新狀態失敗" });
+			}
+		}
+		[HttpPost]
+		public JsonResult GetRatings()
+		{
+			var ratings = _context.Ratings.Where(r => r.Product.SellerAccount == loginAccount)
+				.GroupBy(r => r.OrderId, (order, details) => new
+				{
+					OrderId = order,
+					Product = details.ToList()
+				});
+			if (ratings == null) return Json(new { Result = "None", Message = "沒有評價記錄" });
+			var orders = _context.Orders.Where(o => o.OrderDetails.Any(od => od.Product.SellerAccount == loginAccount))
+				.Where(o => o.Ratings.Any(r => r.OrderId == o.OrderId))
+				.Select(o => new
+				{
+					OrderId = o.OrderId,
+					BuyerAccount = o.BuyerAccount,
+					OrderDate = o.OrderDate,
+					ArrivalDate = o.ArrivalDate,
+					Status = o.Status
+				});
+			var orderDetails = _context.OrderDetails.Where(od => od.Product.SellerAccount == loginAccount)
+				.Where(od => od.Status == "od6")
+				.GroupBy(od => od.OrderId, (order, details) => new
+				{
+					OrderId = order,
+					Product = details.ToList()
+				});
+			return Json(new { Ratings = ratings, Orders = orders, OrderDetails = orderDetails });
+		}
+		[HttpPost]
+		public async Task<JsonResult> ReplyBuyer([FromBody]ReplyModel reply)
+		{
+			if (ModelState.IsValid)
+			{
+				Ratings? rating = await _context.Ratings.FindAsync(reply.ProductId, reply.OrderId);
+				if (rating == null || rating.Product.SellerAccount != loginAccount)
+				{
+					return Json(new { Result = "Error", Message = "評價記錄不存在" });
+				}
+				if (rating.Reply == "")
+				{
+					return Json(new { Result = "Blank", Message = "無回應內容" });
+				}
+				if(rating.Status == "r1")
+				{
+					return Json(new { Result = "Error", Message = "已回應買家評價" });
+				}
+				rating.Reply = reply.Reply;
+				rating.Status = "r1";
+				_context.Update(rating);
+				await _context.SaveChangesAsync();
+				return Json(new { Result = "OK", Message = "評價回應成功" });
+			}
+			else
+			{
+				return Json(new { Result = "Error", Message = "評價回應失敗" });
+			}
 		}
 	}	
 }
