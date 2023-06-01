@@ -6,17 +6,17 @@
     <h1 class="text-black">折價券</h1>
     <div class="container-fluid py-4">
         @*table*@
-        <div class="row" v-if="_tableControl">
+        <div class="row" v-if="tableControl">
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header pb-0">
                         <h3>Coupons</h3>
                         <div class="row" style="width:40%; margin-left:auto; margin-right:20px;">
                             <span class="text-secondary text-xs font-weight-bold">
-                                <a class="btn btn-info btn-sm" v-on:click="createCoupon()" id="createCoupon">CreateCoupns</a>
+                                <a class="btn btn-info btn-sm" v-on:click="viewChange" id="createCoupon">CreateCoupns</a>
                             </span>
                             <label id="filterkeyword" class="col-md-4">關鍵字:</label>
-                            <input type="text" v-model="_filter" v-on:keyup.enter="couponSerch" class="col-md-8 form-control" placeholder="請輸入關鍵字內容" />
+                            <input type="text" v-model="filter" v-on:keyup="couponSerch" class="col-md-8 form-control" placeholder="請輸入關鍵字內容" />
                         </div>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
@@ -24,7 +24,7 @@
                             <table class="table align-items-center mb-0">
                                 <thead>
                                     @*標題*@
-                                    <tr class="text-white">
+                                    <tr class="text-white text-center">
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">持有者</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">發行人</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">類別</th>
@@ -36,17 +36,17 @@
                                 <tbody>
                                     <tr v-for="item in displayCp">
                                         @*持有者資訊*@
-                                        <td class="align-middle">
+                                        <td class="text-center">
                                             <p class="text-xs font-weight-bold mb-0">{{item.HolderAccount}}</p>
                                         </td>
                                         @*發行人*@
-                                        <td class="align-middle">
+                                        <td class="text-center">
                                             <p class="text-xs font-weight-bold mb-0">{{item.PublisherAccount}}</p>
                                         </td>
                                         @*類別*@
-                                        <td class="align-middle">
-                                            <p class="text-xs font-weight-bold mb-0">{{item.ProductCategoryId}}</p>
-                                            <p v-if="item.ProductCategoryId==1" class="text-xs font-weight-bold mb-0">衣服</p>
+                                        <td class="text-center">
+                                            <p class="text-xs font-weight-bold mb-0">{{item.CaregotyName}}</p>
+                                            <p v-if="item.ProductCategoryId==1" class="text-xs font-weight-bold mb-0 ">衣服</p>
                                             <p v-if="item.ProductCategoryId==2" class="text-xs font-weight-bold mb-0">文具</p>
                                             <p v-if="item.ProductCategoryId==3" class="text-xs font-weight-bold mb-0">生鮮食材</p>
                                             <p v-if="item.ProductCategoryId==4" class="text-xs font-weight-bold mb-0">電玩</p>
@@ -56,11 +56,11 @@
                                             <p v-if="item.ProductCategoryId==8" class="text-xs font-weight-bold mb-0">家具</p>
                                         </td>
                                         @*折扣*@
-                                        <td class="align-middle">
+                                        <td class="text-center">
                                             <p class="text-xs font-weight-bold mb-0">{{item.Discount}}</p>
                                         </td>
                                         @*結束時間*@
-                                        <td class="align-middle">
+                                        <td class="text-center">
                                             <p class="text-xs font-weight-bold mb-0">{{item.ExpirationDate}}</p>
                                         </td>
                                         @*狀態*@
@@ -78,7 +78,7 @@
             </div>
         </div>
         @*CreateCoupon*@
-        <div class="row" v-if="_couponControl">
+        <div class="row" v-if="couponControl">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header pb-0">
@@ -182,6 +182,7 @@
 
         </div>
     </div>
+</div>
     @section Scripts {
         <script>
             var VueApp = {
@@ -194,9 +195,9 @@
                         _Discount: '',
                         _Statuss: '',
                         _PublisherAccount: '',
-                        _tableControl: true,
-                        _couponControl: false,
-                        _filter: '',
+                        tableControl: true,
+                        couponControl: false,
+                        filter: '',
                     };
                 },
                 mounted: function () {
@@ -206,7 +207,7 @@
                 methods: {
                     displayCoupon: function () {
                         var _this = this;
-                        axios.post(`${window.location.origin}/Admin/Coupon/DisaplayCoupon/`)
+                        axios.post(`${window.location.origin}/Admin/Coupon/DisaplayCoupon`)
                             .then(res => { _this.displayCp = res.data })
                     },
                     createCoupon: function () {
@@ -222,12 +223,17 @@
                         alert("OK");
                     },
                     couponSerch: function () {
-
+                        var _this =this;
+                        input={};
+                    input.Discount = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
+                    input.HolderAccount = input.StatusName = input.CategoryName =_this.filter;
+                    axios.post(`${window.location.origin}/Admin/Coupon/FilterCoupon`,input)
+                            .then(res=>{_this.displayCp =res.data})
                     },
                     viewChange: function () {
                         var _this = this;
-                        _this._tableControl=false;
-                        _this._couponControl= true;
+                        _this.tableControl=false;
+                        _this.couponControl= true;
                     }
                 },
             }

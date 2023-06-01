@@ -54,7 +54,30 @@ namespace Shocker_Project.Areas.Admin.Controllers
                 _context.SaveChanges();
 
             }
-            return Json(new { Message = "回復完畢" });
+            return Json(new { Message = "建置完畢" });
+        }
+        [HttpPost]
+        public JsonResult FilterCoupon([FromBody]CouponsViewModels cvm) 
+        {
+            
+            return Json(_context.Coupons.Where(x =>
+                      x.HolderAccount.Contains(cvm.HolderAccount) ||
+                      x.Discount == cvm.Discount ||
+                      x.StatusNavigation.StatusName.Contains(cvm.StatusName) ||
+                      x.ProductCategory.CategoryName.Contains(cvm.CategoryName)
+                      ).Select(c => new
+                      {
+                          PublisherAccount = c.PublisherAccount,
+                          HolderAccount = c.HolderAccount,
+                          ProductCategoryId = c.ProductCategoryId,
+                          Discount = c.Discount,
+                          StatusName = c.StatusNavigation.StatusName,
+                          CategoryName = c.ProductCategory.CategoryName,
+                          ExpirationDate=c.ExpirationDate,
+                          Status = c.Status,
+                      }
+                ));
+                    
         }
     }
 }
