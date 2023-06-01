@@ -21,10 +21,11 @@
 
 <h1 class="text-black">問題總覽</h1>
 <div class="container-fluid py-4" id="app">
-
+    @*Table*@
     <div class="row" v-if="replyIndex">
         <div class="col-12">
             <div class="card mb-4">
+                @*上方bar*@
                 <div class="card-header pb-0">
                     <h3>問題表</h3>
                     <div class="row" style="width:30%; margin-left:auto; margin-right:20px;">
@@ -32,22 +33,25 @@
                         <input type="text" v-model="filter" v-on:keyup.enter="QAfilter" class="col-md-8 form-control" placeholder="請輸入關鍵字內容" />
                     </div>
                 </div>
+               
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
                         <table class="table align-items-center mb-0" id="CustomerReplyDT">
+                            @*表格標題*@
                             <thead>
+                               
                                 <tr class="text-white">
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">問題類別 </th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">客戶資訊</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">結案時間</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> 操作</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">狀態</th>
+                                    <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7">問題類別 </th>
+                                    <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7">客戶資訊</th>
+                                    <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7">結案時間</th>
+                                    <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7"> 操作</th>
+                                    <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7">狀態</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="item in QA">
-
-                                    <th>
+                                    @*判斷類別*@
+                                    <td class="text-center">
                                         <div class="d-flex px-2 py-1">
                                             <div class="d-flex flex-column justify-content-center">
                                                 <p class="text-xs font-weight-bold mb-0">{{item.QuestionCategoreyId}}</p>
@@ -58,21 +62,25 @@
                                                 <p v-if="item.QuestionCategoryId==5" class="text-xs font-weight-bold mb-0">其他類別</p>
                                             </div>
                                         </div>
-                                    </th>
-                                    <td>
+                                    </td>
+                                    @*客戶資訊*@
+                                    <td class="text-center">
                                         <p class="text-xs font-weight-bold mb-0">{{item.UserAccount}}</p>
                                         <p class="text-xs font-weight-bold mb-0">{{item.Email}}</p>
-                                        
                                     </td>
-                                    <td class="align-middle">
+                                    @*時間*@
+                                    <td class="text-center">
                                         <p class="text-xs font-weight-bold mb-0">{{item.CloseDate}}</p>
                                     </td>
-                                    <td class="align-middle text-center">
+                                    @*操作*@
+                                    <td class=" text-center">
                                         <span class="text-secondary text-xs font-weight-bold">
-                                            <a class="btn btn-info btn-sm" v-on:click="edit(item.CaseId)" id="editChange">Edit</a>
+                                            <a class="btn btn-info btn-sm" v-if="ifHaveDS==false" v-on:click="edit(item.CaseId)" id="editChange">Edit</a>
+                                            <a class="btn btn-info btn-sm" v-if="ifHaveDS==true" v-on:click="edit(item.CaseId)" id="editChange">檢視</a>
                                         </span>
                                     </td>
-                                    <td class="align-middle text-center text-sm">
+                                    @*狀態*@
+                                    <td class=" text-center text-sm">
                                         <span v-if="item.Status=='cc0'" class="badge badge-sm bg-gradient-danger">未回應</span>
                                         <span v-if="item.Status=='cc1'" class="badge badge-sm bg-gradient-success">已回應</span>
                                     </td>
@@ -84,6 +92,7 @@
             </div>
         </div>
     </div>
+    @*回應*@
     <div class="row" v-if="editStatu">
         <div class="col-12">
             <div class="card mb-4">
@@ -132,6 +141,56 @@
             </div>
         </div>
     </div>
+    @*已回應檢視*@
+    <div class="row" v-if="viewDS">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0">
+                    <h3>問題表</h3>
+                    <div class="row" style="width:30%; margin-left:auto; margin-right:20px;">
+                        <label id="filterkeyword" class="col-md-4">關鍵字:</label>
+                        <input type="text" v-model="QAfilter" v-on:keyup="enter" class="col-md-8 form-control" placeholder="請輸入關鍵字內容" />
+                    </div>
+
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0" id="CustomerReplyDT">
+                            <thead>
+                                @*標題*@
+                                <tr class="text-white">
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">客戶資訊 </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">問題描述 </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">檢視回復</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr @*v-for="item in QA"*@> //非必要顯示
+                                    <td class="align-middle text-center">
+                                        <p class="text-xs font-weight-bold mb-0">{{this._edit.UserAccount}}</p>
+                                        @*<p class="text-xs text-secondary mb-0">UserEmail</p>*@
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <p class="text-xs font-weight-bold mb-0">{{this._edit.Description}}</p>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <p class="text-xs font-weight-bold mb-0">{{this._edit.Description}}</p>  @*//檢視回復*@
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <span class="text-secondary text-xs font-weight-bold">
+                                            <a class="btn btn-info btn-sm" asp-route-id="id" v-on:click="updateReply()">Update</a>
+                                            <a class="btn btn-info btn-sm" asp-route-id="id" v-on:click="backindex()">back</a>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -154,6 +213,8 @@
                     _edit: [],
                     filter: '',
                     _filterData:[],
+                    ifHaveDS:false,
+                    viewDS:false,
             };
             },
             mounted: function () {
@@ -176,7 +237,7 @@
                     axios.post(`${window.location.origin}/Admin/CustomerReply/ReplyQA/`, ccvm)
                         .then(response => { alert(response.data.Message) })
                     //.catch(Error err)
-                    window.location.replace(location.href);  //更新本畫面
+                    /*window.location.replace(location.href);*/  //更新本畫面
 
 
                 },
@@ -207,6 +268,12 @@
                     _this.replyIndex = true;
                 }
             },
+                editNotNull:function(){
+                    _this =this;
+                if (_this.Reply !=null) {
+                    ifHaveDS: true
+                    };
+                }
         }
         var app = Vue.createApp(VueApp).mount('#app');
     </script>
